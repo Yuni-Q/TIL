@@ -10,12 +10,13 @@
 > 서버리스<br>
 > AWS 람다
 
-## NoSQL
+### Cache
 > redis<br>
 > rabbitMQ<br>
 > 카프카
 
-## RDBMS
+
+### DBMS
 > mysql<br>
 > posgerSQL<br>
 > MongoDB
