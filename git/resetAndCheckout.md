@@ -1,8 +1,7 @@
-# mash up backend 세미나 ( 10/ 13 )
 
-## Git reset
+# Git reset
 
-### 1.reset의 옵션
+## 1.reset의 옵션
 1. --soft ( HEAD 이동 )
   > reset 명령은 가장 최근의 git commit 명령을 되돌립니다.<br>
   > reset 명령 뒤에 HEAD~ (HEAD의 부모 커밋)를 주면 Index나 워킹 디렉토리는 그대로 놔두고 브랜치가 가리키는 커밋만 이전으로 되돌립니다.<br>
@@ -15,7 +14,7 @@
   > reset 명령을 통해 git add 와 git commit 명령으로 생성한 마지막 커밋을 되돌립니다. 그리고 워킹 디렉토리의 내용까지도 되립니다.<br>
   > 다른 reset과 달리 복구 할 방법이 없기 때문에 신중하게 사용해야 합니다. 
 
-## Git checkout
+# Git checkout
 ```bash
 git checkout -b [브랜치명]
 ```

@@ -1,4 +1,5 @@
-# mash up backend 세미나 ( 10/ 13 )
+
+# Git
 
 ## 1. Git이란?
 
