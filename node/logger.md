@@ -37,6 +37,12 @@ const logger = winston.createLogger({
     winston.format.json(),
   ),
   transports: [
+    // console에 찍기
+    new winston.transports.Console({
+      // format: winston.format.simple(),
+      level: 'error',
+      colorize: true,
+    }),
     // 날짜별로 로그 저장
     new winston.transports.DailyRotateFile({
       filename: './logs/error-%DATE%.log',
@@ -64,8 +70,7 @@ logger.log({
       });
 
 // 2번 방법
-logger.info({
+logger.info(
   'Hello distributed log files!',
-  },
-});
+);
 ```
