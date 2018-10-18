@@ -22,7 +22,7 @@ Git 영역
 
 ## 2.Git 사용법
 ```bash
-$git init 
+git init 
 ```
 > Working Directory가 되며 .git 파일 생성 됩니다.
 
@@ -53,16 +53,16 @@ git push -u [별칭] [브랜치]
 
 ### Git 부가 기능
 ```bash
-$git log
+git log
 ```
 > commit들의 hash값들을 볼 수 있습니다.
 
 ```bash
-$git rebase
+git rebase
 ```
 > 추후에 정리해 봅시다.<br>
 > rebase로 head를 변경 -> 그럼 해쉬값이 새로 만들어 집니다.
 ```bash
-$git commit --amend [스쿼시 커밋]
+git commit --amend [스쿼시 커밋]
 ```
 > 전 커밋에 커밋! 그래서 기존 커밋의 해쉬값이 변경 됩니다.
