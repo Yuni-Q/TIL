@@ -13,6 +13,11 @@
 3. --hard ( 워킹 디렉토리 업데이트 )
   > reset 명령을 통해 git add 와 git commit 명령으로 생성한 마지막 커밋을 되돌립니다. 그리고 워킹 디렉토리의 내용까지도 되립니다.<br>
   > 다른 reset과 달리 복구 할 방법이 없기 때문에 신중하게 사용해야 합니다. 
+```bash
+git reset [commit hash]
+```
+> default값은 mixed 입니다.
+
 
 # Git checkout
 ```bash
