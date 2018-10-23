@@ -35,8 +35,8 @@ exports.bot = bot;
 
 ```
 
-> api 확인 : https://api.telegram.org/bot[token]/getUpdates
-> /start 후 메세지 전송
+> api 확인 : https://api.telegram.org/bot[token]/getUpdates<br>
+> /start 후 메세지 전송<br>
 > 결과 중 “from”:{“id”:4200110535 에서 숫자 4200110535 가 chat_id 입니다.
 
 ```javascript
