@@ -35,9 +35,11 @@ exports.bot = bot;
 
 ```
 
+> BotFather의 설명에 따라 chat_bot 생성<br>
 > api 확인 : https://api.telegram.org/bot[token]/getUpdates<br>
 > /start 후 메세지 전송<br>
-> 결과 중 “from”:{“id”:4200110535 에서 숫자 4200110535 가 chat_id 입니다.
+> 결과 중 “from”:{“id”:4200110535 에서 숫자 4200110535 가 chat_id 입니다.<br>
+> 위 방법으로 힘들 경우 @get_id_bot에서 /my_id를 통해 chat_id를 가져 올 수 있습니다.<br>
 
 ```javascript
 await sendTelegramChatJob.bot.sendMessage(chatId, [messeage]);
