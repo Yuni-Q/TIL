@@ -67,6 +67,11 @@ git commit --amend [스쿼시 커밋]
 ```
 > 전 커밋에 커밋! 그래서 기존 커밋의 해쉬값이 변경 됩니다.
 
+```bash
+git clone [주소]
+```
+> git repository를 local로 복사해 올 수 있습니다.
+
 ### git messeage
 1. 두 번째 줄은 항상 공백
 2. 첫 줄은 50자 내로, 나머지 줄은 70자 내로 작성
