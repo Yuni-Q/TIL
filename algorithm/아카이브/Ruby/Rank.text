@@ -1,0 +1,36 @@
+  def like
+    user_id = params[:user_id]
+    @like = Follower.find_by(user_id: user_id, follower: current_user.id)
+
+    if @like
+      @like.destroy
+      @val2 = "false"
+    else
+      Follower.create!(user_id: user_id, follower: current_user.id)
+      @val2 = "true"
+    end
+
+    render layout: false
+  
+  end
+
+  def rank
+    @list= Follower.group(:user_id).count
+    @sort = @list.sort_by {|_key, value| value}
+    @result = @sort.reverse.to_h 
+    @array = Array.new
+    @result.each do |key, value|
+      @array << key
+
+    end
+    @per_number = 10
+    @user = Kaminari.paginate_array(@array).page(params[:page]).per(@per_number)
+
+    @page = params[:page].to_i
+    if @page and @page != 0
+      @num = 1+(@per_number*(@page-1))
+    else
+      @num = 1
+    end
+   
+  end
