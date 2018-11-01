@@ -34,3 +34,9 @@ git checkout [브랜치명]
 git checkout [파일명]
 ```
 > 파일의 변경을 취소 합니다.
+
+```bash
+git checkout -b [branch] [remote]/[branch]
+git checkout --track [remote]/[branch]
+```
+> 명령으로 간단히 트래킹 브랜치를 만들 수 있다. --track 옵션을 사용하여 로컬 브랜치 이름을 자동으로 생성할 수 있다.
