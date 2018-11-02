@@ -72,6 +72,43 @@ git clone [주소]
 ```
 > git repository를 local로 복사해 올 수 있습니다.
 
+```bash
+git commit --amend
+```
+> 이전 커밋 수정<br>
+
+```bash
+git revert HEAD
+```
+커밋 취소
+
+```bash
+git cherry-pick 99daed2
+```
+> 원하는 커밋만 추출해서 merge<br>
+
+```bash
+git rebase -i HEAD~~
+```
+> 과거 커밋 합치기<br>
+> 두 번째 줄의 'pick' 문자를 squash로 변경하고 저장 · 종료합니다.<br>
+
+```bash
+git rebase -i HEAD~~
+# 첫 번째 줄의 'pick' 문자를 'edit'으로 변경하여 저장 · 종료합니다. 그러면 다음과 같은 출력 되고 수정할 커밋이 체크아웃된 상태가 됩니다.<br>
+git add sample.txt
+git commit --amend
+git rebase --continue
+```
+> commit 을 실행했다고 해서 rebase 작업이 끝난 것은 아닙니다. 이 커밋 작업이 종료했다는 것을 알리려면, --continue 옵션을 지정하여 rebase 를 실행해야 합니다.<br>
+> 이 때, 다른 커밋에서 충돌이 발생할 수 있습니다. 그럴 때에는 충돌 부분을 수정한 후 add 와 rebase --continue를 실행하면 됩니다. 이 때, 커밋은 필요 없으므로 실행하지 않습니다. 만약 도중에 rebase 작업을 중지하고자 하는 경우에는 rebase에 --abort 옵션을 지정하여 실행하면 됩니다. <br>
+> rebase 전의 커밋은 'ORIG_HEAD'라는 이름으로 남아 있습니다. 만약 rebase 한 후 원래대로 되돌리고자 하는 경우에는 'git reset --hard ORIG_HEAD'을 실행하여 rebase 전의 상태로 되돌릴 수 있습니다.<br>
+
+```bash
+git merge --squash issue1
+```
+> 이번에는 'issue1' 브랜치의 모든 커밋을 하나의 커밋으로 병합하여 'master' 브랜치로 가져와 보도록 하겠습니다.<br>
+
 ### git messeage
 1. 두 번째 줄은 항상 공백
 2. 첫 줄은 50자 내로, 나머지 줄은 70자 내로 작성
