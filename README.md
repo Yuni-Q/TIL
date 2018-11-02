@@ -1,5 +1,9 @@
 # Today I Learned
 
+## 도움이 될 사이트
+[SLiPP](https://www.slipp.net/questions)
+[Jbee님 블로그](http://asfirstalways.tistory.com/153)
+
 ## Todo List
 
 관계형 데이터베이스 동작 방식(언제나 유용)<br>

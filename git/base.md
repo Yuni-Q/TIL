@@ -109,9 +109,23 @@ git merge --squash issue1
 ```
 > 이번에는 'issue1' 브랜치의 모든 커밋을 하나의 커밋으로 병합하여 'master' 브랜치로 가져와 보도록 하겠습니다.<br>
 
+```bash
+git rm [fileName]
+git rm --cached [fileName]
+```
+> 위의 git 명령어를 통해 폴더나 파일을 삭제하면 됩니다.<br>
+> --cached 는 rm 명령어의 옵션이다.<br>
+> --cached의 유무에 따라 차이점을 알아보자.<br>
+
+
+
+출처: http://mygumi.tistory.com/103 [마이구미의 HelloWorld]<br>
+
 ### git messeage
 1. 두 번째 줄은 항상 공백
 2. 첫 줄은 50자 내로, 나머지 줄은 70자 내로 작성
 3. 명령어 사용, 커밋 메시지를 과거형으로 작성 금지
 4. 제목 첫글자를 대문자로, 제목 끝에 . 금지
 5. 본문은 ‘어떻게’보다 ‘무엇을’, ‘왜’에 맞춰 작성하기
+
+[git 도움](https://github.com/k88hudson/git-flight-rules/blob/master/README_kr.md#%EB%AA%A8%EB%93%A0-%EC%84%9C%EB%B8%8C%EB%AA%A8%EB%93%88%EC%9D%84-%ED%81%B4%EB%A1%A0%ED%95%98%EA%B8%B0)
