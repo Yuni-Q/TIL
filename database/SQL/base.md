@@ -1,6 +1,20 @@
 
 # SQL
 
+## 명령어
+### DDL
+테이블과 같은 데이터 구조를 정의하는데 사용하는 명령어와 그들이 실행 구조
+> CREATE, ALTER, RENAME, TRUNCATE
+### DML
+데이터베이스에 들어있는 데이터를 조회하고 조작하는 명령어
+> SELECT, INSERT, UPDATE, DELETE
+### DCL
+데이터베이스에 접근하고 객체들을 사용하도록 권한을 주고 회수하는 명령어
+> GRANT, REVOKE
+### TCL
+논리적인 작업의 단위를 묶어서 DML에 조작된 결과를 작업 단위(트랜잭션)별로 제어하는 명령어
+> COMMIT, ROLLBACK, SAVEPOINT
+
 ## RDB
 #### 정규화
 중복 제거로 인한 무결성 증가 시킵니다.
