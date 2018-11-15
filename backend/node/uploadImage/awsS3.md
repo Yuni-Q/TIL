@@ -37,3 +37,58 @@ s3 메서드 설명
 > async.waterfall를 통해서 넘겨받은 files 객체에는 위에서 설명한 파일 정보가 들어있는 객체입니다.  
 > params.Body값에는 위에서 업로드한 파일을 넘겨줍니다.  
 > params.Key값에는 실제 S3에 업로드될 path + 파일 이름을 작성합니다.  
+
+
+### 다른 방법
+```javascript
+const AWS = require('aws-sdk');
+const formidable = require('formidable');
+const fs = require('fs')
+const path = require('path');
+
+console.log(req.method + ' ' + req.originalUrl + ' : ' + req.connection.remoteAddress);
+AWS.config.update({ accessKeyId: config.aws.accessId, secretAccessKey: config.aws.secretKey });
+let s3 = new AWS.S3();
+let form = new formidable.IncomingForm();
+
+// make upload dirName
+let dirName = '';
+let possible = '0123456789abcdef';
+for (var i = 0; i < 4; i++) dirName += possible.charAt(Math.floor(Math.random() * possible.length));
+dirName = dirName + '-' + new Date().toISOString().substr(0, 10);
+
+// make upload fileName
+let fileName = '';
+possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+for (var i = 0; i < 8; i++) fileName += possible.charAt(Math.floor(Math.random() * possible.length));
+
+// 서버에 업로드 완료 후
+form.parse(req, function (err, fields, files) {
+
+if (!files.image) {
+    res.json(Format.badRequest('image not found!!'));
+    return;
+}
+
+let image = files.image;
+let defaultPath = 'soundAsset/' + dirName + '/' + fileName;
+let imageUrl = defaultPath + path.parse(image.name).ext;
+
+// image upload
+console.log('image path : ' + defaultPath + path.parse(image.name).ext);
+s3.upload({
+    Bucket: config.signature.img_bucket,
+    Key: imageUrl,
+    ACL: 'public-read',
+    Body: fs.createReadStream(image.path)
+}, function (err, result) {
+    if (err) console.log(err);
+    else console.log(result);
+});
+
+
+// unlink tmp files
+fs.unlinkSync(image.path);
+
+});
+```
