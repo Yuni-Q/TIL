@@ -87,9 +87,9 @@ DBMS Architecture
 > 성능 ( I/O 접근 )<br>
 
 DBMS 실행계획 확인법
-Oracle => Explain plan for SQL 구문 
-Mysql => Explain SQL 구문 
-PostgreSQL => Explain SQL 구문
+Oracle => Explain plan for SQL 구문  
+<b>Mysql => Explain SQL 구문</b>  
+PostgreSQL => Explain SQL 구문  
 
 조건분기
 > CASE 활용<br>
