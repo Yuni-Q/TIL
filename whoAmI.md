@@ -68,3 +68,54 @@ Web Front-end : HTML, CSS, JavaScript (AJAX, JQuery), Bootstrap
 - 주제 : HANAflatForm기반 IoT 개발자 양성 과정
 - 기술 : JAVA, Spring, ABAP, Ruby on Rails, Python
 - https://github.com/Yuni-Q/team_project_saveLoc
+
+## SVm(PUFF)
+
+### Ruby
+관리용 내부 Admin 요구 사항 해결  
+각종 통계를 위한 Admin 작업  
+KT GiftShow 관련 작업  
+Swagger 작업   
+Redis 사용  
+Node 서버와 Rails Admin 통신을 통한 데이터 CRUD (ajax, controller)  
+RDB migration으로 작업  
+Staging, Production 배포  
+이미지 업로더 생성  
+검색 기능 구현  
+프론트에 수정한대로 Redis에 저장 후 값 컨트롤  
+Redis 자료 RDB로 전환  
+카테고리별로 6개의 아이템만 redis에 저장  
+GiftShow  MMS 전송에서 DB에 이미지 url 저장 후 관리 가능하게 RDB에 추가  
+GiftShow 상태 체크 및 앱 내 공유 기능  
+객체 sorted  
+Firebase를 통한 공지 작성 (admin에서)  
+게임 통계를 위해 redis 자료 RDB로 옮기기 (DB 직접 설계)  
+서버 할당 알고리즘 변경  
+UTC 시간 차이 문제 해결 (Ruby, Node 각각 시간 표시 방식이 다름)  
+하드 코딩 되어 있던 부분 RDB와 Redis로 분배해서 제거
+페이징 작업
+새로운 API 작성  
+
+### Node
+Swagger 작업  
+Redis 사용  
+Schedule 작업  
+Rails 서버 Node로 포팅  
+Staging, Production 배포  
+Rails로 컨트롤 하는 작업 스케쥴로 컨트롤  
+매일 받아오는 자료에 노출 여부를 추가  
+전날 자료와 비교 후 변경 사항 적용 but 노출 여부는 이전과 같게 유지 추천 상품 알고리즘 변경  
+객체 sorted  
+각종 통계를 위한 Admin 작업  
+UTC 시간 차이 문제 해결 (Ruby, Node 각각 시간 표시 방식이 다름)  
+Job 생성 및 SQS 적용  
+새로운 API 작성  
+Node 어드민 작업  
+이미지 업로더 및 영상 업로더 생성  
+
+### ETC
+API Gayway 추가  
+RDB workbanch로 작업  
+EC2 인스턴스 생성  
+Redis-commander 원격 redis 접속  
+앱에서 클릭으로 동작하는 모든 API 추적  
