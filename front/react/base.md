@@ -1,4 +1,55 @@
 
+## 리엑트란 ?
+React는 SPA (Single Page Application) 즉, 단일 페이지 응용 프로그램에서 사용자 인터페이스를 구성는데 사용되는 오픈 소스 프론트엔드 JS 라이브러리 입니다.  
+
+## 특징
+- RealDOM 을 조작하는데 많은 비용이 들어간다는 점을 고려하여 리액트는 RealDOM 대신 VirtualDOM을 사용합니다.
+- 서버 사이드 렌더링을 지원합니다.
+- 단방향 데이터 흐름 또는 데이터 바인딩을 따릅니다.
+- UI 구성 요소를 재사용할 수 있도록 개발할 수 있습니다.
+
+## React에서 컴포넌트를 어떻게 생성
+
+### Functional
+components ReactJS 에서 component를 생성하는 가장 간단한 방법입니다.  
+props 를 받을 수 있고 React elements 를 리턴할 수 있습니다.  
+이런 방법을 pure 한 JS의 function 이기 때문에 functional한 생성법이라고 부릅니다.  
+
+###  Class components
+ES6 Class를 사용하여 component 를 정의할 수 있습니다.  
+위에서 본 functional 선언법을 아래와 같이 적용할 수 있습니다.  
+
+### 구분
+Component 에서 state 또는 life cycle methods 를 필요로 한다면 Class component를 사용하고 그렇지 않다면 Functional component를 사용할 수 있습니다.
+
+## Pure Components
+(순수 컴포넌트란 무엇인가요?) PureComponent는 동일한 상태에서는 동일한 결과를 반환합니다.  
+shouldComponentUpdate 메서드를 다룰 수 있다는 점을 제외하고는 component와 동일합니다.  
+props 또는 state 가 변경될 때 PureComponent 는 state 와 props 에 대해 Shallow Compare을 수행합니다.  
+반면 component는 현재 props와 변형될 state를 비교하지 않습니다.  
+그렇기 때문에 component는 shouldComponentUpdate가 호출 될 때 마다 다시 render 됩니다. (shouldComponentUpdate의 기본값은 true 이기 때문에)  
+
+## state
+Component State 는 component의 life cycle 동안 변경될 수 있는 정보를 담고 있는 객체입니다.  
+우리는 state를 가능한 단순하게 만들고 state 의 구성 요소의 수를 최소화하기 위해 노력해야 합니다.  
+- state를 직접 업데이트 하려고 한다면 component 는 re-render 되지 않습니다.
+- setState 메서드를 사용해야합니다. setState는 component state 업데이트에 대한 예약을합니다. state 가 변경되면 component는 re-rendering 할 것 입니다.
+
+
+
+
+## props
+Props 는 HTML 태그 속성과 유사한 규칙을 사용하여 React component 에 전달되는 값을 포함하는 단일 값 또는 객체입니다.  
+부모 component 에서 자식 component 로 전달되는 데이터 입니다.  
+- 사용자 정의 데이터를 React component 로 전달할 수 있습니다.
+- State 변경을 Trigger 할 수 있습니다.
+- Component 의 render 메서드 안에서 this.props.reactProp 로 접근하여 사용할 수 있습니다.
+
+
+
+
+
+
 ## 파일
 README.md: .md 확장자는 마크다운(markdown) 파일입니다. 일반 텍스트와 함께 간단한 마크업 언어로 작성합니다. 대부분 프로젝트에는 README.md 파일에 프로젝트 설명 및 설치 방법 등 안내 사항을 작성합니다. 깃허브 리퍼지토리 페이지의 첫 화면에 README.md 파일을 보았을 겁니다. create-react-app 을 설치한 후 바로 깃허브에 프로젝트를 올린다면 README.md 파일 내용은 create-react-app 공식 깃허브 리퍼지토리와 내용이 동일할 것입니다.
 
