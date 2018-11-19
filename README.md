@@ -5,12 +5,11 @@
 ## Project
 
 ### Spring
-[shoppingMall](https://github.com/Yuni-Q/team_project_shoppingMall)  
+[springProject](https://github.com/Yuni-Q/individual_project_springProject)  
 
 ### Ruby
 [saveLoc](https://github.com/Yuni-Q/team_project_saveLoc)  
-[springProject](https://github.com/Yuni-Q/individual_project_springProject)  
-
+[shoppingMall](https://github.com/Yuni-Q/team_project_shoppingMall)  
 
 ### IOS
 [groby](https://github.com/Yuni-Q/groby-iOS)  
