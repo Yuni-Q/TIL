@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>ZR00_63TOP</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: ZR00_63TOP</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  Include ZR14_49TOP</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Include ZR00_00TOP                   Report ZR00_00</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+REPORT zr00_00 MESSAGE-ID zit00.
+
+TABLES: sflight,
+        scarr,
+        scustom.
+
+TYPES: BEGIN OF ty_list.
+         include TYPE sflight.
+TYPES:   celltab  TYPE lvc_t_styl.
+TYPES: END OF ty_list.
+
+<font color ="#0000FF">**********************************************************************</font>
+<font color ="#0000FF">*Class instance</font>
+<font color ="#0000FF">**********************************************************************</font>
+<font color ="#0000FF">*--For database</font>
+DATA : go_con    TYPE REF TO cl_sql_connection,
+       go_stmt   TYPE REF TO cl_sql_statement,
+       go_result TYPE REF TO cl_sql_result_set.
+
+<font color ="#0000FF">*--For data</font>
+DATA : go_root TYPE REF TO cx_root, "db exception## ##
+       go_data TYPE REF TO data.
+
+<font color ="#0000FF">**********************************************************************</font>
+<font color ="#0000FF">* Internal table and work area</font>
+<font color ="#0000FF">**********************************************************************</font>
+DATA : gt_list   TYPE TABLE OF ty_list.
+
+<font color ="#0000FF">* For screen control</font>
+
+<font color ="#0000FF">**********************************************************************</font>
+<font color ="#0000FF">* ALV variable</font>
+<font color ="#0000FF">**********************************************************************</font>
+DATA : go_alv_grid  TYPE REF TO cl_gui_alv_grid,
+       go_container TYPE REF TO cl_gui_docking_container.
+
+DATA : gt_fcat   TYPE lvc_t_fcat,
+       gs_fcat   TYPE lvc_s_fcat,
+       gs_layout TYPE lvc_s_layo.
+
+<font color ="#0000FF">**********************************************************************</font>
+<font color ="#0000FF">* Common variable</font>
+<font color ="#0000FF">**********************************************************************</font>
+DATA : gv_okcode TYPE sy-ucomm.
+
+data : gv_error_in_data type c.
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - E.G.Mellodew. 1998-2005 UK. Sap Release 750
+</font>
+</body>
+</html>

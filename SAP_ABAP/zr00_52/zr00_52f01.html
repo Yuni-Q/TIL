@@ -1,0 +1,348 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>ZR00_52F01</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: ZR00_52F01</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  Include ZR14_49F01</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&  Include           ZR14_49F01</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+
+
+
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_INIT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_init .
+
+<font color ="#0000FF">*  DATA: ls_datum LIKE LINE OF s_datum.</font>
+<font color ="#0000FF">*  ls_datum-sign = 'I'.</font>
+<font color ="#0000FF">*  ls_datum-option = 'EQ'.</font>
+<font color ="#0000FF">*  ls_datum-low = sy-datum.</font>
+<font color ="#0000FF">*  APPEND ls_datum TO s_datum.</font>
+ENDFORM.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  DISPLAY_SCREEN</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM display_screen .
+  CLEAR : gt_fcat, gs_fcat.
+
+  PERFORM set_field_catalog      USING : 'X' 'MTART' '## ##' ' ',
+                                         'X' 'WERKS' '###' ' ',
+                                         'X' 'MATNR' '## ##' ' ',
+                                         ' ' 'MAKTX' '## ##' 'X',
+                                         ' ' 'IFIND' 'INFO Ind' ' ',
+                                         ' ' 'SRIND' 'SR Ind' ' ',
+                                         ' ' 'STIND' 'ST Ind' ' ',
+                                         ' ' 'LVORM' '##' ' ',
+                                         ' ' 'MATKL' '## ##' ' ',
+                                         ' ' 'MEINS' '## ##' ' ',
+                                         ' ' 'BISMT' '## ## ##' ' ',
+                                         ' ' 'SPART' '###' ' ',
+                                         ' ' 'BSTME' '## ## ##' ' ',
+                                         ' ' 'EKGRP' '## ##' ' ',
+                                         ' ' 'INSMK' '##### ##' ' ',
+                                         ' ' 'WEBAZ' '######(#)' ' ',
+                                         ' ' 'MFRNR' '### ##' ' ',
+                                         ' ' 'STAWN' 'H/S Code' ' ',
+                                         ' ' 'MTVER' '##/## ## ##' ' ',
+                                         ' ' 'FERTH' '### ##' ' ',
+                                         ' ' 'ILOOS' 'Non GMO' ' ',
+                                         ' ' 'IHIVI' '###' ' ',
+                                         ' ' 'HERKL' '## ###' ' ',
+                                         ' ' 'MOGRU' '## ##' ' ',
+                                         ' ' 'ITARK' '#### ##' ' ',
+                                         ' ' 'DISPO' 'MRP ###' ' ',
+                                         ' ' 'DISLS' '## ## ##' ' ',
+                                         ' ' 'BSTMI' '## ## ##' ' ',
+                                         ' ' 'BSTRF' '####### ## ####' ' ',
+                                         ' ' 'KZECH' '##/#### ### ## ### ##' ' ',
+                                         ' ' 'LGFSB' '## ### ## ## ## ##' ' ',
+                                         ' ' 'PLIFZ' '## ## ## ##(#)' ' ',
+                                         ' ' 'FHORI' '#### ## #####' ' ',
+                                         ' ' 'EISBE' '## ##' ' ',
+                                         ' ' 'TEMPB' '#### ###' ' ',
+                                         ' ' 'RAUBE' '## ##' ' ',
+                                         ' ' 'BEHVO' '## ## ##' ' ',
+                                         ' ' 'MHDRZ' '## ## ## ##' ' ',
+                                         ' ' 'MHDHB' '# ## ##' ' ',
+                                         ' ' 'BKLAS' '## ###' ' ',
+                                         ' ' 'STPRS' '###' ' ',
+                                         ' ' 'PEINH' '## ##' ' ',
+                                         ' ' 'ZPLP1' '## ## ## 1' ' ',
+                                         ' ' 'ZPLD1' '## ## ## 1# ####' ' '.
+  PERFORM set_layout.
+
+  IF go_container IS INITIAL.
+
+    PERFORM create_object.
+
+    CALL METHOD go_alv_grid-&gt;set_table_for_first_display
+      EXPORTING
+        i_save          = 'A'
+        i_default       = 'X'
+        is_layout       = gs_layout
+      CHANGING
+        it_outtab       = gt_list
+        it_fieldcatalog = gt_fcat.
+
+  ELSE.
+
+    CALL METHOD go_alv_grid-&gt;refresh_table_display.
+
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  CREATE_OBJECT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM create_object .
+  CREATE OBJECT go_container
+    EXPORTING
+      repid     = sy-repid
+      dynnr     = sy-dynnr
+      side      = go_container-&gt;dock_at_left
+      extension = 3000.
+
+  CREATE OBJECT go_alv_grid
+    EXPORTING
+      i_parent = go_container.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_FIELD_CATALOG</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_0183   text</font>
+<font color ="#0000FF">*      --&gt;P_0184   text</font>
+<font color ="#0000FF">*      --&gt;P_0185   text</font>
+<font color ="#0000FF">*      --&gt;P_0186   text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_field_catalog  USING pv_key pv_fieldname pv_coltext pv_emphasize.
+
+  gs_fcat-key       = pv_key.
+  gs_fcat-fieldname = pv_fieldname.
+  gs_fcat-coltext   = pv_coltext.
+  gs_fcat-emphasize = pv_emphasize.
+
+  CASE pv_fieldname.
+    WHEN 'MATNR'.
+      gs_fcat-hotspot = 'X'.
+  ENDCASE.
+
+  APPEND gs_fcat TO gt_fcat.
+
+  CLEAR gs_fcat.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_LAYOUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_layout .
+  gs_layout-zebra       = 'X'.
+  gs_layout-cwidth_opt  = 'X'.
+  gs_layout-sel_mode    = 'D'.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_DATA_MAIN</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_data_main .
+  DATA: lr_lvorm TYPE RANGE OF mara-lvorm,
+        lw_lvorm LIKE LINE OF lr_lvorm.
+
+  clear lr_lvorm.
+
+<font color ="#0000FF">* #### ##</font>
+  IF p_lvorm IS NOT INITIAL.
+    lw_lvorm-sign = 'I'.
+    lw_lvorm-option = 'EQ'.
+    lw_lvorm-low = ' '.
+    APPEND lw_lvorm TO lr_lvorm.
+  ELSE.
+<font color ="#0000FF">*    lw_lvorm-sign = 'I'.</font>
+<font color ="#0000FF">*    lw_lvorm-option = 'EQ'.</font>
+<font color ="#0000FF">*    lw_lvorm-low = ' '.</font>
+<font color ="#0000FF">*    APPEND lw_lvorm TO lr_lvorm.</font>
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">*    lw_lvorm-sign = 'I'.</font>
+<font color ="#0000FF">*    lw_lvorm-option = 'EQ'.</font>
+<font color ="#0000FF">*    lw_lvorm-low = 'X'.</font>
+<font color ="#0000FF">*    APPEND lw_lvorm TO lr_lvorm.</font>
+  ENDIF.
+
+  SELECT
+        a~mtart,
+        c~werks,
+        a~matnr,
+        ' ' AS maktx ,
+        ' ' AS ifind,
+        ' ' AS srind,
+        ' ' AS stind,
+        a~lvorm,
+        a~matkl,
+        a~meins,
+        a~bstme,
+        c~ekgrp,
+        c~insmk,
+        c~webaz,
+        a~mfrnr,
+        c~stawn,
+        c~mtver,
+        a~ferth,
+        a~iloos,
+        a~ihivi,
+        c~herkl,
+        c~mogru,
+        c~itark,
+        c~dispo,
+        c~disls,
+        c~bstmi,
+        c~bstrf,
+        c~kzech,
+        c~lgfsb,
+        c~plifz,
+        c~fhori,
+        c~eisbe,
+        a~tempb,
+        a~raube,
+        a~behvo,
+        a~mhdrz,
+        a~mhdhb,
+        b~bklas,
+        b~stprs,
+        b~peinh,
+        b~zplp1,
+        b~zpld1
+     INTO CORRESPONDING FIELDS OF TABLE @gt_list
+     FROM marc AS c INNER JOIN mara AS a
+          ON c~matnr = a~matnr
+          INNER JOIN mbew AS b
+          ON c~matnr = b~matnr
+         AND c~werks = b~bwkey
+    WHERE c~werks = @p_werks
+      AND a~matnr IN @s_matnr
+      AND a~mtart IN @s_mtart
+      AND a~matkl IN @s_matkl
+      AND a~lvorm IN @lr_lvorm
+      AND c~ekgrp IN @s_ekgrp.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_DATA_ETC</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_data_etc .
+
+  LOOP AT gt_list ASSIGNING FIELD-SYMBOL(&lt;ls_list&gt;).
+
+<font color ="#0000FF">* 1. MARA-MATNR ### ### MAKT##### ## ###.</font>
+<font color ="#0000FF">* ##1: ###</font>
+<font color ="#0000FF">*    select single maktx</font>
+<font color ="#0000FF">*        into &lt;ls_list&gt;-maktx</font>
+<font color ="#0000FF">*        from makt</font>
+<font color ="#0000FF">*       where matnr = &lt;ls_list&gt;-matnr</font>
+<font color ="#0000FF">*         and spras = 'E'.</font>
+
+<font color ="#0000FF">* ##2: ##</font>
+    PERFORM get_maktx USING  &lt;ls_list&gt;-matnr
+                    CHANGING &lt;ls_list&gt;-maktx.
+
+<font color ="#0000FF">* 2.</font>
+
+  ENDLOOP.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_MAKTX</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_&lt;LS_LIST&gt;_MATNR  text</font>
+<font color ="#0000FF">*      &lt;--P_&lt;LS_LIST&gt;_MAKTX  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_maktx  USING    pv_matnr TYPE matnr
+                CHANGING pv_maktx TYPE maktx.
+
+  DATA: ls_maktx TYPE ty_maktx.
+
+  IF gt_maktx IS INITIAL AND gt_list IS NOT INITIAL.
+<font color ="#0000FF">* #####(MARA-MATNR)# ## #### Internal table# ##</font>
+    SELECT matnr,
+           maktx
+        INTO TABLE @gt_maktx
+        FROM makt
+        FOR ALL ENTRIES IN @gt_list
+       WHERE matnr = @gt_list-matnr
+         AND spras = 'E'.
+    IF sy-subrc = 0.
+      SORT gt_maktx BY matnr.
+    ENDIF.
+  ENDIF.
+
+  READ TABLE gt_maktx INTO ls_maktx
+                      WITH KEY matnr = pv_matnr
+                      BINARY SEARCH.
+  IF sy-subrc = 0.
+    pv_maktx = ls_maktx-maktx.
+  ENDIF.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_MAKTX2</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_LT_MAKTX  text</font>
+<font color ="#0000FF">*      --&gt;P_&lt;LS_LIST&gt;_MATNR  text</font>
+<font color ="#0000FF">*      &lt;--P_&lt;LS_LIST&gt;_MAKTX  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_maktx2  USING    pt_maktx TYPE ty_maktx_tab
+                          pv_matnr
+                 CHANGING pv_maktx.
+
+  READ TABLE pt_maktx INTO DATA(ls_maktx)
+                      WITH KEY matnr = pv_matnr
+                      BINARY SEARCH.
+  IF sy-subrc = 0.
+    pv_maktx = ls_maktx-maktx.
+  ENDIF.
+
+ENDFORM.
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - E.G.Mellodew. 1998-2005 UK. Sap Release 750
+</font>
+</body>
+</html>

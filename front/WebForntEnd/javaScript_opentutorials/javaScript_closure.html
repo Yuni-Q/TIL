@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+<script>
+	// 내부 함수의 id가 외부 함수의 id를 가리키고 있기 때문에 0,1,2,3,4 가 출력 된다.
+	var arr = []
+	for(var i = 0; i < 5; i++){
+	    arr[i] = function(id) {
+	        return function(){
+	            return id;
+	        }
+	    }(i);
+	}
+	for(var index in arr) {
+    console.log(arr[index]());
+	}
+</script>
+</head>
+<body>
+
+</body>
+</html>

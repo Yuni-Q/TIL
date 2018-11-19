@@ -1,0 +1,839 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>ZR00_64F01</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: ZR00_64F01</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  Include ZR14_49F01</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&  Include           ZR14_49F01</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+
+
+
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_INIT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_init .
+
+ENDFORM.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  DISPLAY_SCREEN</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM display_screen .
+  DATA: lt_exclude TYPE ui_functions.
+
+  CLEAR : gt_fcat, gs_fcat.
+
+  PERFORM set_field_catalog USING :
+        'X' 'CARRID'     'Airline'      ' ',
+        'X' 'CONNID'     'No.'          ' ',
+        'X' 'FLDATE'     'Flight date'  ' ',
+        ' ' 'PRICE'      'Airfare'      ' ',
+        ' ' 'CURRENCY'   'Currency'     ' ',
+        ' ' 'PLANETYPE'  'Plane Type' ' ',
+        ' ' 'SEATSMAX'   'Capacity econ.' ' ',
+        ' ' 'SEATSOCC'   'Occupied econ.' ' ',
+        ' ' 'PAYMENTSUM' 'Booking total' ' ',
+        ' ' 'SEATSMAX_B'   'Capacity bus.' ' ',
+        ' ' 'SEATSOCC_B'   'Occupied bus.' ' ',
+        ' ' 'SEATSMAX_F'   'Capacity 1st.' ' ',
+        ' ' 'SEATSOCC_F'   'Occupied 1st.' ' '.
+
+  PERFORM set_layout.
+
+  IF go_container IS INITIAL.
+
+    PERFORM create_object.
+
+<font color ="#0000FF">* #### ALV toolbar ##</font>
+    PERFORM exclude_tb_functions CHANGING lt_exclude.
+
+<font color ="#0000FF">* Regiser edit event</font>
+    go_alv_grid-&gt;register_edit_event(
+      cl_gui_alv_grid=&gt;mc_evt_enter
+    ).
+
+    go_alv_grid-&gt;register_edit_event(
+     cl_gui_alv_grid=&gt;mc_evt_modified
+   ).
+
+<font color ="#0000FF">* Set handler</font>
+    SET HANDLER: lcl_event_handler=&gt;handle_data_changed
+                 FOR go_alv_grid,
+
+                 lcl_event_handler=&gt;handle_data_changed_finished
+                 FOR go_alv_grid.
+
+    CALL METHOD go_alv_grid-&gt;set_table_for_first_display
+      EXPORTING
+        i_save               = 'A'
+        i_default            = 'X'
+        is_layout            = gs_layout
+        it_toolbar_excluding = lt_exclude
+      CHANGING
+        it_outtab            = gt_list
+        it_fieldcatalog      = gt_fcat.
+
+  ELSE.
+
+    CALL METHOD go_alv_grid-&gt;refresh_table_display.
+
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  CREATE_OBJECT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM create_object .
+  CREATE OBJECT go_container
+    EXPORTING
+      repid     = sy-repid
+      dynnr     = sy-dynnr
+      side      = go_container-&gt;dock_at_left
+      extension = 3000.
+
+  CREATE OBJECT go_alv_grid
+    EXPORTING
+      i_parent = go_container.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_FIELD_CATALOG</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_0183   text</font>
+<font color ="#0000FF">*      --&gt;P_0184   text</font>
+<font color ="#0000FF">*      --&gt;P_0185   text</font>
+<font color ="#0000FF">*      --&gt;P_0186   text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_field_catalog  USING pv_key pv_field pv_text pv_emphasize.
+
+  gs_fcat-key       = pv_key.
+  gs_fcat-fieldname = pv_field.
+  gs_fcat-coltext   = pv_text.
+  gs_fcat-emphasize = pv_emphasize.
+
+  CASE pv_field.
+    WHEN 'PRICE'
+      OR 'PLANETYPE'
+      OR 'FLDATE'.
+
+<font color ="#0000FF">* ## ### #####</font>
+<font color ="#0000FF">* FLDATA, PRICE, PLANETYPE ### ### ### ### ## ####</font>
+      gs_fcat-edit = 'X'.
+      gs_fcat-ref_table = 'SFLIGHT'.
+
+<font color ="#0000FF">* shortdump ##</font>
+      gs_fcat-checktable = '!'.        "do not check foreign keys
+
+    WHEN 'CARRID'
+      OR 'CONNID'
+      OR 'CURRENCY'.
+
+<font color ="#0000FF">* ### ### ### #### #### ## ##</font>
+      gs_fcat-auto_value = 'X'.
+      gs_fcat-checktable = '!'.   "do not check foreign key relations
+      gs_fcat-ref_table = 'SFLIGHT'.
+  ENDCASE.
+
+  APPEND gs_fcat TO gt_fcat.
+  CLEAR gs_fcat.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_LAYOUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_layout .
+  gs_layout-zebra       = 'X'.
+  gs_layout-cwidth_opt  = 'X'.
+  gs_layout-sel_mode    = 'D'.
+
+<font color ="#0000FF">* style field</font>
+  gs_layout-stylefname  = 'CELLTAB'.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_DATA_MAIN</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_data_main .
+  DATA: ls_spfli   TYPE spfli,
+        ls_list    LIKE LINE OF gt_list,
+        lt_celltab TYPE lvc_t_styl,
+        lv_tabix   TYPE sytabix.
+
+  gv_carrid = s_carrid-low.
+  gv_connid = s_connid-low.
+
+<font color ="#0000FF">* Airline code, connection number# ##### ##</font>
+  SELECT SINGLE *
+      INTO ls_spfli
+      FROM spfli
+     WHERE carrid = gv_carrid
+       AND connid = gv_connid.
+
+  IF sy-subrc &lt;&gt; 0.
+<font color ="#0000FF">* #### ## ## ##### ### ##</font>
+    CALL FUNCTION 'POPUP_TO_INFORM'
+      EXPORTING
+        titel = TEXT-i01
+        txt1  = TEXT-i02
+        txt2  = TEXT-i03
+        txt3  = TEXT-i04
+        txt4  = TEXT-i05.
+  ELSE.
+<font color ="#0000FF">* STEP 0. CARRID, CONNID# Database table# lock# ##.</font>
+<font color ="#0000FF">*   ## #### #### #### #### ##</font>
+    PERFORM lock_sflight USING gv_success.
+
+    IF gv_success IS NOT INITIAL.
+
+      IF pa_ds IS INITIAL.                     "Not data selection
+<font color ="#0000FF">* CARRID, CONNID ### #### #### gc_record_limit# ###</font>
+<font color ="#0000FF">* ## ### ####.</font>
+        SELECT *
+            UP TO gc_record_limits ROWS
+            INTO CORRESPONDING FIELDS OF TABLE gt_list
+            FROM sflight
+           WHERE carrid = gv_carrid
+             AND connid = gv_connid.
+
+<font color ="#0000FF">* DB## ## # ## #### Read only</font>
+        PERFORM fill_celltab USING 'RO'
+                          CHANGING lt_celltab.
+
+        LOOP AT gt_list INTO ls_list.
+          lv_tabix = sy-tabix.
+
+<font color ="#0000FF">* Style ##</font>
+          INSERT LINES OF lt_celltab INTO TABLE ls_list-celltab.
+
+          MODIFY gt_list FROM ls_list INDEX lv_tabix.
+        ENDLOOP.
+
+      ELSE.
+        PERFORM create_initial_table.
+      ENDIF.
+    ELSE.
+      MESSAGE i000(0k) WITH '## #### ######'
+         DISPLAY LIKE 'E'.
+    ENDIF.
+  ENDIF.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  LOCK_SFLIGHT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  CARRID, CONNID# lock# ### ## #### #### ### #</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_GV_SUCCESS  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM lock_sflight  USING    pv_success TYPE char01.
+  CLEAR pv_success.
+
+  CALL FUNCTION 'ENQUEUE_ESFLIGHT'
+    EXPORTING
+      carrid         = gv_carrid
+      connid         = gv_connid
+      _scope         = '3'
+    EXCEPTIONS
+      foreign_lock   = 1
+      system_failure = 2
+      OTHERS         = 3.
+
+  IF sy-subrc = 0.
+    pv_success = 'X'.
+  ENDIF.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  FILL_CELLTAB</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_0302   text</font>
+<font color ="#0000FF">*      &lt;--P_LT_CELLTAB  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM fill_celltab  USING    p_mode
+                   CHANGING pt_celltab TYPE lvc_t_styl.
+  DATA: ls_celltab TYPE lvc_s_styl,
+        lv_mode    TYPE lvc_style.
+
+  IF p_mode = 'RW'.
+    lv_mode = cl_gui_alv_grid=&gt;mc_style_enabled.
+  ELSE.
+    lv_mode = cl_gui_alv_grid=&gt;mc_style_disabled.
+  ENDIF.
+
+  ls_celltab-fieldname = 'FLDATE'.
+  ls_celltab-style = lv_mode.
+  INSERT ls_celltab INTO TABLE pt_celltab.
+
+  ls_celltab-fieldname = 'PRICE'.
+  ls_celltab-style = lv_mode.
+  INSERT ls_celltab INTO TABLE pt_celltab.
+
+  ls_celltab-fieldname = 'PLANETYPE'.
+  ls_celltab-style = lv_mode.
+  INSERT ls_celltab INTO TABLE pt_celltab.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  EXCLUDE_TB_FUNCTIONS</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      &lt;--P_LT_EXCLUDE  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM exclude_tb_functions  CHANGING pt_exclude TYPE ui_functions.
+  DATA ls_exclude TYPE ui_func.
+
+  ls_exclude = cl_gui_alv_grid=&gt;mc_fc_loc_insert_row.
+  APPEND ls_exclude TO pt_exclude.
+  ls_exclude = cl_gui_alv_grid=&gt;mc_fc_loc_undo.
+  APPEND ls_exclude TO pt_exclude.
+  ls_exclude = cl_gui_alv_grid=&gt;mc_fc_loc_copy_row.
+  APPEND ls_exclude TO pt_exclude.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  HANDLE_DATA_CHANGED</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_ER_DATA_CHANGED  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM handle_data_changed  USING
+               pr_data_changed TYPE REF TO cl_alv_changed_data_protocol.
+
+  CLEAR gv_error_in_data.
+
+<font color ="#0000FF">* 1. ### ## ##### ##</font>
+  PERFORM check_double_entries USING pr_data_changed.
+
+<font color ="#0000FF">* 2. #### #### ##, ##/### #### ### itab# ##</font>
+<font color ="#0000FF">*    ##(pr_data_changed-&gt;mt_inserted_rows)</font>
+<font color ="#0000FF">*    ##(pr_data_changed-&gt;mt_deleted_rows)</font>
+
+  CHECK gv_error_in_data IS INITIAL.
+  PERFORM check_delta_entries USING pr_data_changed.
+
+<font color ="#0000FF">* 3. #### ## ##(###)</font>
+  CHECK gv_error_in_data IS INITIAL.
+
+  PERFORM check_data_values   USING pr_data_changed.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  CHECK_DELTA_ENTRIES</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM check_delta_entries USING
+       pr_data_changed TYPE REF TO cl_alv_changed_data_protocol.
+
+  DATA: ls_deleted_rows  TYPE lvc_s_moce,
+        ls_inserted_rows TYPE lvc_s_moce.
+
+  DATA: ls_list     LIKE LINE OF gt_list,
+        ls_del_rows LIKE LINE OF gt_del_rows,
+        ls_ins_rows LIKE LINE OF gt_ins_rows.
+
+<font color ="#0000FF">*--------------------------------------------------------------------*</font>
+<font color ="#0000FF">* 1. Internal table## ##</font>
+<font color ="#0000FF">*--------------------------------------------------------------------*</font>
+  LOOP AT pr_data_changed-&gt;mt_deleted_rows INTO ls_deleted_rows.
+<font color ="#0000FF">* ##### #### itab# ### ##</font>
+    READ TABLE gt_list INTO ls_list INDEX ls_deleted_rows-row_id.
+    IF sy-subrc &lt;&gt; 0.
+      MESSAGE i000(0k) WITH 'Internal error when deleting a row'.
+    ELSE.
+      CLEAR ls_del_rows.
+      MOVE-CORRESPONDING ls_list TO ls_del_rows.
+
+<font color ="#0000FF">* 1a.DB## #### ## ##</font>
+      APPEND ls_del_rows TO gt_del_rows.
+
+<font color ="#0000FF">* 1b.### #### Inserted row# ## #### ##</font>
+<font color ="#0000FF">*     ##### ### ##</font>
+      DELETE gt_ins_rows WHERE carrid = ls_list-carrid
+                           AND connid = ls_list-connid
+                           AND fldate = ls_list-fldate.
+    ENDIF.
+  ENDLOOP.
+
+<font color ="#0000FF">*--------------------------------------------------------------------*</font>
+<font color ="#0000FF">* 2. ### line</font>
+<font color ="#0000FF">*--------------------------------------------------------------------*</font>
+<font color ="#0000FF">* DATA_CHANGED #### GT_LIST# #### #### ## ###</font>
+<font color ="#0000FF">* ROW_ID ### MT_GOOD_CELLS## ## ### ## #### #</font>
+<font color ="#0000FF">* pr_data_changed-&gt;get_cell_value()</font>
+
+<font color ="#0000FF">* 2a. Internal table# data selection ## #### ####</font>
+  IF gv_table_initial IS NOT INITIAL.
+    PERFORM get_key_values USING 1
+                                 pr_data_changed
+                        CHANGING ls_list.
+
+    APPEND ls_list TO gt_ins_rows.
+
+    PERFORM set_table_initial_status USING ' '.
+  ENDIF.
+
+<font color ="#0000FF">* 2b. ### ### gt_ins_rows# ##</font>
+  LOOP AT pr_data_changed-&gt;mt_inserted_rows INTO ls_inserted_rows.
+    CLEAR ls_list.
+
+    PERFORM get_key_values USING ls_inserted_rows-row_id
+                                 pr_data_changed
+                        CHANGING ls_list.
+
+<font color ="#0000FF">*    IF ls_list-fldate IS INITIAL.</font>
+<font color ="#0000FF">*      CALL METHOD pr_data_changed-&gt;add_protocol_entry</font>
+<font color ="#0000FF">*        EXPORTING</font>
+<font color ="#0000FF">*          i_msgid     = '0K'</font>
+<font color ="#0000FF">*          i_msgno     = '000'</font>
+<font color ="#0000FF">*          i_msgty     = 'E'</font>
+<font color ="#0000FF">*          i_msgv1     = 'Fligth date is initial.'</font>
+<font color ="#0000FF">*          i_fieldname = ls_good-fieldname</font>
+<font color ="#0000FF">*          i_row_id    = ls_good-row_id.</font>
+<font color ="#0000FF">*    else.</font>
+<font color ="#0000FF">*    ENDIF.</font>
+    APPEND ls_list TO gt_ins_rows.
+  ENDLOOP.
+ENDFORM.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  CREATE_INITIAL_TABLE</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  Not data selection# #### #### ##, ##### #####.</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM create_initial_table .
+  DATA: ls_list    LIKE LINE OF gt_list,
+        ls_scarr   TYPE scarr,
+        lt_celltab TYPE lvc_t_styl.
+
+<font color ="#0000FF">* ### ##</font>
+  SELECT SINGLE *
+      INTO ls_scarr
+      FROM scarr
+     WHERE carrid = gv_carrid.
+
+  IF sy-subrc = 0.
+    ls_list-carrid = gv_carrid.
+    ls_list-connid = gv_connid.
+    ls_list-currency = ls_scarr-currcode.
+
+    PERFORM fill_celltab USING 'RW'
+                      CHANGING lt_celltab.
+
+    INSERT LINES OF lt_celltab INTO TABLE ls_list-celltab.
+
+    APPEND ls_list TO gt_list.
+  ENDIF.
+
+<font color ="#0000FF">* Internal table# initial #### #### #### ####</font>
+  PERFORM set_table_initial_status USING 'X'.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_TABLE_INITIAL_STATUS</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_0689   text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_table_initial_status  USING  pv_status TYPE char01.
+  gv_table_initial = pv_status.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_KEY_VALUES</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_1      text</font>
+<font color ="#0000FF">*      --&gt;P_PR_DATA_CHANGED  text</font>
+<font color ="#0000FF">*      &lt;--P_LS_LIST  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_key_values
+         USING
+           pv_row_id       TYPE int4
+           pr_data_changed TYPE REF TO cl_alv_changed_data_protocol
+         CHANGING
+           ps_list TYPE ty_list.
+
+<font color ="#0000FF">* get values of key cells of row ROW_ID</font>
+
+<font color ="#0000FF">* CARRIER</font>
+  CALL METHOD pr_data_changed-&gt;get_cell_value
+    EXPORTING
+      i_row_id    = pv_row_id
+      i_fieldname = 'CARRID'
+    IMPORTING
+      e_value     = ps_list-carrid.
+
+  IF sy-subrc NE 0.
+    MESSAGE i000(0k) WITH 'Internal error when inserting a row'.
+  ENDIF.
+
+<font color ="#0000FF">* CONNID</font>
+  CALL METHOD pr_data_changed-&gt;get_cell_value
+    EXPORTING
+      i_row_id    = pv_row_id
+      i_fieldname = 'CONNID'
+    IMPORTING
+      e_value     = ps_list-connid.
+
+  IF sy-subrc NE 0.
+    MESSAGE i000(0k) WITH 'Internal error when inserting a row'.
+  ENDIF.
+
+<font color ="#0000FF">* FLDATE</font>
+  CALL METHOD pr_data_changed-&gt;get_cell_value
+    EXPORTING
+      i_row_id    = pv_row_id
+      i_fieldname = 'FLDATE'
+    IMPORTING
+      e_value     = ps_list-fldate.
+
+  IF sy-subrc NE 0.
+    MESSAGE i000(0k) WITH 'Internal error when inserting a row'.
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  CHECK_DATA_VALUES</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_PR_DATA_CHANGED  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM check_data_values  USING
+            pr_data_changed TYPE REF TO cl_alv_changed_data_protocol.
+
+  DATA: ls_good      TYPE lvc_s_modi,
+        ls_list      type ty_list,
+        ls_saplane   TYPE saplane,
+        lv_planetype TYPE s_planetye,
+        lv_fldate    TYPE datum.
+
+  LOOP AT pr_data_changed-&gt;mt_good_cells INTO ls_good.
+    CASE ls_good-fieldname.
+      WHEN 'PLANETYPE'.
+        CALL METHOD pr_data_changed-&gt;get_cell_value
+          EXPORTING
+            i_row_id    = ls_good-row_id
+            i_fieldname = ls_good-fieldname
+          IMPORTING
+            e_value     = lv_planetype.
+
+        SELECT SINGLE *
+            INTO ls_saplane
+            FROM saplane
+           WHERE planetype = lv_planetype.
+
+        IF sy-subrc NE 0.
+          CALL METHOD pr_data_changed-&gt;add_protocol_entry
+            EXPORTING
+              i_msgid     = '0K'
+              i_msgno     = '000'
+              i_msgty     = 'E'
+              i_msgv1     = TEXT-m02
+              i_fieldname = ls_good-fieldname
+              i_row_id    = ls_good-row_id.
+
+          gv_error_in_data = 'X'.
+        ELSE.
+          CALL METHOD pr_data_changed-&gt;modify_cell
+            EXPORTING
+              i_row_id    = ls_good-row_id
+              i_fieldname = 'SEATSMAX'
+              i_value     = ls_saplane-seatsmax.
+
+          CALL METHOD pr_data_changed-&gt;modify_cell
+            EXPORTING
+              i_row_id    = ls_good-row_id
+              i_fieldname = 'SEATSMAX_B'
+              i_value     = ls_saplane-seatsmax_b.
+
+          CALL METHOD pr_data_changed-&gt;modify_cell
+            EXPORTING
+              i_row_id    = ls_good-row_id
+              i_fieldname = 'SEATSMAX_F'
+              i_value     = ls_saplane-seatsmax_f.
+        ENDIF.
+
+      WHEN 'FLDATE'.
+        CALL METHOD pr_data_changed-&gt;get_cell_value
+          EXPORTING
+            i_row_id    = ls_good-row_id
+            i_fieldname = ls_good-fieldname
+          IMPORTING
+            e_value     = lv_fldate.
+        if lv_fldate is not INITIAL.
+          READ TABLE gt_ins_rows with key carrid = gv_carrid
+                                          connid = gv_connid
+                                          fldate = lv_fldate
+                  TRANSPORTING NO FIELDS.
+          if sy-subrc &lt;&gt; 0.
+            ls_list-carrid = gv_carrid.
+            ls_list-connid = gv_connid.
+            ls_list-fldate = lv_fldate.
+            append ls_list to gt_ins_rows.
+          endif.
+        endif.
+    ENDCASE.
+  ENDLOOP.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  CHECK_DOUBLE_ENTRIES</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_PR_DATA_CHANGED  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM check_double_entries  USING
+           pr_data_changed TYPE REF TO cl_alv_changed_data_protocol.
+
+  DATA: lt_good_cells TYPE lvc_t_modi,
+        ls_good       TYPE lvc_s_modi,
+<font color ="#0000FF">*          ls_key        type sflight_key,</font>
+        ls_sflight    TYPE sflight,
+        lv_flightdate TYPE sflight-fldate,
+        ls_del_row    TYPE lvc_s_moce,
+        ls_list       LIKE LINE OF gt_list,
+        lv_reentered  TYPE c.
+
+<font color ="#0000FF">*--------------------------------------------------------------------*</font>
+<font color ="#0000FF">* ### #### #### ##### ##</font>
+<font color ="#0000FF">* CARRID, CONNID# ### #### FLDATE ## ###</font>
+<font color ="#0000FF">*--------------------------------------------------------------------*</font>
+<font color ="#0000FF">* 1. MT_GOOD_CELLS ## ### ## ### #### ## lt_good_cells</font>
+<font color ="#0000FF">*    itab# #### ## ## ##### #</font>
+  LOOP AT pr_data_changed-&gt;mt_good_cells INTO ls_good.
+    CASE ls_good-fieldname.
+      WHEN 'FLDATE'.
+
+        CALL METHOD pr_data_changed-&gt;get_cell_value
+          EXPORTING
+            i_row_id    = ls_good-row_id
+            i_fieldname = ls_good-fieldname
+          IMPORTING
+            e_value     = lv_flightdate.
+
+        READ TABLE lt_good_cells WITH KEY
+                          value = lv_flightdate
+                          TRANSPORTING NO FIELDS.
+        IF sy-subrc = 0.
+<font color ="#0000FF">* There exists already a line with the same flight date!</font>
+          CALL METHOD pr_data_changed-&gt;add_protocol_entry
+            EXPORTING
+              i_msgid     = '0K'
+              i_msgno     = '000'
+              i_msgty     = 'E'
+              i_msgv1     = 'This flight already exists.'
+              i_fieldname = ls_good-fieldname
+              i_row_id    = ls_good-row_id.
+
+          gv_error_in_data = 'X'.
+        ELSE.
+          ls_good-value = lv_flightdate.
+          APPEND ls_good TO lt_good_cells.
+        ENDIF.
+    ENDCASE.
+  ENDLOOP.
+
+<font color ="#0000FF">*--------------------------------------------------------------------*</font>
+<font color ="#0000FF">* 2. ### ## ### ## ## #### ####?</font>
+<font color ="#0000FF">*--------------------------------------------------------------------*</font>
+  LOOP AT lt_good_cells INTO ls_good.
+    lv_flightdate = ls_good-value.
+    READ TABLE gt_list WITH KEY
+                  carrid = gv_carrid
+                  connid = gv_connid
+                  fldate = lv_flightdate
+                  TRANSPORTING NO FIELDS.
+
+    IF sy-subrc = 0.
+<font color ="#0000FF">*   ### ##### ## ### ##### ## #### ##</font>
+      lv_reentered = space.
+      LOOP AT pr_data_changed-&gt;mt_deleted_rows INTO ls_del_row.
+        READ TABLE gt_list INTO ls_list INDEX ls_del_row-row_id.
+        IF sy-subrc NE 0.
+<font color ="#0000FF">*           gt_list# ## #### ##### # --&gt; error</font>
+          MESSAGE i000(0k) WITH 'Internal error when deleting a row'.
+        ELSEIF
+                  ls_list-carrid EQ gv_carrid
+              AND ls_list-connid EQ gv_connid
+              AND ls_list-fldate EQ ls_good-value.
+          lv_reentered = 'X'.
+        ENDIF.
+      ENDLOOP.
+
+      IF lv_reentered NE 'X'.
+<font color ="#0000FF">*    ##### ## #### ### #### ### ##</font>
+        CALL METHOD pr_data_changed-&gt;add_protocol_entry
+          EXPORTING
+            i_msgid     = '0K'
+            i_msgno     = '000'
+            i_msgty     = 'E'
+            i_msgv1     = 'This flight already exists.'
+            i_fieldname = ls_good-fieldname
+            i_row_id    = ls_good-row_id.
+
+        gv_error_in_data = 'X'.
+      ENDIF.
+    ENDIF.
+  ENDLOOP.
+
+<font color ="#0000FF">* 3.</font>
+<font color ="#0000FF">* In this demo report you may prevent the selection</font>
+<font color ="#0000FF">* of data by setting parameter 'p_ds'.</font>
+<font color ="#0000FF">* If this is done, the next check is required:</font>
+  IF gv_table_initial =  'X'.
+    CLEAR ls_list.
+    PERFORM get_key_values
+         USING    1
+                  pr_data_changed
+        CHANGING  ls_list.
+
+    SELECT SINGLE * FROM sflight INTO ls_sflight
+              WHERE carrid = ls_list-carrid
+                AND connid = ls_list-connid
+                AND fldate = ls_list-fldate.
+
+    IF sy-subrc = 0.
+      CALL METHOD pr_data_changed-&gt;add_protocol_entry
+        EXPORTING
+          i_msgid     = '0K'
+          i_msgno     = '000'
+          i_msgty     = 'E'
+          i_msgv1     = TEXT-m01
+          i_fieldname = 'FLDATE'
+          i_row_id    = 1.
+
+      gv_error_in_data = 'X'.
+    ENDIF.
+<font color ="#0000FF">* flag initial_table is reset in method 'update_delta_tables'</font>
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  UNLOCK_SFLIGHT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM unlock_sflight .
+  call function 'DEQUEUE_ESFLIGHT'
+       exporting
+            carrid = gv_carrid
+            connid = gv_connid
+            _scope = '3'.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SAVE_DATA</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM save_data .
+  data: lv_valid type c.
+
+<font color ="#0000FF">* ALV Grid# ### ### ### ##</font>
+<font color ="#0000FF">* DATA_CHANGED event# ##### #### ### ####.</font>
+<font color ="#0000FF">* ### ### l_valid = 'X' # ##.</font>
+
+  call method go_alv_grid-&gt;check_changed_data
+               importing e_valid = lv_valid.
+
+  if lv_valid is initial.
+    call function 'POPUP_TO_INFORM'
+         exporting
+              titel = text-i06
+              txt1  = text-i07
+              txt2  = text-i08
+              txt3  = text-i09.
+
+  else.
+    perform update_database.
+    message s000(0k) with text-s01.
+  endif.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  UPDATE_DATABASE</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM update_database .
+  data: ls_ins_rows like line of gt_ins_rows,
+        ls_sflight type sflight,
+        ls_list     like line of gt_list,
+        lt_instab type table of sflight.
+
+<font color ="#0000FF">* 1. ### ## DB## ##</font>
+  delete sflight from table gt_del_rows.
+
+<font color ="#0000FF">* 2. ### ### DB# ##</font>
+  loop at gt_ins_rows into ls_ins_rows.
+    read table gt_list into ls_list
+     with key carrid = ls_ins_rows-carrid
+              connid = ls_ins_rows-connid
+              fldate = ls_ins_rows-fldate.
+    if sy-subrc eq 0.
+      move-corresponding ls_list to ls_sflight.
+      append ls_sflight to lt_instab.
+    endif.
+  endloop.
+
+  insert sflight from table lt_instab.
+
+<font color ="#0000FF">* 3. clear delta internal tables.</font>
+  clear: gt_ins_rows, gt_del_rows.
+ENDFORM.
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - E.G.Mellodew. 1998-2005 UK. Sap Release 750
+</font>
+</body>
+</html>

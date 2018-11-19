@@ -1,0 +1,21 @@
+<div class="target" id="target1">
+    target 1
+</div>
+ 
+<div class="target" id="target2">
+    target 2
+</div>
+ 
+<input type="button" value="remove target 1" id="btn1" />
+<input type="button" value="empty target 2" id="btn2" />
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script>
+    $('#btn1').click(function(){
+        $('#target1').remove();
+        // dive제거
+    })
+    $('#btn2').click(function(){
+        $('#target2').empty();
+        // 내용만 제거
+    })
+</script>

@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>ZR00_56</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: ZR00_56</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  ####-Splitter</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Report  ZR00_56</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Splitter container ##</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+
+include <a href ="zr00_56top.html">ZR00_56TOP</a>.
+include <a href ="zr00_56c01.html">zr00_56C01</a>.
+include <a href ="zr00_56s01.html">ZR00_56S01</a>.
+include <a href ="zr00_56o01.html">ZR00_56O01</a>.
+include <a href ="zr00_56i01.html">ZR00_56I01</a>.
+include <a href ="zr00_56f01.html">ZR00_56F01</a>.
+
+INITIALIZATION.
+  PERFORM set_init.
+
+START-OF-SELECTION.
+  perform get_data_main.
+
+  IF gt_list IS NOT INITIAL.
+    CALL SCREEN 100.
+  ENDIF.
+
+<font color ="#0000FF">*GUI Texts</font>
+<font color ="#0000FF">*----------------------------------------------------------</font>
+<font color ="#0000FF">* TITLE100 --&gt; ####-Splitter container</font>
+<font color ="#0000FF">* TITLE100 --&gt; ####-Splitter container</font>
+
+<font color ="#0000FF">*Text elements</font>
+<font color ="#0000FF">*----------------------------------------------------------</font>
+<font color ="#0000FF">* T01 ####</font>
+<font color ="#0000FF">* T02 ####</font>
+
+
+<font color ="#0000FF">*Selection texts</font>
+<font color ="#0000FF">*----------------------------------------------------------</font>
+<font color ="#0000FF">* R_01         ## ##</font>
+<font color ="#0000FF">* R_02         ## ###</font>
+<font color ="#0000FF">* R_03         ##</font>
+<font color ="#0000FF">* S_AEDAT         ###</font>
+<font color ="#0000FF">* S_BSART         ####</font>
+<font color ="#0000FF">* S_EBELN         ####</font>
+<font color ="#0000FF">* S_EINDT         ###</font>
+<font color ="#0000FF">* S_EKGRP         ####</font>
+<font color ="#0000FF">* S_EKORG         ####</font>
+<font color ="#0000FF">* S_LIFNR         ####</font>
+<font color ="#0000FF">* S_LOEKZ         ##</font>
+<font color ="#0000FF">* S_MATNR         ####</font>
+<font color ="#0000FF">* S_WERKS         ###</font>
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - E.G.Mellodew. 1998-2005 UK. Sap Release 750
+</font>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script>
+      function Ultra(){}
+      Ultra.prototype.ultraProp = true;
+      // 1,2,3 모두 없는 경우에 true가 출력 됨
+
+      function Super(){}
+      var t = new Ultra();
+      t.ultraProp = 3;
+      Super.prototype = t;
+
+      // 1 ,2 둘다 없는 경우엔 3이 출력 됨
+
+      function Sub(){}
+      Sub.prototype = new Super();
+//      Sub.prototype.ultraProp = 2; // 1이 없는 경우 2가 출력 됨
+
+      var o = new Sub();
+//      o.ultraProp = 1; // 이 경우는 1이 출력 됨
+      console.log(o.ultraProp);
+    </script>
+  </head>
+  <body>
+
+  </body>
+</html>

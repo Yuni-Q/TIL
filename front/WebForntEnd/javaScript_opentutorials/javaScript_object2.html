@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script>
+    // contain은 내부에 값이 있는지 체크 !!
+    // 모든 객체에 영향을 줄 수 있다 . 이게 장점이자 문제점
+    // 배열에 contain값도 포함 된다.
+      Object.prototype.contain = function(neddle) {
+      for(var name in this){
+          if(this[name] === neddle){
+              return true;
+          }
+      }
+      return false;
+      }
+      var o = {'name':'egoing', 'city':'seoul'}
+      console.log(o.contain('egoing'));
+      var a = ['egoing','leezche','grapittie'];
+      console.log(a.contain('leezche'));
+
+      for(var name in o){
+        // hasOwnProperty로 인해 contain이 제거 됨 !!
+        if(o.hasOwnProperty(name))
+        console.log(name);
+      }
+    </script>
+  </head>
+  <body>
+
+  </body>
+</html>

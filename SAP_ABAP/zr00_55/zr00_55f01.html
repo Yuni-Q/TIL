@@ -1,0 +1,455 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>ZR00_55F01</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: ZR00_55F01</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  Include ZR14_49F01</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&  Include           ZR14_49F01</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+
+
+
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_INIT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_init .
+
+<font color ="#0000FF">*  DATA: ls_datum LIKE LINE OF s_datum.</font>
+<font color ="#0000FF">*  ls_datum-sign = 'I'.</font>
+<font color ="#0000FF">*  ls_datum-option = 'EQ'.</font>
+<font color ="#0000FF">*  ls_datum-low = sy-datum.</font>
+<font color ="#0000FF">*  APPEND ls_datum TO s_datum.</font>
+ENDFORM.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  DISPLAY_SCREEN</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM display_screen .
+  CLEAR : gt_fcat, gs_fcat.
+
+  PERFORM set_field_catalog USING :
+        ' ' 'EKORG'  '####'    'X',
+        ' ' 'WERKS'  '###'      'X',
+        ' ' 'EBELN'  '####'    'X',
+        ' ' 'EBELP'  '####'    'X',
+        ' ' 'BSART'  '####'    ' ',
+        ' ' 'MATNR'  '####'      ' ',
+        ' ' 'TXZ01'  '####'    ' ',
+        ' ' 'EKGRP'  '####'      ' ',
+        ' ' 'EKNAM'  '###'    ' ',
+        ' ' 'LIFNR'  '####'    ' ',
+        ' ' 'NAME1'  '###'    ' ',
+        ' ' 'AEDAT'  '###'      ' ',
+        ' ' 'EINDT'  '###'      ' ',
+        ' ' 'BUDAT_MKPF'  '###'    ' ',
+        ' ' 'CPUTM_MKPF'  '####'      ' ',
+        ' ' 'USNAM_MKPF'  '#####'    ' ',
+        ' ' 'MENGE'  '####'    ' ',
+        ' ' 'MEINS'  '##'        ' ',
+        ' ' 'MECNT'  '####'      ' ',
+        ' ' 'BSTMG'  '####'      ' ',
+        ' ' 'BSTME'  '##'    ' ',
+        ' ' 'NETWR'  '####'      ' ',
+        ' ' 'WAERS'  '####'    ' ',
+        ' ' 'LGORT'  '####'    ' ',
+        ' ' 'LGOBE'  '#####'    ' ',
+        ' ' 'ERNAM'  '#####'    ' '
+        .
+
+
+  PERFORM set_layout.
+
+  IF go_container IS INITIAL.
+
+    PERFORM create_object.
+
+    CALL METHOD go_alv_grid-&gt;set_table_for_first_display
+      EXPORTING
+        i_save          = 'A'
+        i_default       = 'X'
+        is_layout       = gs_layout
+      CHANGING
+        it_outtab       = gt_list
+        it_fieldcatalog = gt_fcat.
+
+  ELSE.
+
+    CALL METHOD go_alv_grid-&gt;refresh_table_display.
+
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  CREATE_OBJECT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM create_object .
+  CREATE OBJECT go_container
+    EXPORTING
+      repid     = sy-repid
+      dynnr     = sy-dynnr
+      side      = go_container-&gt;dock_at_left
+      extension = 3000.
+
+  CREATE OBJECT go_alv_grid
+    EXPORTING
+      i_parent = go_container.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_FIELD_CATALOG</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_0183   text</font>
+<font color ="#0000FF">*      --&gt;P_0184   text</font>
+<font color ="#0000FF">*      --&gt;P_0185   text</font>
+<font color ="#0000FF">*      --&gt;P_0186   text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_field_catalog  USING pv_key pv_field pv_text pv_emphasize.
+
+  gs_fcat-key       = pv_key.
+  gs_fcat-fieldname = pv_field.
+  gs_fcat-coltext   = pv_text.
+  gs_fcat-emphasize = pv_emphasize.
+
+  APPEND gs_fcat TO gt_fcat.
+  CLEAR gs_fcat.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_LAYOUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_layout .
+  gs_layout-zebra       = 'X'.
+  gs_layout-cwidth_opt  = 'X'.
+  gs_layout-sel_mode    = 'D'.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_DATA_MAIN</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_data_main .
+  DATA: lr_elikz TYPE RANGE OF ekpo-elikz,
+        ls_elikz LIKE LINE OF lr_elikz.
+
+<font color ="#0000FF">* #### "Delivery Completed" Indicator</font>
+  CASE abap_true.
+    WHEN r_01.
+      ls_elikz-sign = 'I'.
+      ls_elikz-option = 'EQ'.
+      ls_elikz-low  = 'X'.
+      APPEND ls_elikz TO lr_elikz.
+    WHEN r_02.
+      ls_elikz-sign = 'I'.
+      ls_elikz-option = 'BT'.
+      ls_elikz-low  = ' '.
+      ls_elikz-high = 'X'.
+      APPEND ls_elikz TO lr_elikz.
+  ENDCASE.
+
+  SELECT b~ekorg,
+         a~werks,
+         a~ebeln,
+         a~ebelp,
+         b~bsart,
+         a~matnr,
+         a~txz01,
+         b~ekgrp,
+         b~lifnr,
+         b~aedat,
+         c~eindt,
+         a~menge,
+         a~meins,
+         a~netwr,
+         b~waers,
+         a~lgort,
+         b~ernam,
+         a~retpo
+     INTO CORRESPONDING FIELDS OF TABLE @gt_list
+     FROM ekpo AS a INNER JOIN ekko AS b
+                            ON a~ebeln = b~ebeln
+                    INNER JOIN eket AS c
+                            ON c~ebeln = a~ebeln
+                           AND c~ebelp = a~ebelp
+                           AND c~etenr = '1'
+   WHERE ekorg   IN @s_ekorg
+     AND a~werks IN @s_werks
+     AND b~ekgrp IN @s_ekgrp
+     AND a~matnr IN @s_matnr
+     AND a~ebeln IN @s_ebeln
+     AND b~lifnr IN @s_lifnr
+     AND b~bsart IN @s_bsart
+     AND c~eindt IN @s_eindt
+     AND b~aedat IN @s_aedat
+     AND b~loekz IN @s_loekz
+     AND a~elikz IN @lr_elikz
+     AND b~bstyp NE 'A'.
+  IF sy-subrc = 0.
+    SORT gt_list BY ekorg werks ebeln ebelp.
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_DATA_ETC</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_data_etc .
+
+  DATA: lt_mseg_cnt TYPE HASHED TABLE OF ty_mseg_cnt
+                    WITH UNIQUE KEY ebeln
+                                    ebelp,
+        ls_mseg_cnt LIKE LINE OF lt_mseg_cnt.
+
+  DATA: lt_mseg      TYPE TABLE OF ty_mseg,
+        ls_mseg      TYPE ty_mseg,
+        ls_mseg_buf  TYPE ty_mseg,
+        lt_mseg_last TYPE TABLE OF ty_mseg,
+        ls_mseg_last LIKE LINE OF lt_mseg_last.
+
+  DATA: ls_list  TYPE ty_list,
+        lv_tabix TYPE sytabix.
+
+  IF gt_list IS NOT INITIAL.
+<font color ="#0000FF">* Get MSEG</font>
+    SELECT
+      ebeln
+      ebelp
+      budat_mkpf
+      cputm_mkpf
+      usnam_mkpf
+      bwart
+<font color ="#0000FF">*      bstmg                  "####</font>
+      menge       AS bstmg    "####
+      bstme                   "####
+      INTO CORRESPONDING FIELDS OF TABLE lt_mseg
+      FROM mseg
+      FOR ALL ENTRIES IN gt_list
+     WHERE ebeln = gt_list-ebeln
+       AND ebelp = gt_list-ebelp
+       AND bwart IN ('101', '161').
+
+    IF sy-subrc = 0.
+<font color ="#0000FF">* ##### #### #### ##</font>
+      SORT lt_mseg BY ebeln ebelp budat_mkpf DESCENDING
+                                  cputm_mkpf DESCENDING.
+
+      LOOP AT lt_mseg INTO ls_mseg.
+<font color ="#0000FF">* ### ### ## ## ## ##### #### #### ##</font>
+<font color ="#0000FF">* ### #### ## #### ### 1## ##</font>
+<font color ="#0000FF">* 1) ebeln-ebelp #### #### #####, ebeln## ebelp#</font>
+<font color ="#0000FF">*    ### ### ##</font>
+        IF ( ls_mseg_buf-ebeln &lt;&gt; ls_mseg-ebeln ) OR
+           ( ls_mseg_buf-ebelp &lt;&gt; ls_mseg-ebelp ).
+
+          APPEND ls_mseg TO lt_mseg_last.
+
+<font color ="#0000FF">* 2) retpo ### #### ## gt_list# ##</font>
+          CLEAR ls_list.
+          READ TABLE gt_list INTO ls_list
+                             WITH KEY ebeln = ls_mseg-ebeln
+                                      ebelp = ls_mseg-ebelp.
+        ENDIF.
+
+        CLEAR ls_mseg_cnt.
+        MOVE-CORRESPONDING ls_mseg TO ls_mseg_cnt.
+
+<font color ="#0000FF">* ##### #### ##</font>
+        CASE ls_mseg-bwart.
+          WHEN '101' OR '161'.
+            ls_mseg_cnt-mecnt = 1.
+
+            COLLECT ls_mseg_cnt INTO lt_mseg_cnt.
+        ENDCASE.
+
+        MOVE-CORRESPONDING ls_mseg TO ls_mseg_buf.
+      ENDLOOP.
+    ENDIF.
+
+  ENDIF.
+
+<font color ="#0000FF">* ## ##### #### ### sort</font>
+  SORT lt_mseg_last BY ebeln ebelp.
+
+<font color ="#0000FF">*--------------------------------------------------------------------*</font>
+<font color ="#0000FF">* Main loop</font>
+<font color ="#0000FF">*--------------------------------------------------------------------*</font>
+  LOOP AT gt_list into ls_list.
+    lv_tabix = sy-tabix.
+    CLEAR ls_mseg_cnt.
+
+<font color ="#0000FF">* ##### ##### ### ### ##</font>
+    READ TABLE lt_mseg_cnt INTO ls_mseg_cnt
+                       WITH TABLE KEY ebeln = ls_list-ebeln
+                                      ebelp = ls_list-ebelp.
+    IF sy-subrc = 0.
+      IF r_01 = abap_true AND ls_mseg_cnt-mecnt = 0.
+<font color ="#0000FF">* ##### 0# ### ##</font>
+        DELETE gt_list INDEX lv_tabix.
+      ELSE.
+        ls_list-mecnt = ls_mseg_cnt-mecnt.
+        ls_list-bstmg = ls_mseg_cnt-bstmg.
+
+        CLEAR ls_mseg_last.
+        READ TABLE lt_mseg_last INTO ls_mseg_last
+                                WITH KEY ebeln = ls_mseg-ebeln
+                                         ebelp = ls_mseg-ebelp
+                                BINARY SEARCH.
+        ls_list-budat_mkpf = ls_mseg_last-budat_mkpf.
+        ls_list-cputm_mkpf = ls_mseg_last-cputm_mkpf.
+        ls_list-usnam_mkpf = ls_mseg_last-usnam_mkpf.
+      ENDIF.
+    ELSE.
+<font color ="#0000FF">* ##### '####'# #, ## ### ## #### ##</font>
+      IF r_01 = abap_true.
+        DELETE gt_list INDEX lv_tabix.
+      ENDIF.
+    ENDIF.
+
+<font color ="#0000FF">* Code# ### ##</font>
+    PERFORM get_lifnr_text USING ls_list-lifnr
+                        CHANGING ls_list-name1.
+
+    PERFORM get_lgort_text USING ls_list-werks
+                                 ls_list-lgort
+                        CHANGING ls_list-lgobe.
+
+    PERFORM get_exgrp_text USING ls_list-ekgrp
+                        CHANGING ls_list-eknam.
+
+    modify gt_list from ls_list index lv_tabix.
+  ENDLOOP.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_LIFNR_TEXT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_&lt;LS_LIST&gt;_LIFNR  text</font>
+<font color ="#0000FF">*      &lt;--P_&lt;LS_LIST&gt;_NAME1  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_lifnr_text  USING    pv_lifnr TYPE lifnr
+                     CHANGING pv_name1 TYPE lfa1-name1.
+
+  DATA: ls_lifnr LIKE LINE OF gt_lifnr.
+
+  IF gt_lifnr IS INITIAL.
+    SELECT lifnr
+           name1
+        INTO TABLE gt_lifnr
+        FROM lfa1.
+    IF sy-subrc = 0.
+      SORT gt_lifnr BY lifnr.
+    ENDIF.
+  ENDIF.
+
+  READ TABLE gt_lifnr INTO ls_lifnr
+                      WITH KEY lifnr = pv_lifnr
+                      BINARY SEARCH.
+  IF sy-subrc = 0.
+    pv_name1 = ls_lifnr-name1.
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_LGORT_TEXT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_&lt;LS_LIST&gt;_WERKS  text</font>
+<font color ="#0000FF">*      --&gt;P_&lt;LS_LIST&gt;_LGORT  text</font>
+<font color ="#0000FF">*      &lt;--P_&lt;LS_LIST&gt;_LGOBE  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_lgort_text  USING    pv_werks
+                              pv_lgort
+                     CHANGING pv_lgobe.
+
+  DATA: ls_lgort LIKE LINE OF gt_lgort.
+
+  IF gt_lgort IS INITIAL.
+    SELECT werks
+           lgort
+           lgobe
+        INTO TABLE gt_lgort
+        FROM t001l.
+    IF sy-subrc = 0.
+      SORT gt_lgort BY werks lgort.
+    ENDIF.
+  ENDIF.
+
+  READ TABLE gt_lgort INTO ls_lgort
+                      WITH KEY werks = pv_werks
+                               lgort = pv_lgort
+                      BINARY SEARCH.
+  IF sy-subrc = 0.
+    pv_lgobe = ls_lgort-lgobe.
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_EXGRP_TEXT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_&lt;LS_LIST&gt;_EKGRP  text</font>
+<font color ="#0000FF">*      &lt;--P_&lt;LS_LIST&gt;_EKNAM  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_exgrp_text  USING    pv_ekgrp
+                     CHANGING pv_eknam.
+
+  DATA: ls_ekgrp LIKE LINE OF gt_ekgrp.
+
+  IF gt_ekgrp IS INITIAL.
+    SELECT ekgrp
+           eknam
+        INTO TABLE gt_ekgrp
+        FROM t024.
+    IF sy-subrc = 0.
+      SORT gt_ekgrp BY ekgrp.
+    ENDIF.
+  ENDIF.
+
+  READ TABLE gt_ekgrp INTO ls_ekgrp
+                      WITH KEY ekgrp = pv_ekgrp
+                      BINARY SEARCH.
+  IF sy-subrc = 0.
+    pv_eknam = ls_ekgrp-eknam.
+  ENDIF.
+
+ENDFORM.
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - E.G.Mellodew. 1998-2005 UK. Sap Release 750
+</font>
+</body>
+</html>

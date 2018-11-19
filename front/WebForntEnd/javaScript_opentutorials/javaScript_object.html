@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <script>
+      // object 바로 아래 있는 것과 prototype 아래 있는 것의 사용법 차이 !!!
+
+      //object.keys()
+      var arr = ["a","b","c"];
+      console.log('object.keys(arr)', object.keys(arr));
+
+      //object.prototype.toString()
+      var o = new Object();
+      console.log('o.toString()',o.toString());
+
+      var a = new Array(1,2,3);
+      console.log('a.toString()',a.toString());
+    </script>
+  </body>
+</html>

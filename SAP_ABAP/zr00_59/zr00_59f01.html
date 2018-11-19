@@ -1,0 +1,937 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>ZR00_59F01</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: ZR00_59F01</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  Include ZR14_49F01</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&  Include           ZR14_49F01</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+
+
+
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_INIT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_init .
+
+<font color ="#0000FF">*  DATA: ls_datum LIKE LINE OF s_datum.</font>
+<font color ="#0000FF">*  ls_datum-sign = 'I'.</font>
+<font color ="#0000FF">*  ls_datum-option = 'EQ'.</font>
+<font color ="#0000FF">*  ls_datum-low = sy-datum.</font>
+<font color ="#0000FF">*  APPEND ls_datum TO s_datum.</font>
+ENDFORM.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  DISPLAY_SCREEN</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM display_screen .
+
+  PERFORM create_field_catalog.
+
+  PERFORM set_layout.
+
+<font color ="#0000FF">*  IF go_container IS INITIAL.</font>
+  IF go_head_container IS INITIAL.
+
+    PERFORM create_object.
+
+<font color ="#0000FF">* head alv</font>
+    CALL METHOD go_alv_grid-&gt;set_table_for_first_display
+      EXPORTING
+        i_save          = 'A'
+        i_default       = 'X'
+        is_layout       = gs_layout
+      CHANGING
+        it_outtab       = gt_head
+        it_fieldcatalog = gt_fcat.
+
+<font color ="#0000FF">* item alv</font>
+    CALL METHOD go_alv_grid_item-&gt;set_table_for_first_display
+      EXPORTING
+        i_save          = 'A'
+        i_default       = 'X'
+        is_layout       = gs_layout_item
+      CHANGING
+        it_outtab       = gt_item
+        it_fieldcatalog = gt_fcat_item.
+
+<font color ="#0000FF">* schedule line alv</font>
+    CALL METHOD go_alv_grid_eket-&gt;set_table_for_first_display
+      EXPORTING
+        i_save          = 'A'
+        i_default       = 'X'
+        is_layout       = gs_layout_eket
+      CHANGING
+        it_outtab       = gt_eket
+        it_fieldcatalog = gt_fcat_eket.
+
+<font color ="#0000FF">* ## alv</font>
+    CALL METHOD go_alv_grid_summ-&gt;set_table_for_first_display
+      EXPORTING
+        i_save          = 'A'
+        i_default       = 'X'
+        is_layout       = gs_layout_summ
+      CHANGING
+        it_outtab       = gt_lifnr_sum
+        it_fieldcatalog = gt_fcat_summ.
+
+  ELSE.
+
+    CALL METHOD go_alv_grid-&gt;refresh_table_display.
+
+    CALL METHOD go_alv_grid_item-&gt;refresh_table_display.
+
+    CALL METHOD go_alv_grid_eket-&gt;refresh_table_display.
+
+    CALL METHOD go_alv_grid_summ-&gt;refresh_table_display.
+  ENDIF.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  CREATE_OBJECT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM create_object .
+  CREATE OBJECT go_container
+    EXPORTING
+      repid     = sy-repid
+      dynnr     = sy-dynnr
+      side      = go_container-&gt;dock_at_left
+      extension = 3000.
+
+<font color ="#0000FF">**   create splitter container in which to place graphics</font>
+  CREATE OBJECT go_splitter_container
+    EXPORTING
+      parent  = go_container
+      rows    = 2
+      columns = 2.
+
+<font color ="#0000FF">**   get part of splitter container for 1st table</font>
+  CALL METHOD go_splitter_container-&gt;get_container
+    EXPORTING
+      row       = 1
+      column    = 1
+    RECEIVING
+      container = go_head_container.
+
+<font color ="#0000FF">**   get part of splitter container for 2nd table</font>
+  CALL METHOD go_splitter_container-&gt;get_container
+    EXPORTING
+      row       = 2
+      column    = 1
+    RECEIVING
+      container = go_item_container.
+
+<font color ="#0000FF">**   get part of splitter container for 2nd table</font>
+  CALL METHOD go_splitter_container-&gt;get_container
+    EXPORTING
+      row       = 2
+      column    = 2
+    RECEIVING
+      container = go_eket_container.
+
+<font color ="#0000FF">**   ##</font>
+  CALL METHOD go_splitter_container-&gt;get_container
+    EXPORTING
+      row       = 1
+      column    = 2
+    RECEIVING
+      container = go_summ_container.
+
+<font color ="#0000FF">* ### ALV</font>
+  CREATE OBJECT go_alv_grid
+    EXPORTING
+      i_parent = go_head_container.
+
+<font color ="#0000FF">* ### ALV</font>
+  CREATE OBJECT go_alv_grid_item
+    EXPORTING
+      i_parent = go_item_container.
+
+<font color ="#0000FF">* ### ALV</font>
+  CREATE OBJECT go_alv_grid_eket
+    EXPORTING
+      i_parent = go_eket_container.
+
+<font color ="#0000FF">* ### ALV</font>
+  CREATE OBJECT go_alv_grid_summ
+    EXPORTING
+      i_parent = go_summ_container.
+
+<font color ="#0000FF">* Register event</font>
+  SET HANDLER lcl_event_handler=&gt;double_click FOR go_alv_grid.
+  SET HANDLER lcl_event_handler=&gt;double_click FOR go_alv_grid_item.
+
+  SET HANDLER: lcl_event_handler=&gt;handle_toolbar
+                                         FOR go_alv_grid_summ,
+               lcl_event_handler=&gt;handle_user_command
+                                         FOR go_alv_grid_summ.
+ENDFORM.
+
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_FIELD_CATALOG</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_0183   text</font>
+<font color ="#0000FF">*      --&gt;P_0184   text</font>
+<font color ="#0000FF">*      --&gt;P_0185   text</font>
+<font color ="#0000FF">*      --&gt;P_0186   text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_field_catalog  USING pv_key pv_field pv_text pv_emphasize.
+
+  gs_fcat-key       = pv_key.
+  gs_fcat-fieldname = pv_field.
+  gs_fcat-coltext   = pv_text.
+  gs_fcat-emphasize = pv_emphasize.
+
+  CASE pv_field.
+    WHEN 'NETWR'.
+      gs_fcat-do_sum = 'X'.
+      gs_fcat-cfieldname = 'WAERS'.
+    WHEN 'MENGE'.
+      gs_fcat-do_sum = 'X'.
+      gs_fcat-qfieldname = 'MEINS'.
+  ENDCASE.
+
+  APPEND gs_fcat TO gt_fcat.
+  CLEAR gs_fcat.
+
+ENDFORM.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_FIELD_CATALOG</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_0183   text</font>
+<font color ="#0000FF">*      --&gt;P_0184   text</font>
+<font color ="#0000FF">*      --&gt;P_0185   text</font>
+<font color ="#0000FF">*      --&gt;P_0186   text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_field_catalog_item  USING pv_key pv_field pv_text pv_emphasize.
+
+  gs_fcat-key       = pv_key.
+  gs_fcat-fieldname = pv_field.
+  gs_fcat-coltext   = pv_text.
+  gs_fcat-emphasize = pv_emphasize.
+
+  CASE pv_field.
+    WHEN 'NETWR'.
+      gs_fcat-do_sum = 'X'.
+      gs_fcat-cfieldname = 'WAERS'.
+    WHEN 'MENGE'.
+      gs_fcat-do_sum = 'X'.
+      gs_fcat-qfieldname = 'MEINS'.
+  ENDCASE.
+  APPEND gs_fcat TO gt_fcat_item.
+  CLEAR gs_fcat.
+
+ENDFORM.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_FIELD_CATALOG</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_0183   text</font>
+<font color ="#0000FF">*      --&gt;P_0184   text</font>
+<font color ="#0000FF">*      --&gt;P_0185   text</font>
+<font color ="#0000FF">*      --&gt;P_0186   text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_field_catalog_eket  USING pv_key pv_field pv_text pv_emphasize.
+
+  gs_fcat-key       = pv_key.
+  gs_fcat-fieldname = pv_field.
+  gs_fcat-coltext   = pv_text.
+  gs_fcat-emphasize = pv_emphasize.
+
+  CASE pv_field.
+    WHEN 'NETWR'.
+      gs_fcat-do_sum = 'X'.
+      gs_fcat-cfieldname = 'WAERS'.
+    WHEN 'MENGE'.
+      gs_fcat-do_sum = 'X'.
+      gs_fcat-qfieldname = 'MEINS'.
+  ENDCASE.
+  APPEND gs_fcat TO gt_fcat_eket.
+  CLEAR gs_fcat.
+
+ENDFORM.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_FIELD_CATALOG</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_0183   text</font>
+<font color ="#0000FF">*      --&gt;P_0184   text</font>
+<font color ="#0000FF">*      --&gt;P_0185   text</font>
+<font color ="#0000FF">*      --&gt;P_0186   text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_field_catalog_summ  USING pv_key pv_field pv_text pv_emphasize.
+
+  gs_fcat-key       = pv_key.
+  gs_fcat-fieldname = pv_field.
+  gs_fcat-coltext   = pv_text.
+  gs_fcat-emphasize = pv_emphasize.
+
+  CASE pv_field.
+    WHEN 'NETWR'.
+      gs_fcat-do_sum = 'X'.
+      gs_fcat-cfieldname = 'WAERS'.
+    WHEN 'MENGE'.
+      gs_fcat-do_sum = 'X'.
+      gs_fcat-qfieldname = 'MEINS'.
+  ENDCASE.
+  APPEND gs_fcat TO gt_fcat_summ.
+  CLEAR gs_fcat.
+
+ENDFORM.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_LAYOUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_layout .
+  gs_layout-zebra       = 'X'.
+  gs_layout-cwidth_opt  = 'X'.
+  gs_layout-sel_mode    = 'D'.
+  gs_layout-grid_title  = '#### ###'.
+  gs_layout-info_fname  = 'ROWCOL'.
+
+  gs_layout_item-zebra       = 'X'.
+  gs_layout_item-cwidth_opt  = 'X'.
+  gs_layout_item-sel_mode    = 'D'.
+  gs_layout_item-grid_title  = '#### ###'.
+
+  gs_layout_eket-zebra       = 'X'.
+  gs_layout_eket-cwidth_opt  = 'X'.
+  gs_layout_eket-sel_mode    = 'D'.
+  gs_layout_eket-grid_title  = 'Scheduling Agreement Schedule Lines'.
+
+  gs_layout_summ-zebra       = 'X'.
+  gs_layout_summ-cwidth_opt  = 'X'.
+  gs_layout_summ-sel_mode    = 'D'.
+  gs_layout_summ-grid_title  = '##'.
+  gs_layout_summ-info_fname  = 'RCOLS'.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_DATA_MAIN</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_data_main .
+  DATA: ls_list      TYPE ty_list,
+        ls_head      TYPE ty_list,
+        ls_lifnr_sum TYPE ty_lifnr_sum,
+        ls_ekgrp_sum TYPE ty_ekgrp_sum,
+        lv_ebeln     TYPE ebeln,
+        lv_ebelp     TYPE ebelp,
+        lv_tabix     TYPE sytabix.
+
+  SELECT b~ekorg,
+         a~werks,
+         a~ebeln,
+         a~ebelp,
+         b~bsart,
+         a~matnr,
+         a~txz01,
+         b~ekgrp,
+         b~lifnr,
+         b~aedat,
+         a~menge,
+         a~meins,
+         a~netwr,
+         b~waers,
+         a~lgort,
+         b~ernam,
+         a~retpo,
+         c~etenr,
+         c~slfdt,
+         c~lpein,
+         c~menge AS menge_eket,
+         c~ameng,
+         c~wemng,
+         c~wamng
+     INTO CORRESPONDING FIELDS OF TABLE @gt_list
+     FROM ekpo AS a INNER JOIN ekko AS b
+                    ON a~ebeln = b~ebeln
+                    INNER JOIN eket AS c
+                    ON a~ebeln = c~ebeln
+                   AND a~ebelp = c~ebelp
+   WHERE b~ekorg IN @s_ekorg
+     AND b~ekgrp IN @s_ekgrp
+     AND a~ebeln IN @s_ebeln
+     AND b~lifnr IN @s_lifnr
+     AND b~bsart IN @s_bsart
+     AND b~aedat IN @s_aedat
+     AND b~bstyp NE 'A'.
+  IF sy-subrc = 0.
+    SORT gt_list BY ebeln ebelp etenr.
+
+<font color ="#0000FF">* GT_LIST## EKKO, EKPO, EKET ### ####</font>
+<font color ="#0000FF">* EKPO(EBELP) #### EKET# ##### # # ##</font>
+    LOOP AT gt_list INTO ls_list.
+      lv_tabix = sy-tabix.
+
+<font color ="#0000FF">* ### ##</font>
+      CALL METHOD zcl_it00_text_util=&gt;get_lifnr_text
+        EXPORTING
+          i_lifnr = ls_list-lifnr
+        IMPORTING
+          e_text  = ls_list-name1.
+
+      zcl_it00_text_util=&gt;get_ekgrp_text(
+         EXPORTING
+           i_ekgrp = ls_list-ekgrp
+         IMPORTING
+           e_text  = ls_list-eknam ).
+
+      IF ls_list-txz01 IS INITIAL.
+        zcl_it00_text_util=&gt;get_matnr_text(
+           EXPORTING
+             i_matnr = ls_list-matnr
+           IMPORTING
+             e_maktx = ls_list-txz01 ).
+      ENDIF.
+
+<font color ="#0000FF">* EKKO(EBELN) #### ## ## EKPO(EBELP)####</font>
+<font color ="#0000FF">* 1## ###.</font>
+<font color ="#0000FF">* ##loop# ebeln, ebelp # ##loop# ebeln, ebelp#</font>
+<font color ="#0000FF">* ## ### ##</font>
+      IF lv_ebeln &lt;&gt; ls_list-ebeln OR
+         lv_ebelp &lt;&gt; ls_list-ebelp.
+
+        CLEAR ls_head.
+        ls_head-ebeln = ls_list-ebeln.
+        ls_head-ekorg = ls_list-ekorg.
+        ls_head-bsart = ls_list-bsart.
+        ls_head-ekgrp = ls_list-ekgrp.
+        ls_head-eknam = ls_list-eknam.
+        ls_head-lifnr = ls_list-lifnr.
+        ls_head-name1 = ls_list-name1.
+        ls_head-aedat = ls_list-aedat.
+        ls_head-waers = ls_list-waers.
+        ls_head-ernam = ls_list-ernam.
+        ls_head-netwr = ls_list-netwr.
+        ls_head-mecnt = 1.              "/####
+        COLLECT ls_head INTO gt_head.
+
+<font color ="#0000FF">* ### ##</font>
+        CLEAR ls_lifnr_sum.
+        ls_lifnr_sum-lifnr = ls_list-lifnr.
+        ls_lifnr_sum-name1 = ls_list-name1.
+        ls_lifnr_sum-netwr = ls_list-netwr.
+        ls_lifnr_sum-waers = ls_list-waers.
+        COLLECT ls_lifnr_sum INTO gt_lifnr_sum.
+
+<font color ="#0000FF">* ##### ##</font>
+        CLEAR ls_ekgrp_sum.
+        ls_ekgrp_sum-ekgrp = ls_list-ekgrp.
+        ls_ekgrp_sum-eknam = ls_list-eknam.
+        ls_ekgrp_sum-netwr = ls_list-netwr.
+        ls_ekgrp_sum-waers = ls_list-waers.
+        COLLECT ls_ekgrp_sum INTO gt_ekgrp_sum.
+
+<font color ="#0000FF">* ###### ##</font>
+      ENDIF.
+
+<font color ="#0000FF">* LOOP ##### ## ebeln, ebelp ## ##</font>
+      lv_ebeln = ls_list-ebeln.
+      lv_ebelp = ls_list-ebelp.
+
+      MODIFY gt_list from ls_list index lv_tabix.
+    ENDLOOP.
+
+<font color ="#0000FF">* Row color</font>
+    LOOP AT gt_head INTO ls_head.
+      IF ls_head-mecnt &gt; 1.
+        ls_head-rowcol = 'C311'.
+
+        MODIFY gt_head FROM ls_head.
+      ENDIF.
+    ENDLOOP.
+
+<font color ="#0000FF">* ### ## ## ### ## C711</font>
+    SORT gt_lifnr_sum BY netwr DESCENDING waers.
+    CLEAR ls_lifnr_sum.
+    READ TABLE gt_lifnr_sum INTO ls_lifnr_sum INDEX 1.
+    IF sy-subrc = 0.
+      ls_lifnr_sum-rcols = 'C711'.
+      MODIFY gt_lifnr_sum FROM ls_lifnr_sum INDEX 1
+            TRANSPORTING rcols.
+    ENDIF.
+  ENDIF.
+ENDFORM.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_LIFNR_TEXT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_&lt;LS_LIST&gt;_LIFNR  text</font>
+<font color ="#0000FF">*      &lt;--P_&lt;LS_LIST&gt;_NAME1  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_lifnr_text  USING    pv_lifnr TYPE lifnr
+                     CHANGING pv_name1 TYPE lfa1-name1.
+
+  DATA: ls_lifnr LIKE LINE OF gt_lifnr.
+
+  IF gt_lifnr IS INITIAL.
+    SELECT lifnr
+           name1
+        INTO TABLE gt_lifnr
+        FROM lfa1.
+    IF sy-subrc = 0.
+      SORT gt_lifnr BY lifnr.
+    ENDIF.
+  ENDIF.
+
+  READ TABLE gt_lifnr INTO ls_lifnr
+                      WITH KEY lifnr = pv_lifnr
+                      BINARY SEARCH.
+  IF sy-subrc = 0.
+    pv_name1 = ls_lifnr-name1.
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_LGORT_TEXT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_&lt;LS_LIST&gt;_WERKS  text</font>
+<font color ="#0000FF">*      --&gt;P_&lt;LS_LIST&gt;_LGORT  text</font>
+<font color ="#0000FF">*      &lt;--P_&lt;LS_LIST&gt;_LGOBE  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_lgort_text  USING    pv_werks
+                              pv_lgort
+                     CHANGING pv_lgobe.
+
+  DATA: ls_lgort LIKE LINE OF gt_lgort.
+
+  IF gt_lgort IS INITIAL.
+    SELECT werks
+           lgort
+           lgobe
+        INTO TABLE gt_lgort
+        FROM t001l.
+    IF sy-subrc = 0.
+      SORT gt_lgort BY werks lgort.
+    ENDIF.
+  ENDIF.
+
+  READ TABLE gt_lgort INTO ls_lgort
+                      WITH KEY werks = pv_werks
+                               lgort = pv_lgort
+                      BINARY SEARCH.
+  IF sy-subrc = 0.
+    pv_lgobe = ls_lgort-lgobe.
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_EXGRP_TEXT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_&lt;LS_LIST&gt;_EKGRP  text</font>
+<font color ="#0000FF">*      &lt;--P_&lt;LS_LIST&gt;_EKNAM  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_exgrp_text  USING    pv_ekgrp
+                     CHANGING pv_eknam.
+
+  DATA: ls_ekgrp LIKE LINE OF gt_ekgrp.
+
+  IF gt_ekgrp IS INITIAL.
+    SELECT ekgrp
+           eknam
+        INTO TABLE gt_ekgrp
+        FROM t024.
+    IF sy-subrc = 0.
+      SORT gt_ekgrp BY ekgrp.
+    ENDIF.
+  ENDIF.
+
+  READ TABLE gt_ekgrp INTO ls_ekgrp
+                      WITH KEY ekgrp = pv_ekgrp
+                      BINARY SEARCH.
+  IF sy-subrc = 0.
+    pv_eknam = ls_ekgrp-eknam.
+  ENDIF.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  CREATE_FIELD_CATALOG</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM create_field_catalog .
+  CLEAR : gt_fcat, gs_fcat.
+
+  PERFORM set_field_catalog USING :
+        ' ' 'EKORG'  '####'    'X',
+        ' ' 'EBELN'  '####'    'X',
+        ' ' 'BSART'  '####'    ' ',
+        ' ' 'EKGRP'  '####'      ' ',
+        ' ' 'EKNAM'  '###'    ' ',
+        ' ' 'LIFNR'  '####'    ' ',
+        ' ' 'NAME1'  '###'    ' ',
+        ' ' 'AEDAT'  '###'      ' ',
+        ' ' 'NETWR'  '####'      ' ',
+        ' ' 'WAERS'  '####'    ' ',
+        ' ' 'ERNAM'  '#####'    ' '
+        .
+
+  CLEAR : gt_fcat_item, gs_fcat.
+  PERFORM set_field_catalog_item USING :
+        ' ' 'EBELN'  '####'    'X',
+        ' ' 'EBELP'  '####'    'X',
+        ' ' 'WERKS'  '###'      ' ',
+        ' ' 'MATNR'  '####'      ' ',
+        ' ' 'TXZ01'  '####'    ' ',
+        ' ' 'MENGE'  '####'    ' ',
+        ' ' 'MEINS'  '##'        ' ',
+        ' ' 'NETWR'  '####'      ' ',
+        ' ' 'WAERS'  '####'    ' ',
+        ' ' 'LGORT'  '####'    ' ',
+        ' ' 'LGOBE'  '#####'    ' '
+        .
+
+  CLEAR : gt_fcat_eket, gs_fcat.
+  PERFORM set_field_catalog_eket USING :
+        ' ' 'EBELN'  '####'    'X',
+        ' ' 'EBELP'  '####'    'X',
+        ' ' 'ETENR'  'Line'        'X',
+        ' ' 'EINDT'  '###'      ' ',
+        ' ' 'SLFDT'  'Delivery dt.' ' ',
+        ' ' 'LPEIN'  'Category of delivery date'    ' ',
+        ' ' 'MENGE'  'Scheduled Quantity'        ' ',
+        ' ' 'AMENG'  'Previous Quantity'      ' ',
+        ' ' 'WEMNG'  'Quantity of GR'    ' ',
+        ' ' 'WAMNG'  'Issued Quantity'    ' ',
+        ' ' 'MEINS'  '##'    ' '
+        .
+
+  CLEAR : gt_fcat_summ, gs_fcat.
+  PERFORM set_field_catalog_summ USING :
+        ' ' 'LIFNR'  '####'    'X',
+        ' ' 'NAME1'  '###'      'X',
+        ' ' 'NETWR'  '####'    ' ',
+        ' ' 'WAERS'  '##'        ' '.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  HOTSPOT_CLICK</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_E_COLUMN_ID  text</font>
+<font color ="#0000FF">*      --&gt;P_E_ROW_ID  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM hotspot_click  USING    p_e_column_id
+                             p_e_row_id.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  DOUBLE_CLICK</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_E_COLUMN  text</font>
+<font color ="#0000FF">*      --&gt;P_E_ROW  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM double_click  USING    ps_column TYPE lvc_s_col
+                            ps_row    TYPE lvc_s_row
+                            p_sender.
+  IF p_sender IS NOT INITIAL.
+    IF p_sender = go_alv_grid.
+<font color ="#0000FF">*      MESSAGE 'GO_ALV_GRID' TYPE 'I'.</font>
+
+      PERFORM get_data_item USING ps_row-index.
+    ELSEIF p_sender = go_alv_grid_item.
+      PERFORM get_data_eket USING ps_row-index ps_column-fieldname.
+    ENDIF.
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_DATA_ITEM</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_data_item USING pv_index.
+  DATA: ls_head  TYPE ty_list,
+        ls_list  TYPE ty_list,
+        ls_item  TYPE ty_list,
+        lv_tabix TYPE sytabix.
+
+  DATA: lv_ebelp TYPE ebelp.
+
+  CLEAR gt_item.
+
+  READ TABLE gt_head INTO ls_head INDEX pv_index.
+
+<font color ="#0000FF">* ##1</font>
+  LOOP AT gt_list INTO ls_list WHERE ebeln = ls_head-ebeln.
+
+    IF lv_ebelp &lt;&gt; ls_list-ebelp.
+      CLEAR ls_item.
+      MOVE-CORRESPONDING ls_list TO ls_item.
+
+      APPEND ls_item TO gt_item.
+    ENDIF.
+
+    lv_ebelp = ls_list-ebelp.
+  ENDLOOP.
+
+  PERFORM display_item.
+  IF gt_item IS NOT INITIAL.
+    PERFORM get_data_eket USING 1 'EBELN'.
+  ENDIF.
+ENDFORM.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_DATA_EKET</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_data_eket USING pv_index pv_fieldname.
+
+  DATA: ls_list  TYPE ty_list,
+        ls_item  TYPE ty_list,
+        ls_eket  LIKE LINE OF gt_eket,
+        lv_tabix TYPE sytabix.
+
+  CLEAR gt_eket.
+
+  READ TABLE gt_item INTO ls_item INDEX pv_index.
+  IF sy-subrc = 0.
+    CASE pv_fieldname.
+      WHEN 'EBELN'.
+        LOOP AT gt_list INTO ls_list WHERE ebeln = ls_item-ebeln.
+          CLEAR ls_eket.
+          MOVE-CORRESPONDING ls_list TO ls_eket.
+          ls_eket-menge = ls_list-menge_eket.
+          APPEND ls_eket TO gt_eket.
+        ENDLOOP.
+
+      WHEN 'EBELP'.
+        LOOP AT gt_list INTO ls_list WHERE ebeln = ls_item-ebeln
+                                       AND ebelp = ls_item-ebelp.
+          CLEAR ls_eket.
+          MOVE-CORRESPONDING ls_list TO ls_eket.
+          ls_eket-menge = ls_list-menge_eket.
+          APPEND ls_eket TO gt_eket.
+        ENDLOOP.
+    ENDCASE.
+  ENDIF.
+
+  PERFORM display_eket.
+ENDFORM.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  DISPLAY_ITEM</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM display_item .
+  IF go_item_container IS NOT INITIAL.
+    CALL METHOD go_alv_grid_item-&gt;refresh_table_display.
+  ENDIF.
+ENDFORM.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  DISPLAY_EKET</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM display_eket .
+  IF go_eket_container IS NOT INITIAL.
+    CALL METHOD go_alv_grid_eket-&gt;refresh_table_display.
+  ENDIF.
+ENDFORM.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  DISPLAY_SUMM</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM display_summ .
+  IF go_summ_container IS NOT INITIAL.
+    CALL METHOD go_alv_grid_summ-&gt;refresh_table_display.
+  ENDIF.
+ENDFORM.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  HANDLE_TOOLBAR</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_E_OBJECT  text</font>
+<font color ="#0000FF">*      --&gt;P_E_INTERACTIVE  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM handle_toolbar USING po_object TYPE REF TO cl_alv_event_toolbar_set
+                          p_interactive.
+  DATA: ls_toolbar TYPE stb_button.
+
+  CLEAR ls_toolbar.
+  MOVE 3 TO ls_toolbar-butn_type.             "##### '|'
+  APPEND ls_toolbar TO po_object-&gt;mt_toolbar.
+
+  CLEAR ls_toolbar.
+  MOVE 'LIFNR' TO ls_toolbar-function.
+  MOVE icon_display_text TO ls_toolbar-icon.
+  MOVE '####' TO ls_toolbar-quickinfo.
+  MOVE 'Vendor#' TO ls_toolbar-text.
+  MOVE ' ' TO ls_toolbar-disabled.
+  APPEND ls_toolbar TO po_object-&gt;mt_toolbar.
+
+  CLEAR ls_toolbar.
+  MOVE 'EKGRP' TO ls_toolbar-function.
+  MOVE '## ### ##'           TO ls_toolbar-quickinfo.
+  MOVE '#####' TO ls_toolbar-text.
+  MOVE ' ' TO ls_toolbar-disabled.
+  APPEND ls_toolbar TO po_object-&gt;mt_toolbar.
+ENDFORM .
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  HANDLE_USER_COMMAND</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*   ALV# ### ### #### # #### user command ##</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_E_UCOMM  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM handle_user_command  USING    p_ucomm TYPE syucomm.
+
+<font color ="#0000FF">* 1) Field catalog ##</font>
+  PERFORM create_field_catalog_sum USING p_ucomm.
+
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">* 2) ##### + Field catalog + layout</font>
+<font color ="#0000FF">*    ALV Grid-&gt;set_table_for_first_display</font>
+  CASE p_ucomm .
+    WHEN 'LIFNR'.
+      ASSIGN gt_lifnr_sum TO &lt;gt_data&gt;.
+    WHEN 'EKGRP'.
+      ASSIGN gt_ekgrp_sum TO &lt;gt_data&gt;.
+<font color ="#0000FF">*    WHEN 'ERNAM'.</font>
+<font color ="#0000FF">*      ASSIGN gt_ernam_sum TO &lt;GT_DATA&gt;.</font>
+<font color ="#0000FF">*    WHEN 'WERKS'.</font>
+<font color ="#0000FF">*      ASSIGN gt_werks_sum TO &lt;GT_DATA&gt;.</font>
+    WHEN OTHERS.
+      RETURN.
+  ENDCASE.
+
+  IF gt_fcat_summ IS NOT INITIAL.
+    CALL METHOD go_alv_grid_summ-&gt;set_table_for_first_display
+      EXPORTING
+        i_save                        = 'A'
+        i_default                     = 'X'
+        is_layout                     = gs_layout_summ
+      CHANGING
+        it_outtab                     = &lt;gt_data&gt;      " gt_lifnr_sum
+        it_fieldcatalog               = gt_fcat_summ
+      EXCEPTIONS
+        invalid_parameter_combination = 1
+        program_error                 = 2
+        too_many_lines                = 3
+        OTHERS                        = 4.
+    IF sy-subrc &lt;&gt; 0.
+    ENDIF.
+
+  ELSE.
+    MESSAGE 'Field catalog ## ##' TYPE 'I' DISPLAY LIKE 'E'.
+  ENDIF.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  CREATE_FIELD_CATALOG_SUM</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_P_UCOMM  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM create_field_catalog_sum  USING    p_ucomm TYPE syucomm.
+  CLEAR : gt_fcat_summ, gs_fcat.
+
+  CASE p_ucomm.
+    WHEN 'LIFNR'.
+      PERFORM set_field_catalog_summ USING :
+            ' ' 'LIFNR'  '####'    'X',
+            ' ' 'NAME1'  '###'      'X',
+            ' ' 'NETWR'  '####'    ' ',
+            ' ' 'WAERS'  '##'        ' '.
+
+    WHEN 'EKGRP'.
+      PERFORM set_field_catalog_summ USING :
+            ' ' 'EKGRP'  '####'    'X',
+            ' ' 'EKNAM'  '#####'  'X',
+            ' ' 'NETWR'  '####'    ' ',
+            ' ' 'WAERS'  '##'        ' '.
+
+    WHEN 'ERNAM'.
+      PERFORM set_field_catalog_summ USING :
+            ' ' 'ERNAM'  '#####'    'X',
+            ' ' 'NETWR'  '####'    ' ',
+            ' ' 'WAERS'  '##'        ' '.
+
+    WHEN 'WERKS'.
+      PERFORM set_field_catalog_summ USING :
+            ' ' 'WERKS'  '###'    'X',
+            ' ' 'NAME1'  '####'      'X',
+            ' ' 'NETWR'  '####'    ' ',
+            ' ' 'WAERS'  '##'        ' '.
+  ENDCASE.
+
+ENDFORM.
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - E.G.Mellodew. 1998-2005 UK. Sap Release 750
+</font>
+</body>
+</html>

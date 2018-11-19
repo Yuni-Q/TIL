@@ -1,0 +1,573 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>ZR00_63F01</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: ZR00_63F01</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  Include ZR14_49F01</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&  Include           ZR14_49F01</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+
+
+
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_INIT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_init .
+
+ENDFORM.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  DISPLAY_SCREEN</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM display_screen .
+  DATA: lt_exclude TYPE ui_functions.
+
+  CLEAR : gt_fcat, gs_fcat.
+
+<font color ="#0000FF">* 1. PLANETYPE, SEATSOCC ### ###### ##</font>
+  PERFORM set_field_catalog USING :
+        'X' 'CARRID'     'Airline'               ' ',
+        'X' 'CONNID'     'Flight Number'         ' ',
+        'X' 'FLDATE'     'Date'                  ' ',
+        ' ' 'PRICE'      'Airfare'               'X',
+        ' ' 'CURRENCY'   'Airline Curr.'         'X',
+        ' ' 'PLANETYPE'  'Plane Type'            ' ',
+        ' ' 'SEATSMAX'   'Max Capacity Economy'  ' ',
+        ' ' 'SEATSOCC'   'Occupied Economy'      ' ',
+        ' ' 'PAYMENTSUM' 'Booking Total'         'X',
+        ' ' 'SEATSMAX_B' 'Max Capacity Business' ' ',
+        ' ' 'SEATSOCC_B' 'Occupied Business'     ' ',
+        ' ' 'SEATSMAX_F' 'Max Capacity First'    ' ',
+        ' ' 'SEATSOCC_F' 'Occupied First'        ' '.
+
+
+  PERFORM set_layout.
+
+<font color ="#0000FF">* 2. ALV Tool## ### ## ####</font>
+  PERFORM exclude_tb_functions CHANGING lt_exclude.
+
+  IF go_container IS INITIAL.
+
+    PERFORM create_object.
+
+    CALL METHOD go_alv_grid-&gt;set_table_for_first_display
+      EXPORTING
+        i_save               = 'A'
+        i_default            = 'X'
+        is_layout            = gs_layout
+        it_toolbar_excluding = lt_exclude
+      CHANGING
+        it_outtab            = gt_list
+        it_fieldcatalog      = gt_fcat.
+
+<font color ="#0000FF">* 3. DATA_CHANGED event# ### Action ##</font>
+<font color ="#0000FF">*    ENTER ## ### # DATA_CHANGED event# #### #</font>
+<font color ="#0000FF">*    go_alv_grid-&gt;register_edit_event(</font>
+<font color ="#0000FF">*        EXPORTING</font>
+<font color ="#0000FF">*          i_event_id = cl_gui_alv_grid=&gt;mc_evt_enter ).</font>
+
+    go_alv_grid-&gt;register_edit_event(
+        EXPORTING
+          i_event_id = cl_gui_alv_grid=&gt;mc_evt_modified ).
+
+
+<font color ="#0000FF">* 4. Event handler ### ##</font>
+    SET HANDLER lcl_event_handler=&gt;handle_data_changed FOR go_alv_grid.
+    SET HANDLER lcl_event_handler=&gt;handle_data_changed_finished
+                FOR go_alv_grid.
+  ELSE.
+
+    CALL METHOD go_alv_grid-&gt;refresh_table_display.
+
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  CREATE_OBJECT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM create_object .
+  CREATE OBJECT go_container
+    EXPORTING
+      repid     = sy-repid
+      dynnr     = sy-dynnr
+      side      = go_container-&gt;dock_at_left
+      extension = 3000.
+
+  CREATE OBJECT go_alv_grid
+    EXPORTING
+      i_parent = go_container.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_FIELD_CATALOG</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_0183   text</font>
+<font color ="#0000FF">*      --&gt;P_0184   text</font>
+<font color ="#0000FF">*      --&gt;P_0185   text</font>
+<font color ="#0000FF">*      --&gt;P_0186   text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_field_catalog  USING pv_key pv_field pv_text pv_emphasize.
+
+  gs_fcat-key       = pv_key.
+  gs_fcat-fieldname = pv_field.
+  gs_fcat-coltext   = pv_text.
+  gs_fcat-emphasize = pv_emphasize.
+
+  CASE pv_field.
+    WHEN 'PLANETYPE'.
+
+<font color ="#0000FF">* 1a. ### ####</font>
+      gs_fcat-edit = 'X'.
+
+<font color ="#0000FF">* 1b. Short dump# ### ## ##</font>
+      gs_fcat-checktable = '!'.
+
+      gs_fcat-ref_table  = 'SFLIGHT'.
+
+    WHEN 'SEATSOCC'
+      OR 'SEATSOCC_B'
+      OR 'SEATSOCC_F'.
+<font color ="#0000FF">* 1a. ### ####</font>
+      gs_fcat-edit = 'X'.
+
+<font color ="#0000FF">* 1b. Short dump# ### ## ##</font>
+      gs_fcat-checktable = '!'.
+
+      gs_fcat-ref_table  = 'SFLIGHT'.
+
+    WHEN 'PRICE'
+      OR 'PAYMENTSUM'.
+      gs_fcat-cfieldname = 'CURRENCY'.
+
+  ENDCASE.
+
+  APPEND gs_fcat TO gt_fcat.
+  CLEAR gs_fcat.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_LAYOUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_layout .
+  gs_layout-zebra       = 'X'.
+  gs_layout-cwidth_opt  = 'X'.
+  gs_layout-sel_mode    = 'D'.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_DATA_MAIN</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_data_main .
+
+  SELECT *
+      INTO CORRESPONDING FIELDS OF TABLE gt_list
+      FROM sflight
+     WHERE carrid IN s_carrid
+       AND connid IN s_connid
+       AND fldate IN s_fldate.
+
+  IF sy-subrc = 0.
+
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  EXCLUDE_TB_FUNCTIONS</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      &lt;--P_LT_EXCLUDE  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM exclude_tb_functions CHANGING pt_exclude TYPE ui_functions.
+<font color ="#0000FF">* Only allow to change data not to create new entries (exclude</font>
+<font color ="#0000FF">* generic functions).</font>
+
+  DATA ls_exclude TYPE ui_func.
+
+  ls_exclude = cl_gui_alv_grid=&gt;mc_fc_loc_copy_row.
+  APPEND ls_exclude TO pt_exclude.
+
+  ls_exclude = cl_gui_alv_grid=&gt;mc_fc_loc_delete_row.
+  APPEND ls_exclude TO pt_exclude.
+
+  ls_exclude = cl_gui_alv_grid=&gt;mc_fc_loc_append_row.
+  APPEND ls_exclude TO pt_exclude.
+
+  ls_exclude = cl_gui_alv_grid=&gt;mc_fc_loc_insert_row.
+  APPEND ls_exclude TO pt_exclude.
+
+  ls_exclude = cl_gui_alv_grid=&gt;mc_fc_loc_move_row.
+  APPEND ls_exclude TO pt_exclude.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  HANDLE_DATA_CHANGED</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_ER_DATA_CHANGED  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM handle_data_changed  USING
+         pr_data_changed  TYPE REF TO cl_alv_changed_data_protocol.
+
+  DATA: ls_good TYPE lvc_s_modi.
+
+  CLEAR gv_error_in_data.
+
+<font color ="#0000FF">* 5. MT_GOOD_CELL# #### LOOP### ##</font>
+  LOOP AT pr_data_changed-&gt;mt_good_cells INTO ls_good.
+    CASE ls_good-fieldname.
+
+<font color ="#0000FF">*  PLANETYPE ### ##### #</font>
+      WHEN 'PLANETYPE'.
+        PERFORM check_planetype USING ls_good
+                                      pr_data_changed.
+
+<font color ="#0000FF">*  SEATSOCC  ### ##### #</font>
+      WHEN 'SEATSOCC'.
+        PERFORM check_seatsocc  USING ls_good
+                                      pr_data_changed.
+
+      WHEN OTHERS.
+    ENDCASE.
+  ENDLOOP.
+
+<font color ="#0000FF">* DATA_CHANGED event## modify_cell# ### ### ## internal</font>
+<font color ="#0000FF">* table## ## #### ## ## ###</font>
+<font color ="#0000FF">* DATA_CHANGED event# ##### internal table# #### ###</font>
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">* internal table# ### ### #####</font>
+<font color ="#0000FF">* DATA_CHANGED_FINISHED event## internal table# ### ##.</font>
+
+
+<font color ="#0000FF">* DATA_CHANGE : register_edit_event# cl_gui_alv_grid=&gt;mc_evt_modified</font>
+  IF gv_error_in_data IS NOT INITIAL.
+    pr_data_changed-&gt;display_protocol( ).
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  CHECK_PLANETYPE</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_LS_GOOD  text</font>
+<font color ="#0000FF">*      --&gt;P_PR_DATA_CHANGED  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM check_planetype  USING
+               ps_good  TYPE lvc_s_modi
+               pr_data_changed TYPE REF TO cl_alv_changed_data_protocol.
+
+  DATA: lv_planetype     TYPE sflight-planetype,
+        ls_splane        TYPE saplane,
+        ls_good_seatsocc TYPE lvc_s_modi.
+
+
+
+<font color ="#0000FF">* CELL# ### PLANETYPE ## ## ###.</font>
+  pr_data_changed-&gt;get_cell_value(
+     EXPORTING
+       i_row_id  = ps_good-row_id
+       i_fieldname = ps_good-fieldname
+     IMPORTING
+       e_value = lv_planetype ).
+
+<font color ="#0000FF">* a) ### PLANETYPE# #####?</font>
+  SELECT SINGLE *
+     INTO ls_splane
+     FROM saplane
+    WHERE planetype = lv_planetype.
+
+  IF sy-subrc &lt;&gt; 0.
+<font color ="#0000FF">* #### ## PLANETYPE# ###### ## ### ##</font>
+
+    pr_data_changed-&gt;add_protocol_entry(
+      EXPORTING
+        i_msgid = '0K'
+        i_msgno = '000'
+        i_msgty = 'E'
+        i_msgv1 = 'Plane type'
+        i_msgv2 = lv_planetype
+        i_msgv3 = 'does not exist'
+        i_fieldname = ps_good-fieldname
+        i_row_id = ps_good-row_id ).
+
+    gv_error_in_data = 'X'.
+    EXIT.
+  ENDIF.
+
+<font color ="#0000FF">* SEATSOCC #### ###### ##</font>
+  READ TABLE pr_data_changed-&gt;mt_good_cells INTO ls_good_seatsocc
+       WITH KEY row_id = ps_good-row_id
+                fieldname = 'SEATSOCC'.
+  IF sy-subrc = 0.
+<font color ="#0000FF">* PLANETYPE, SEATSOCC# ## ### ##</font>
+    PERFORM check_new_plane_new_seatsocc USING ps_good
+                                               ls_good_seatsocc
+                                               ls_splane
+                                               pr_data_changed.
+  ELSE.
+<font color ="#0000FF">* PLANETYPE ## / SEATSOCC# ## ## ##</font>
+    PERFORM check_new_plane_old_seatsocc USING ps_good
+                                               ls_splane
+                                               pr_data_changed.
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  CHECK_SEATSOCC</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_LS_GOOD  text</font>
+<font color ="#0000FF">*      --&gt;P_PR_DATA_CHANGED  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM check_seatsocc  USING
+               ps_good  TYPE lvc_s_modi
+               pr_data_changed TYPE REF TO cl_alv_changed_data_protocol.
+
+  DATA: lv_new_seatsocc TYPE sflight-seatsocc,
+        lv_old_seatsmax TYPE sflight-seatsmax,
+        ls_list         LIKE LINE OF gt_list,
+        ls_good         TYPE lvc_s_modi.
+
+<font color ="#0000FF">*--------------------------------------------------------------------*</font>
+<font color ="#0000FF">* a.## row#  PLANETYPE# ##### ##</font>
+<font color ="#0000FF">*--------------------------------------------------------------------*</font>
+  READ TABLE pr_data_changed-&gt;mt_good_cells INTO ls_good
+             WITH KEY row_id = ps_good-row_id
+                      fieldname = 'PLANETYPE'.
+  IF sy-subrc = 0.
+<font color ="#0000FF">*    seatsmax(new value) &gt;= seatsocc(new value)</font>
+<font color ="#0000FF">*    PERFORM check_new_plane_new_seatsocc. ## ## ###### ##</font>
+    EXIT.
+  ENDIF.
+
+<font color ="#0000FF">*--------------------------------------------------------------------*</font>
+<font color ="#0000FF">* b.seatsmax(old value) &gt;= seatsocc(new value) ## ##</font>
+<font color ="#0000FF">*--------------------------------------------------------------------*</font>
+<font color ="#0000FF">* ## ### seatsocc ##</font>
+  pr_data_changed-&gt;get_cell_value(
+    EXPORTING
+      i_row_id    = ps_good-row_id
+      i_fieldname = ps_good-fieldname
+    IMPORTING
+      e_value = lv_new_seatsocc
+  ).
+
+<font color ="#0000FF">* SEATSMAX ### old# ##</font>
+  READ TABLE gt_list INTO ls_list INDEX ps_good-row_id.
+  lv_old_seatsmax = ls_list-seatsmax.
+
+<font color ="#0000FF">* ##### ## ### ## error ##</font>
+  IF lv_old_seatsmax &lt; lv_new_seatsocc.
+    pr_data_changed-&gt;add_protocol_entry(
+      EXPORTING
+        i_msgid = '0K'
+        i_msgno = '000'
+        i_msgty = 'E'
+        i_msgv1 = 'Plane type'
+        i_msgv2 = ls_list-planetype
+        i_msgv3 = 'excees the capacity of the plane'
+        i_fieldname = ps_good-fieldname
+        i_row_id = ps_good-row_id ).
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  CHECK_NEW_PLANE_NEW_SEATSOCC</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_PS_GOOD  text</font>
+<font color ="#0000FF">*      --&gt;P_LS_GOOD_SEATSOCC  text</font>
+<font color ="#0000FF">*      --&gt;P_LS_SPLANE  text</font>
+<font color ="#0000FF">*      --&gt;P_PR_DATA_CHANGED  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM check_new_plane_new_seatsocc  USING
+              ps_good           TYPE lvc_s_modi
+              ps_good_seatsocc  TYPE lvc_s_modi
+              ps_splane         TYPE saplane
+              pr_data_changed   TYPE REF TO cl_alv_changed_data_protocol.
+
+  DATA: lv_new_seatsocc TYPE sflight-seatsocc.
+
+<font color ="#0000FF">*--------------------------------------------------------------------*</font>
+<font color ="#0000FF">* ## SEATSOCC ## ##</font>
+<font color ="#0000FF">*--------------------------------------------------------------------*</font>
+  pr_data_changed-&gt;get_cell_value(
+    EXPORTING
+      i_row_id = ps_good_seatsocc-row_id
+      i_fieldname = ps_good_seatsocc-fieldname
+    IMPORTING
+      e_value  = lv_new_seatsocc ).
+
+<font color ="#0000FF">*--------------------------------------------------------------------*</font>
+<font color ="#0000FF">* ##### PLANETYPE# seatsmax &gt;= ##### seatsocc</font>
+<font color ="#0000FF">*--------------------------------------------------------------------*</font>
+  IF ps_splane-seatsmax &gt;= lv_new_seatsocc.
+<font color ="#0000FF">* ## PLANETYPE# seatsmax ## ALV ### ##</font>
+    pr_data_changed-&gt;modify_cell(
+      EXPORTING
+        i_row_id = ps_good-row_id
+        i_fieldname = 'SEATSMAX'
+        i_value  = ps_splane-seatsmax ).
+  ELSE.
+<font color ="#0000FF">* ##### ##</font>
+    pr_data_changed-&gt;add_protocol_entry(
+      EXPORTING
+        i_msgid = '0K'
+        i_msgno = '000'
+        i_msgty = 'E'
+        i_msgv1 = 'Plane type'
+        i_msgv2 = ps_splane-planetype
+        i_msgv3 = 'does not have enough seats'
+        i_fieldname = ps_good-fieldname
+        i_row_id = ps_good-row_id ).
+
+    gv_error_in_data = 'X'.
+  ENDIF.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  CHECK_NEW_PLANE_OLD_SEATSOCC</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_PS_GOOD  text</font>
+<font color ="#0000FF">*      --&gt;P_LS_SPLANE  text</font>
+<font color ="#0000FF">*      --&gt;P_PR_DATA_CHANGED  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM check_new_plane_old_seatsocc  USING
+              ps_good           TYPE lvc_s_modi
+              ps_splane         TYPE saplane
+              pr_data_changed   TYPE REF TO cl_alv_changed_data_protocol.
+
+  DATA: lv_old_seatsocc TYPE sflight-seatsocc,
+        ls_list         LIKE LINE OF gt_list.
+
+<font color ="#0000FF">* #### ## ## GT_LIST# ##</font>
+  READ TABLE gt_list INTO ls_list INDEX ps_good-row_id.
+  lv_old_seatsocc = ls_list-seatsocc.
+
+<font color ="#0000FF">* ##### PLANETYPE# seatsmax &gt;= ## seatsocc</font>
+  IF ps_splane-seatsmax &gt;= lv_old_seatsocc.
+    pr_data_changed-&gt;modify_cell(
+      EXPORTING
+        i_row_id = ps_good-row_id
+        i_fieldname = 'SEATSMAX'
+        i_value  = ps_splane-seatsmax ).
+  ELSE.
+    pr_data_changed-&gt;add_protocol_entry(
+      EXPORTING
+        i_msgid = '0K'
+        i_msgno = '000'
+        i_msgty = 'E'
+        i_msgv1 = 'Plane type'
+        i_msgv2 = ps_splane-planetype
+        i_msgv3 = 'does not have enough seats'
+        i_fieldname = ps_good-fieldname
+        i_row_id = ps_good-row_id ).
+
+    gv_error_in_data = 'X'.
+  ENDIF.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  HANDLE_DATA_CHANGED_FINISHED</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_E_MODIFIED  text</font>
+<font color ="#0000FF">*      --&gt;P_ET_GOOD_CELLS  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM handle_data_changed_finished  USING    pv_modified  TYPE char01
+                                            pt_good_cells TYPE lvc_t_modi.
+  DATA: ls_good TYPE lvc_s_modi,
+        ls_list LIKE LINE OF gt_list.
+
+<font color ="#0000FF">* data_changed  Event# ### ### ###</font>
+<font color ="#0000FF">* data_changed  Event## ### ### Internal table# #### ##</font>
+  LOOP AT pt_good_cells INTO ls_good.
+    READ TABLE gt_list INTO ls_list INDEX ls_good-row_id.
+    IF sy-subrc = 0.
+      ls_list-paymentsum = ( ls_list-price * ls_list-seatsocc )
+                         + ( ls_list-price * ls_list-seatsocc_b * 2 )
+                         + ( ls_list-price * ls_list-seatsocc_f * 4 ).
+
+      MODIFY gt_list FROM ls_list INDEX ls_good-row_id
+                                  TRANSPORTING paymentsum.
+    ENDIF.
+  ENDLOOP.
+
+  IF pt_good_cells IS NOT INITIAL.
+    go_alv_grid-&gt;refresh_table_display( ).
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SAVE_DATA</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM save_data .
+  DATA: ls_list LIKE LINE OF gt_list,
+        lt_save TYPE TABLE OF sflight,
+        ls_save LIKE LINE OF lt_save.
+
+  DATA: lv_valid TYPE char01.
+
+  CLEAR lv_valid.
+
+<font color ="#0000FF">* DATA_CHANGED event# ##### ### ##</font>
+  go_alv_grid-&gt;check_changed_data(
+    IMPORTING
+      e_valid = lv_valid ).
+
+  IF lv_valid IS NOT INITIAL.
+    LOOP AT gt_list INTO ls_list.
+      MOVE-CORRESPONDING ls_list TO ls_save.
+      APPEND ls_save TO lt_save.
+    ENDLOOP.
+
+    MODIFY sflight FROM TABLE lt_save.
+    IF sy-subrc = 0.
+      MESSAGE 'Data saved successfully' TYPE 'S'.
+    ENDIF.
+  ENDIF.
+ENDFORM.
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - E.G.Mellodew. 1998-2005 UK. Sap Release 750
+</font>
+</body>
+</html>

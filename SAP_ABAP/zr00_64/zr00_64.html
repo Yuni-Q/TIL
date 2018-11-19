@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>ZR00_64</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: ZR00_64</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  ALV delete/append rows</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Report  ZR00_A0</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&  ALV EDIT ###</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+
+include <a href ="zr00_64top.html">ZR00_64TOP</a>.
+include <a href ="zr00_64c01.html">zr00_64C01</a>.
+include <a href ="zr00_64s01.html">ZR00_64S01</a>.
+include <a href ="zr00_64o01.html">ZR00_64O01</a>.
+include <a href ="zr00_64i01.html">ZR00_64I01</a>.
+include <a href ="zr00_64f01.html">ZR00_64F01</a>.
+
+
+INITIALIZATION.
+  PERFORM set_init.
+
+START-OF-SELECTION.
+  perform get_data_main.
+
+  IF gt_list IS NOT INITIAL and gv_success is not INITIAL.
+    CALL SCREEN 100.
+  ENDIF.
+
+<font color ="#0000FF">*GUI Texts</font>
+<font color ="#0000FF">*----------------------------------------------------------</font>
+<font color ="#0000FF">* TITLE100 --&gt; ALV delete/append rows</font>
+
+<font color ="#0000FF">*Text elements</font>
+<font color ="#0000FF">*----------------------------------------------------------</font>
+<font color ="#0000FF">* I01 Flight does not exist</font>
+<font color ="#0000FF">* I02 This flight does not yet exist. First enter</font>
+<font color ="#0000FF">* I03 a flight for this airline carrier</font>
+<font color ="#0000FF">* I04 and a new connection number</font>
+<font color ="#0000FF">* I05 in the flight maintenance transaction.</font>
+<font color ="#0000FF">* I06 Input error</font>
+<font color ="#0000FF">* I07 Entries are not yet consistent.</font>
+<font color ="#0000FF">* I08 Check your entries</font>
+<font color ="#0000FF">* I09 using the error log.</font>
+<font color ="#0000FF">* I10 This flight is currently being edited.</font>
+<font color ="#0000FF">* M01 This flight already exists.</font>
+<font color ="#0000FF">* M02 This plane type does not exist.</font>
+<font color ="#0000FF">* S01 Changes were saved.</font>
+<font color ="#0000FF">* T01 ####</font>
+<font color ="#0000FF">* T02 ####</font>
+
+
+<font color ="#0000FF">*Selection texts</font>
+<font color ="#0000FF">*----------------------------------------------------------</font>
+<font color ="#0000FF">* PA_DS         Not data selection</font>
+<font color ="#0000FF">* S_CARRID D       .</font>
+<font color ="#0000FF">* S_CONNID D       .</font>
+
+
+<font color ="#0000FF">*Messages</font>
+<font color ="#0000FF">*----------------------------------------------------------</font>
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">* Message class: 0K</font>
+<font color ="#0000FF">*000   & & & &</font>
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - E.G.Mellodew. 1998-2005 UK. Sap Release 750
+</font>
+</body>
+</html>

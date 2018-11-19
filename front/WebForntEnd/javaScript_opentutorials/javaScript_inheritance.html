@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script>
+		//상속에 관한 이야기
+		// 자바스크립트는 prototype을 통해 상속한다 !!
+		// prototype이 엄청 중요하다고 한디.
+		// prototype based language
+		function Person(name){
+		    this.name = name;
+		}
+		Person.prototype.name=null;
+		Person.prototype.introduce = function(){
+		    return 'My name is '+this.name; 
+		}
+		 
+		function Programmer(name){
+		    this.name = name;
+		}
+		Programmer.prototype = new Person();
+		Programmer.prototype.coding = function(){
+		    return "hello world";
+		}
+		 
+		var p1 = new Programmer('egoing');
+		document.write(p1.introduce()+"<br />");
+		document.write(p1.coding()+"<br />");
+	</script>
+</head>
+<body>
+
+</body>
+</html>

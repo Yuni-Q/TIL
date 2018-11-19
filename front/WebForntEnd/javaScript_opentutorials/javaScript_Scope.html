@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script>
+		// 이 경우 10이 아닌 5가 출력 됨
+		// 실행할 당시가 아니라 정의 될 당시의 변수로 처리 된다 !!
+		var i = 5;
+		function a(){
+		    var i = 10;
+		    b();
+		}
+
+		function b(){
+		    document.write(i);
+		}
+
+		a();
+	</script>
+</head>
+<body>
+
+</body>
+</html>

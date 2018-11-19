@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>ZR12_53</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: ZR12_53</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  Program ZR12_53</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Report  ZR12_53</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+
+include <a href ="zr12_53top.html">ZR12_53TOP</a>.    " global Data
+
+ include <a href ="zr12_53s01.html">ZR12_53S01</a>.  " PBO-Modules
+ include <a href ="zr12_53c01.html">ZR12_53C01</a>.  " PBO-Modules
+ include <a href ="zr12_53o01.html">ZR12_53O01</a>.  " PBO-Modules
+ include <a href ="zr12_53i01.html">ZR12_53I01</a>.  " PAI-Modules
+ include <a href ="zr12_53f01.html">ZR12_53F01</a>.  " FORM-Routines
+
+  INITIALIZATION.
+ PERFORM init_value.
+
+
+
+ START-OF-SELECTION.
+
+
+ PERFORM get_data.
+
+
+
+   call SCREEN 100.
+
+<font color ="#0000FF">*GUI Texts</font>
+<font color ="#0000FF">*----------------------------------------------------------</font>
+<font color ="#0000FF">* TITLE100 --&gt; BKPF+BSEG</font>
+
+<font color ="#0000FF">*Text elements</font>
+<font color ="#0000FF">*----------------------------------------------------------</font>
+<font color ="#0000FF">* T01 ####</font>
+
+
+<font color ="#0000FF">*Selection texts</font>
+<font color ="#0000FF">*----------------------------------------------------------</font>
+<font color ="#0000FF">* P_BUKRS         ####</font>
+<font color ="#0000FF">* P_GJAHR         ####</font>
+<font color ="#0000FF">* S_BUDAT         ####</font>
+
+
+<font color ="#0000FF">*Messages</font>
+<font color ="#0000FF">*----------------------------------------------------------</font>
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">* Message class: ZIT00</font>
+<font color ="#0000FF">*001   Data save successfully!!</font>
+<font color ="#0000FF">*002   Data save failure!!</font>
+<font color ="#0000FF">*004   & & & &</font>
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - E.G.Mellodew. 1998-2005 UK. Sap Release 750
+</font>
+</body>
+</html>

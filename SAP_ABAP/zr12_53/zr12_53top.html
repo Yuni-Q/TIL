@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>ZR12_53TOP</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: ZR12_53TOP</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  Include ZR12_53TOP</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Include ZR12_53TOP                                        Report ZR12_53</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+REPORT zr12_53 MESSAGE-ID zit00.
+
+<font color ="#0000FF">**********************************************************************</font>
+<font color ="#0000FF">* tables</font>
+<font color ="#0000FF">**********************************************************************</font>
+TABLES : bkpf,
+         bseg.
+
+<font color ="#0000FF">**********************************************************************</font>
+<font color ="#0000FF">* types</font>
+<font color ="#0000FF">**********************************************************************</font>
+TYPES : BEGIN OF ty_list,
+          bukrs TYPE bkpf-bukrs,
+          belnr TYPE bkpf-belnr,
+          gjahr TYPE bkpf-gjahr,
+          buzei TYPE bseg-buzei,
+          budat TYPE bkpf-budat,
+          blart TYPE bkpf-blart,
+          sgtxt TYPE bseg-sgtxt,
+          dmbtr TYPE bseg-dmbtr,
+          waers TYPE bkpf-waers,
+          hkont TYPE bseg-hkont,
+        END OF ty_list.
+
+TYPES : BEGIN OF ty_header,
+          gjahr TYPE bkpf-gjahr,
+          belnr TYPE bkpf-belnr,
+          budat TYPE bkpf-budat,
+          blart TYPE bkpf-blart,
+          tcode TYPE bkpf-tcode,
+          waers TYPE bkpf-waers,
+        END OF ty_header.
+
+TYPES : BEGIN OF ty_segment,
+          belnr TYPE bseg-belnr,
+          buzei TYPE bseg-buzei,
+          bschl TYPE bseg-bschl,
+          sgtxt TYPE bseg-sgtxt,
+          dmbtr TYPE bseg-dmbtr,
+          hkont TYPE bseg-hkont,
+          txt50 TYPE skat-txt50,
+        END OF ty_segment.
+
+<font color ="#0000FF">**********************************************************************</font>
+<font color ="#0000FF">* internal table and work area</font>
+<font color ="#0000FF">**********************************************************************</font>
+DATA : gs_list    TYPE ty_list,
+       gt_list    TYPE TABLE OF ty_list,
+       gs_header  TYPE ty_header,
+       gt_header  TYPE TABLE OF ty_header,
+       gs_segment TYPE ty_segment,
+       gt_segment TYPE TABLE OF ty_segment,
+       gs_skat    TYPE skat,
+       gt_skat    TYPE TABLE OF skat.
+
+<font color ="#0000FF">**********************************************************************q</font>
+<font color ="#0000FF">* for screen</font>
+<font color ="#0000FF">**********************************************************************</font>
+DATA : gs_fcat_header  TYPE lvc_s_fcat,
+       gt_fcat_header  TYPE lvc_t_fcat,
+       gs_layo_header  TYPE lvc_s_layo,
+       gs_fcat_segment TYPE lvc_s_fcat,
+       gt_fcat_segment TYPE lvc_t_fcat,
+       gs_layo_segment TYPE lvc_s_layo.
+
+<font color ="#0000FF">**********************************************************************</font>
+<font color ="#0000FF">* class instance</font>
+<font color ="#0000FF">**********************************************************************</font>
+DATA : go_docking_contianer  TYPE REF TO cl_gui_docking_container,
+       go_splitter_container TYPE REF TO cl_gui_splitter_container,
+       go_container_header   TYPE REF TO cl_gui_container,
+       go_container_segment  TYPE REF TO cl_gui_container,
+       go_alv_grid_header    TYPE REF TO cl_gui_alv_grid,
+       go_alv_grid_segment   TYPE REF TO cl_gui_alv_grid.
+
+<font color ="#0000FF">**********************************************************************</font>
+<font color ="#0000FF">* common variable</font>
+<font color ="#0000FF">**********************************************************************</font>
+DATA : gv_OKCODE TYPE sy-ucomm.
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - E.G.Mellodew. 1998-2005 UK. Sap Release 750
+</font>
+</body>
+</html>

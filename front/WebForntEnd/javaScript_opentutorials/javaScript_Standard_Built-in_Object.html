@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+<script>
+    // Math.ramdom() 0~1 사이의 값을 랜덤하게 준다.
+    // arr.length를 곱해 주면 0~length가 된다.
+    // 하지만 값은 아직 소수 !!
+    // 정수로 바꾸려면 Math.floor() 쓰면 소수점을 버린다.
+
+/*
+    var arr = new Array('seoul','new york','ladarkh','pusan', 'Tsukuba');
+    function getRandomValueFromArray(haystack){
+        var index = Math.floor(haystack.length*Math.random());
+        return haystack[index];
+    }
+    console.log(getRandomValueFromArray(arr));
+*/
+    Array.prototype.rand = function(){
+        var index = Math.floor(this.length*Math.random());
+        return this[index];
+    }
+    var arr = new Array('seoul','new york','ladarkh','pusan', 'Tsukuba');
+    console.log(arr.rand());
+
+
+</script>
+  </head>
+  <body>
+
+  </body>
+</html>

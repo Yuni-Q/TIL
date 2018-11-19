@@ -1,0 +1,384 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>ZR00_50F01</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: ZR00_50F01</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  Include ZR14_49F01</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&  Include           ZR14_49F01</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_DATA_IOT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_data_iot .
+  DATA : lt_list TYPE TABLE OF gty_list,
+         lt_save TYPE TABLE OF ztit00_msg001,
+         ls_save LIKE LINE OF lt_save.
+
+  DATA : lv_sql   TYPE string, " for query
+         lv_where TYPE string,
+         lv_text  TYPE string. " for error message
+
+<font color ="#0000FF">**-- Open SQL## Secondary HANA DB access</font>
+
+<font color ="#0000FF">**********************************************************************</font>
+<font color ="#0000FF">*-- Get data by ADBC</font>
+<font color ="#0000FF">**********************************************************************</font>
+  IF s_datum-high &gt; gv_date.
+    lv_where = | where cdate between '{ gv_date }' | &&
+               |   and '{ s_datum-high }' |.
+  ELSE.
+    lv_where = | where cdate = '{ gv_date }' |.
+  ENDIF.
+
+  TRY .
+<font color ="#0000FF">*-- Get connection info.</font>
+      go_con = cl_sql_connection=&gt;get_connection('HDBSTD30').
+
+<font color ="#0000FF">*-- Create connection object</font>
+      CREATE OBJECT go_stmt
+        EXPORTING
+          con_ref = go_con.
+
+<font color ="#0000FF">*-- Make query</font>
+      CLEAR lv_sql.
+
+      lv_sql = | select | &
+               |  { sy-mandt } AS MANDT, | &
+               |    DEVICEID as devid, CDATE, CTIME, | &
+               |    TEMPERATURE as tempp, | &
+               |    HUMIDITY    as humi,  | &
+               |    BRIGHT      as br     | &
+               |  from "STUDENT30".ZIT00_MSG001 | &
+<font color ="#0000FF">*               | where cdate = '{ gv_date }' |.</font>
+               | { lv_where }  |.
+
+<font color ="#0000FF">*-- Execute query</font>
+      go_result = go_stmt-&gt;execute_query( lv_sql ).
+
+<font color ="#0000FF">*-- Internal table layout setting</font>
+      CLEAR lt_save.
+      GET REFERENCE OF lt_save INTO go_data.
+
+      go_result-&gt;set_param_table( go_data ). " Layout ###
+      go_result-&gt;next_package( ).            " Put data to Internal table
+      go_result-&gt;close( ).                   " Close connectivity
+
+    CATCH cx_sql_exception INTO go_root.
+      lv_text = go_root-&gt;get_text( ).
+<font color ="#0000FF">*-- Error message</font>
+
+  ENDTRY.
+
+  IF lt_save IS NOT INITIAL.
+    MODIFY ztit00_msg001 FROM TABLE lt_save.
+    APPEND LINES OF lt_save TO gt_list.
+  ENDIF.
+ENDFORM.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_INIT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_init .
+  DATA: ls_datum LIKE LINE OF s_datum.
+
+  ls_datum-sign = 'I'.
+  ls_datum-option = 'EQ'.
+  ls_datum-high = sy-datum.
+
+  CALL METHOD cl_reca_date=&gt;add_to_date
+    EXPORTING
+      id_days = -7
+      id_date = ls_datum-high
+    RECEIVING
+      rd_date = ls_datum-low.
+
+  APPEND ls_datum TO s_datum.
+ENDFORM.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  DISPLAY_SCREEN</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM display_screen .
+  CLEAR : gt_fcat, gs_fcat.
+  PERFORM set_field_catalog USING : ' ' 'DEVID'  'Device ID'    'X',
+                                    ' ' 'CDATE'  'Create Date'  'C410',
+                                    ' ' 'CTIME'  'Create Time'  'X',
+                                    ' ' 'TEMPP'  'Temperature'  ' ',
+                                    ' ' 'HUMI'   'Humidity'     ' ',
+                                    ' ' 'BR'     'Bright'       ' '.
+
+  PERFORM set_layout.
+
+  IF go_container IS INITIAL.
+
+    PERFORM create_object.
+
+<font color ="#0000FF">* Register ALV Event</font>
+    SET HANDLER : lcl_event_handler=&gt;hotspot_click_h FOR go_alv_grid.
+<font color ="#0000FF">*                  lcl_event_handler=&gt;double_click_h FOR go_grid.</font>
+
+    CALL METHOD go_alv_grid-&gt;set_table_for_first_display
+      EXPORTING
+        i_save          = 'A'
+        i_default       = 'X'
+        is_layout       = gs_layout
+      CHANGING
+        it_outtab       = gt_list
+        it_fieldcatalog = gt_fcat.
+
+  ELSE.
+
+    CALL METHOD go_alv_grid-&gt;refresh_table_display.
+
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  CREATE_OBJECT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM create_object .
+  CREATE OBJECT go_container
+    EXPORTING
+      repid     = sy-repid
+      dynnr     = sy-dynnr
+      side      = go_container-&gt;dock_at_left
+      extension = 3000.
+
+  CREATE OBJECT go_alv_grid
+    EXPORTING
+      i_parent = go_container.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_FIELD_CATALOG</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_0183   text</font>
+<font color ="#0000FF">*      --&gt;P_0184   text</font>
+<font color ="#0000FF">*      --&gt;P_0185   text</font>
+<font color ="#0000FF">*      --&gt;P_0186   text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_field_catalog  USING pv_key pv_field pv_text pv_emphasize.
+
+  gs_fcat-key       = pv_key.
+  gs_fcat-fieldname = pv_field.
+  gs_fcat-coltext   = pv_text.
+  gs_fcat-emphasize = pv_emphasize.
+
+  CASE gs_fcat-fieldname.
+    WHEN 'DEVID'.
+      gs_fcat-hotspot = 'X'.
+  ENDCASE.
+
+  APPEND gs_fcat TO gt_fcat.
+  CLEAR gs_fcat.
+
+ENDFORM.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_FIELD_CATALOG</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_0183   text</font>
+<font color ="#0000FF">*      --&gt;P_0184   text</font>
+<font color ="#0000FF">*      --&gt;P_0185   text</font>
+<font color ="#0000FF">*      --&gt;P_0186   text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_pop_field_catalog  USING pv_key pv_field pv_text pv_emphasize.
+  DATA: ls_fcat TYPE lvc_s_fcat.
+
+  ls_fcat-key       = pv_key.
+  ls_fcat-fieldname = pv_field.
+  ls_fcat-coltext   = pv_text.
+  ls_fcat-emphasize = pv_emphasize.
+
+  APPEND ls_fcat TO gt_fcat_pop.
+
+ENDFORM.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_LAYOUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_layout .
+  gs_layout-zebra       = 'X'.
+  gs_layout-cwidth_opt  = 'X'.
+  gs_layout-sel_mode    = 'D'.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_DATA_MAIN</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_data_main .
+  DATA:  ls_date LIKE LINE OF gr_date.
+
+  READ TABLE s_datum INTO DATA(ls_datum) INDEX 1.
+
+  FREE: gt_list, gr_date, gv_date, gv_read_r3, gv_read_adbc.
+
+  IF sy-subrc = 0.
+    IF ls_datum-low IS NOT INITIAL AND ls_datum-high IS INITIAL.
+      IF ls_datum-low &gt;= sy-datum.
+        gv_date = sy-datum.
+        gv_read_adbc = 'X'.
+      ELSE.
+        ls_date-sign = 'I'.
+        ls_date-option = 'EQ'.
+        ls_date-low   = ls_datum-low.
+        APPEND ls_date TO gr_date.
+        gv_read_r3 = 'X'.
+      ENDIF.
+
+    ELSEIF ls_datum-low IS NOT INITIAL AND ls_datum-high IS NOT INITIAL.
+      IF ls_datum-high &gt;= sy-datum.
+        ls_date-sign = 'I'.
+        ls_date-option = 'BT'.
+        ls_date-low  = ls_datum-low.
+        ls_date-high = sy-datum - 1.
+        APPEND ls_date TO gr_date.
+
+<font color ="#0000FF">*        gv_date = ls_datum-high.</font>
+        gv_date = sy-datum.
+
+        gv_read_r3 = 'X'.
+        gv_read_adbc = 'X'.
+      ELSE.
+        ls_date-sign = 'I'.
+        ls_date-option = 'BT'.
+        ls_date-low   = ls_datum-low.
+        ls_date-high = ls_datum-high.
+        APPEND ls_date TO gr_date.
+
+        gv_read_r3 = 'X'.
+      ENDIF.
+
+    ENDIF.
+  ENDIF.
+
+  IF gv_read_r3 = 'X'.
+    PERFORM gt_data_r3.
+  ENDIF.
+
+  IF gv_read_adbc = 'X'.
+    PERFORM get_data_iot.
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GT_DATA_R3</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM gt_data_r3 .
+  SELECT *
+      INTO CORRESPONDING FIELDS OF TABLE gt_list
+      FROM ztit00_msg001
+    WHERE cdate IN gr_date.
+<font color ="#0000FF">*  IF sy-subrc = 0.</font>
+<font color ="#0000FF">*    MODIFY ztit00_msg001 FROM TABLE gt_list.</font>
+<font color ="#0000FF">*  ENDIF.</font>
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  HOTSPOT_C</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_E_ROW_ID  text</font>
+<font color ="#0000FF">*      --&gt;P_E_COLUMN_ID  text</font>
+<font color ="#0000FF">*      --&gt;P_ES_ROW_NO  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM hotspot_c  USING    p_row_id     TYPE lvc_s_row
+                         p_column_id  STRUCTURE lvc_s_col
+                         ps_row_no    STRUCTURE lvc_s_roid.
+  DATA : lv_code,
+         lv_msg(100).
+
+  CLEAR : gt_detail.
+
+  READ TABLE gt_list INTO DATA(ls_list) INDEX p_row_id-index.
+
+  IF sy-subrc EQ 0.
+
+<font color ="#0000FF">* Device ## ## ### ##</font>
+    SELECT *
+        INTO CORRESPONDING FIELDS OF TABLE gt_detail
+        FROM ztit00_devid
+       WHERE devid = ls_list-devid.
+
+<font color ="#0000FF">* ### ## ## # ### ##</font>
+    IF sy-subrc &lt;&gt; 0 .
+      MESSAGE s000 WITH lv_msg DISPLAY LIKE 'E'.
+      EXIT.
+    ENDIF.
+
+<font color ="#0000FF">* Detail Screen ##</font>
+    CALL SCREEN '0101' STARTING AT 20 3. "
+
+  ENDIF.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  EXCLUDE_TOOLBAR</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM exclude_toolbar .
+  gs_toolbar = cl_gui_alv_grid=&gt;mc_fc_print.
+  APPEND gs_toolbar TO gt_toolbar.
+  CLEAR gs_toolbar.
+
+  gs_toolbar = cl_gui_alv_grid=&gt;mc_fc_current_variant.
+  APPEND gs_toolbar TO gt_toolbar.
+  CLEAR gs_toolbar.
+
+  gs_toolbar = cl_gui_alv_grid=&gt;mc_fc_graph.
+  APPEND gs_toolbar TO gt_toolbar.
+  CLEAR gs_toolbar.
+ENDFORM.
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - E.G.Mellodew. 1998-2005 UK. Sap Release 750
+</font>
+</body>
+</html>

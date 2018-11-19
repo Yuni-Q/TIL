@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>ZR00_52TOP</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: ZR00_52TOP</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  Include ZR14_49TOP</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Include ZR00_00TOP                   Report ZR00_00</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+REPORT zr00_00 MESSAGE-ID zit00.
+
+TABLES: mara,
+        marc,
+        mbew..
+
+<font color ="#0000FF">**********************************************************************</font>
+<font color ="#0000FF">* TYPES</font>
+<font color ="#0000FF">**********************************************************************</font>
+TYPES: BEGIN OF ty_list,
+         mtart TYPE mara-mtart,
+         werks TYPE marc-werks,
+         matnr TYPE mara-matnr,
+         maktx TYPE makt-maktx,
+         ifind TYPE c LENGTH 1,
+         srind TYPE c LENGTH 1,
+         stind TYPE c LENGTH 1,
+         lvorm TYPE mara-lvorm,
+         matkl TYPE mara-matkl,
+         meins TYPE mara-meins,
+         bismt TYPE mara-bismt,
+         spart TYPE mara-spart,
+         bstme TYPE mara-bstme,
+         ekgrp TYPE marc-ekgrp,
+         insmk TYPE marc-insmk,
+         webaz TYPE marc-webaz,
+         mfrnr TYPE mara-mfrnr,
+         stawn TYPE marc-stawn,
+         mtver TYPE marc-mtver,
+         ferth TYPE mara-ferth,
+         iloos TYPE mara-iloos,
+         ihivi TYPE mara-ihivi,
+         herkl TYPE marc-herkl,
+         mogru TYPE marc-mogru,
+         itark TYPE marc-itark,
+         dispo TYPE marc-dispo,
+         disls TYPE marc-disls,
+         bstmi TYPE marc-bstmi,
+         bstrf TYPE marc-bstrf,
+         kzech TYPE marc-kzech,
+         lgfsb TYPE marc-lgfsb,
+         plifz TYPE marc-plifz,
+         fhori TYPE marc-fhori,
+         eisbe TYPE marc-eisbe,
+         tempb TYPE mara-tempb,
+         raube TYPE mara-raube,
+         behvo TYPE mara-behvo,
+         mhdrz TYPE mara-mhdrz,
+         mhdhb TYPE mara-mhdhb,
+         bklas TYPE mbew-bklas,
+         stprs TYPE mbew-stprs,
+         peinh TYPE mbew-peinh,
+         zplp1 TYPE mbew-zplp1,
+         zpld1 TYPE mbew-zpld1,
+       END OF ty_list.
+
+TYPES: BEGIN OF ty_maktx,
+         matnr TYPE matnr,
+         maktx TYPE maktx,
+       END OF ty_maktx,
+       ty_maktx_tab TYPE TABLE OF ty_maktx.
+
+<font color ="#0000FF">**********************************************************************</font>
+<font color ="#0000FF">*Class instance</font>
+<font color ="#0000FF">**********************************************************************</font>
+<font color ="#0000FF">*--For database</font>
+DATA : go_con    TYPE REF TO cl_sql_connection,
+       go_stmt   TYPE REF TO cl_sql_statement,
+       go_result TYPE REF TO cl_sql_result_set.
+
+<font color ="#0000FF">*--For data</font>
+DATA : go_root TYPE REF TO cx_root, "db exception## ##
+       go_data TYPE REF TO data.
+
+<font color ="#0000FF">**********************************************************************</font>
+<font color ="#0000FF">* Internal table and work area</font>
+<font color ="#0000FF">**********************************************************************</font>
+DATA : gt_list  TYPE TABLE OF ty_list,
+       gt_maktx TYPE TABLE OF ty_maktx.
+
+<font color ="#0000FF">* For screen control</font>
+DATA : gs_devid TYPE ztit00_devid.
+
+<font color ="#0000FF">**********************************************************************</font>
+<font color ="#0000FF">* ALV variable</font>
+<font color ="#0000FF">**********************************************************************</font>
+DATA : go_alv_grid  TYPE REF TO cl_gui_alv_grid,
+       go_container TYPE REF TO cl_gui_docking_container.
+
+DATA : gt_fcat   TYPE lvc_t_fcat,
+       gs_fcat   TYPE lvc_s_fcat,
+       gs_layout TYPE lvc_s_layo.
+
+<font color ="#0000FF">**********************************************************************</font>
+<font color ="#0000FF">* Common variable</font>
+<font color ="#0000FF">**********************************************************************</font>
+DATA : gv_okcode TYPE sy-ucomm.
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - E.G.Mellodew. 1998-2005 UK. Sap Release 750
+</font>
+</body>
+</html>

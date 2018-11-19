@@ -1,0 +1,530 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>ZR00_51F01</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: ZR00_51F01</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  Include ZR14_49F01</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&  Include           ZR14_49F01</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+
+
+
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_INIT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_init .
+  p_datum = sy-datum.
+
+<font color ="#0000FF">*  DATA: ls_datum LIKE LINE OF s_datum.</font>
+<font color ="#0000FF">*  ls_datum-sign = 'I'.</font>
+<font color ="#0000FF">*  ls_datum-option = 'EQ'.</font>
+<font color ="#0000FF">*  ls_datum-low = sy-datum.</font>
+<font color ="#0000FF">*  APPEND ls_datum TO s_datum.</font>
+ENDFORM.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  DISPLAY_SCREEN</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM display_screen .
+  CLEAR : gt_fcat, gs_fcat.
+
+  PERFORM set_field_catalog USING :
+        ' ' 'DEVID'  'Device ID'    'X',
+        ' ' 'DEVNM'  'Device Name'  'C410',
+        ' ' 'PLACE'  '####'     ' ',
+        ' ' 'IDATE'  '####'     ' ',
+        ' ' 'DDATE'  '####'     ' ',
+        ' ' 'DINAME' '###'       ' ',
+        ' ' 'ERNAM'  '###'       ' ',
+        ' ' 'ERDAT'  '####'     ' ',
+        ' ' 'ERZET'  '####'     ' ',
+        ' ' 'AENAM'  '###'       ' ',
+        ' ' 'AEDAT'  '####'     ' ',
+        ' ' 'AEZET'  '####'     ' '.
+
+  PERFORM set_layout.
+
+  IF go_container IS INITIAL.
+
+    PERFORM create_object.
+
+    CALL METHOD go_alv_grid-&gt;set_table_for_first_display
+      EXPORTING
+        i_save          = 'A'
+        i_default       = 'X'
+        is_layout       = gs_layout
+      CHANGING
+        it_outtab       = gt_list
+        it_fieldcatalog = gt_fcat.
+
+  ELSE.
+
+    CALL METHOD go_alv_grid-&gt;refresh_table_display.
+
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  CREATE_OBJECT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM create_object .
+  CREATE OBJECT go_container
+    EXPORTING
+      repid     = sy-repid
+      dynnr     = sy-dynnr
+      side      = go_container-&gt;dock_at_left
+      extension = 3000.
+
+  CREATE OBJECT go_alv_grid
+    EXPORTING
+      i_parent = go_container.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_FIELD_CATALOG</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_0183   text</font>
+<font color ="#0000FF">*      --&gt;P_0184   text</font>
+<font color ="#0000FF">*      --&gt;P_0185   text</font>
+<font color ="#0000FF">*      --&gt;P_0186   text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_field_catalog  USING pv_key pv_field pv_text pv_emphasize.
+
+  gs_fcat-key       = pv_key.
+  gs_fcat-fieldname = pv_field.
+  gs_fcat-coltext   = pv_text.
+  gs_fcat-emphasize = pv_emphasize.
+
+  APPEND gs_fcat TO gt_fcat.
+  CLEAR gs_fcat.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_LAYOUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_layout .
+  gs_layout-zebra       = 'X'.
+  gs_layout-cwidth_opt  = 'X'.
+  gs_layout-sel_mode    = 'D'.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_DATA_MAIN</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_data_main .
+  FREE gt_list.
+
+  SELECT *
+      INTO CORRESPONDING FIELDS OF TABLE gt_list
+      FROM ztit00_devid.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  CALL_SCREEN_0200</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM call_screen_0200 .
+  CALL SCREEN 0200 STARTING AT 5 5
+                   ENDING AT   85 20.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SAVE_DEVICE_INFO</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM save_device_info .
+  DATA: lv_tabix TYPE sytabix.
+
+  CLEAR gs_devid.
+
+  IF ztit00_devid-devid IS NOT INITIAL.
+    MOVE-CORRESPONDING ztit00_devid TO gs_devid.
+
+<font color ="#0000FF">* Create # # ernam, erdat, erzet ###</font>
+<font color ="#0000FF">* Change # # aenam, aedat, aezet ###</font>
+    CASE gv_opmode.
+      WHEN gc_opmode_create.
+        gs_devid-ernam = sy-uname.
+        gs_devid-erdat = sy-datum.
+        gs_devid-erzet = sy-uzeit.
+      WHEN gc_opmode_change.
+        gs_devid-aenam = sy-uname.
+        gs_devid-aedat = sy-datum.
+        gs_devid-aezet = sy-uzeit.
+    ENDCASE.
+
+    MODIFY ztit00_devid FROM gs_devid.
+
+<font color ="#0000FF">* Device ID# #### #### ##</font>
+    IF sy-subrc = 0.
+      IF gv_opmode NE gc_opmode_change.
+        gv_opmode = gc_opmode_change.
+      ENDIF.
+
+<font color ="#0000FF">* ALV ##</font>
+      READ TABLE gt_list INTO DATA(ls_list)
+                         WITH KEY devid = ztit00_devid-devid.
+      IF sy-subrc = 0.
+        lv_tabix = sy-tabix.
+        ls_list-devnm  = gs_devid-devnm.
+        ls_list-place  = gs_devid-place.
+        ls_list-idate  = gs_devid-idate.
+        ls_list-ddate  = gs_devid-ddate.
+        ls_list-diname = gs_devid-diname.
+        ls_list-aenam  = gs_devid-aenam.
+        ls_list-aedat  = gs_devid-aedat.
+        ls_list-aezet  = gs_devid-aezet.
+
+        MODIFY gt_list FROM ls_list INDEX lv_tabix.
+      ELSE.
+        MOVE-CORRESPONDING gs_devid TO ls_list.
+        APPEND ls_list TO gt_list.
+      ENDIF.
+
+      PERFORM refresh_alv_list.
+    ENDIF.
+  ELSE.
+    MESSAGE 'Device ID# #######' TYPE 'I' DISPLAY LIKE 'E'.
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  MODIFY_SCREEN</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM modify_screen .
+  LOOP AT SCREEN.
+
+<font color ="#0000FF">* ## ### # SCREEN-GROUP# 'GR1'# ### display ony</font>
+<font color ="#0000FF">*    IF screen-group1 EQ 'GR1' AND gv_opmode = gc_opmode_change.</font>
+<font color ="#0000FF">*      screen-input = 0.</font>
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">*      MODIFY SCREEN.</font>
+<font color ="#0000FF">*    ENDIF.</font>
+
+
+    IF gv_opmode = gc_opmode_change.
+<font color ="#0000FF">* ##### #</font>
+      IF screen-group1 EQ 'GR1'.
+        screen-input = 0.  "/devid ####
+      ENDIF.
+
+      "###,,, ###..(AA)
+      IF screen-group2 EQ 'GR2'.
+        screen-input = 0.  "/Display only
+      ENDIF.
+
+    ELSE.
+<font color ="#0000FF">* ##### #</font>
+      IF screen-group2 EQ 'GR2'.
+        screen-invisible = 1. "(AA) ## ##
+        screen-input = 0.
+      ENDIF.
+    ENDIF.
+
+    MODIFY SCREEN.
+
+  ENDLOOP.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_SELECTED_ROWS</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_selected_rows CHANGING pv_index TYPE lvc_s_row-index.
+  DATA: lt_selected_rows TYPE lvc_t_row,
+        ls_selected_rows LIKE LINE OF lt_selected_rows.
+
+  CALL METHOD go_alv_grid-&gt;get_selected_rows
+    IMPORTING
+      et_index_rows = lt_selected_rows.
+
+  IF lt_selected_rows IS INITIAL.
+    MESSAGE '## #### ######' TYPE 'I'.
+  ELSEIF lines( lt_selected_rows ) &gt; 1.
+    MESSAGE '1## ## ### ###' TYPE 'I' DISPLAY LIKE 'E'.
+  ELSE.
+    READ TABLE lt_selected_rows INTO ls_selected_rows INDEX 1.
+    IF sy-subrc = 0.
+      pv_index = ls_selected_rows-index.
+    ENDIF.
+  ENDIF.
+ENDFORM.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_LINE_DATA</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      &lt;--P_GS_RETURN  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_line_data  CHANGING ps_return TYPE bapireturn.
+  DATA: lv_index TYPE lvc_s_row-index.
+
+  PERFORM get_selected_rows CHANGING lv_index.
+
+  IF lv_index &gt; 0.
+
+    READ TABLE gt_list INTO DATA(ls_data) INDEX lv_index.
+    IF sy-subrc = 0.
+      ps_return-type = 'S'.
+      CLEAR ztit00_devid.
+<font color ="#0000FF">* internal table# ## ## ### ### ##</font>
+      MOVE-CORRESPONDING ls_data TO ztit00_devid.
+    ENDIF.
+
+  ELSE.
+    ps_return-type = 'E'.
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  CALL_SCREEN_0300</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM call_screen_0300 .
+  CALL SCREEN 0300 STARTING AT 5 5
+                   ENDING AT   85 20.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SAVE_DEVICE_DATA</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM save_device_data .
+  DATA: ls_save  TYPE ztit00_devid,      "### ###
+        ls_list  LIKE LINE OF gt_list,   "ALV ## ##
+        lv_tabix TYPE sytabix.
+
+<font color ="#0000FF">* ztit00_devid# screen## ### ## ## #</font>
+<font color ="#0000FF">* ls_save# #### ### ### ##</font>
+  IF ztit00_devid-devid IS NOT INITIAL.
+    CLEAR ls_save.
+
+    MOVE-CORRESPONDING ztit00_devid TO ls_save.
+
+    CASE gv_opmode.
+      WHEN gc_opmode_create.
+        ls_save-ernam = sy-uname.
+        ls_save-erdat = sy-datum.
+        ls_save-erzet = sy-uzeit.
+      WHEN gc_opmode_change.
+        ls_save-aenam = sy-uname.
+        ls_save-aedat = sy-datum.
+        ls_save-aezet = sy-uzeit.
+    ENDCASE.
+
+    MODIFY ztit00_devid FROM ls_save.
+    IF sy-subrc = 0.
+      MESSAGE '#### #######.' TYPE 'I'.
+
+<font color ="#0000FF">* ALV ### ##</font>
+      READ TABLE gt_list INTO ls_list
+                         WITH KEY devid = ls_save-devid.
+      IF sy-subrc = 0.
+<font color ="#0000FF">* ## #### ## ##</font>
+        lv_tabix = sy-tabix.
+        MOVE-CORRESPONDING ls_save TO ls_list.
+        MODIFY gt_list FROM ls_list INDEX lv_tabix.
+      ELSE.
+<font color ="#0000FF">* ## #### ## ##</font>
+        MOVE-CORRESPONDING ls_save TO ls_list.
+        APPEND ls_list TO gt_list.
+      ENDIF.
+
+<font color ="#0000FF">* ALV Refresh</font>
+      go_alv_grid-&gt;refresh_table_display( ).
+    ENDIF.
+
+  ENDIF.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  REFRESH_ALV_LIST</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM refresh_alv_list .
+  go_alv_grid-&gt;refresh_table_display( i_soft_refresh = 'X' ).
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  DELETE_LINE_DATA</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM delete_line_data CHANGING ps_return TYPE bapireturn.
+  DATA: lv_index  TYPE lvc_s_row-index,
+        lv_tabix  TYPE sytabix,
+        lv_answer TYPE char01.
+
+<font color ="#0000FF">* ### ## ##</font>
+  PERFORM get_selected_rows CHANGING lv_index.
+
+  IF lv_index &gt; 0.
+
+    READ TABLE gt_list INTO DATA(ls_data) INDEX lv_index.
+    IF sy-subrc = 0.
+      lv_tabix = sy-tabix.
+      ps_return-type = 'S'.
+
+      PERFORM call_popup_confirm CHANGING lv_answer.
+
+      IF lv_answer = '1'.
+        DELETE FROM ztit00_devid WHERE devid = ls_data-devid.
+        IF sy-subrc = 0.
+          MESSAGE '#######' TYPE 'I'.
+          DELETE gt_list INDEX lv_tabix.
+
+          PERFORM refresh_alv_list.
+        ENDIF.
+      ENDIF.
+    ENDIF.
+
+  ELSE.
+    ps_return-type = 'E'.
+  ENDIF.
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  DELETE_LINES</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      &lt;--P_GS_RETURN  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM delete_lines  CHANGING ps_return TYPE bapireturn.
+  DATA: lt_selected_rows TYPE lvc_t_row,
+        ls_selected_rows LIKE LINE OF lt_selected_rows.
+
+  DATA: ls_list   LIKE LINE OF gt_list,
+        lv_tabix  TYPE sytabix,
+        lv_answer TYPE char01.
+
+<font color ="#0000FF">* ########? ### ##</font>
+  PERFORM call_popup_confirm CHANGING lv_answer.
+
+  IF lv_answer = '1'.
+
+    CALL METHOD go_alv_grid-&gt;get_selected_rows
+      IMPORTING
+        et_index_rows = lt_selected_rows.
+
+<font color ="#0000FF">* ### line# ## ##</font>
+    LOOP AT lt_selected_rows INTO ls_selected_rows.
+      CLEAR: ls_list, lv_tabix.
+
+      READ TABLE gt_list INTO ls_list INDEX ls_selected_rows-index.
+
+      IF sy-subrc = 0.
+        lv_tabix = sy-tabix.
+<font color ="#0000FF">* DB ### ### ##</font>
+        DELETE FROM ztit00_devid WHERE devid = ls_list-devid.
+        IF sy-subrc = 0.
+          ps_return-type = 'S'.
+          ls_list-sel = 'X'.
+          MODIFY gt_list INDEX lv_tabix
+                         FROM ls_list
+                         TRANSPORTING sel.
+        ENDIF.
+      ENDIF.
+    ENDLOOP.
+
+<font color ="#0000FF">* ALV ## ##</font>
+    IF ps_return-type = 'S'.
+      DELETE gt_list WHERE sel = 'X'.
+
+      MESSAGE '#######' TYPE 'I'.
+      PERFORM refresh_alv_list.
+    ENDIF.
+  ENDIF.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  CALL_POPUP_CONFIRM</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      &lt;--P_LV_ANSWER  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM call_popup_confirm  CHANGING pv_answer TYPE char01.
+  CLEAR pv_answer.
+
+  CALL FUNCTION 'POPUP_TO_CONFIRM'
+    EXPORTING
+      titlebar              = '##'
+<font color ="#0000FF">*     DIAGNOSE_OBJECT       = ' '</font>
+      text_question         = '########? '
+      text_button_1         = 'Yes'  "'Ja'(001)
+<font color ="#0000FF">*     ICON_BUTTON_1         = ' '</font>
+      text_button_2         = 'No'  "'Nein'(002)
+<font color ="#0000FF">*     ICON_BUTTON_2         = ' '</font>
+      default_button        = '1'
+      display_cancel_button = 'X'
+    IMPORTING
+      answer                = pv_answer
+    EXCEPTIONS
+      text_not_found        = 1
+      OTHERS                = 2.
+ENDFORM.
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - E.G.Mellodew. 1998-2005 UK. Sap Release 750
+</font>
+</body>
+</html>

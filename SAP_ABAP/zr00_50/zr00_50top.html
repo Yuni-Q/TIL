@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>ZR00_50TOP</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: ZR00_50TOP</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  Include ZR14_49TOP</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Include ZR14_49TOP                       Report ZR14_49</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+REPORT zr50_49 MESSAGE-ID zit00.
+
+<font color ="#0000FF">* Function key</font>
+TABLES : sscrfields.
+
+TABLES: ztit00_msg001.
+
+<font color ="#0000FF">**********************************************************************</font>
+<font color ="#0000FF">*Class instance</font>
+<font color ="#0000FF">**********************************************************************</font>
+<font color ="#0000FF">*--For database</font>
+DATA : go_con    TYPE REF TO cl_sql_connection,
+       go_stmt   TYPE REF TO cl_sql_statement,
+       go_result TYPE REF TO cl_sql_result_set.
+
+<font color ="#0000FF">*--For data</font>
+DATA : go_root TYPE REF TO cx_root, "db exception## ##
+       go_data TYPE REF TO data.
+
+<font color ="#0000FF">**********************************************************************</font>
+<font color ="#0000FF">* Internal table and work area</font>
+<font color ="#0000FF">**********************************************************************</font>
+TYPES : BEGIN OF gty_list,
+          mandt TYPE mandt,
+          devid TYPE c LENGTH 40,
+          cdate TYPE datum,
+          ctime TYPE tims,
+          tempp TYPE p LENGTH 7 DECIMALS 2,
+          humi  TYPE p LENGTH 7 DECIMALS 2,
+          br    TYPE p LENGTH 7 DECIMALS 2,
+        END OF gty_list.
+
+<font color ="#0000FF">* using type</font>
+<font color ="#0000FF">*DATA : gt_list TYPE TABLE OF gty_list.</font>
+
+<font color ="#0000FF">* using CLASS type</font>
+<font color ="#0000FF">*data : gt_list type table of zcl_it00_iot=&gt;ty_list.</font>
+
+DATA : gt_list   TYPE TABLE OF ztit00_msg001,
+       gt_detail TYPE TABLE OF ztit00_devid.
+
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&       Class lcl_event_handler</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*        Text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+CLASS lcl_event_handler DEFINITION.
+  PUBLIC SECTION.
+    CLASS-METHODS : hotspot_click_h FOR EVENT hotspot_click OF cl_gui_alv_grid
+      IMPORTING e_row_id
+                e_column_id
+                es_row_no.
+ENDCLASS.
+
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&       Class (Implementation)  lcl_event_handler</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*        Text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+CLASS lcl_event_handler IMPLEMENTATION.
+  METHOD hotspot_click_h.
+    PERFORM hotspot_c USING e_row_id e_column_id es_row_no.
+  ENDMETHOD.
+ENDCLASS.               "lcl_event_handler
+
+<font color ="#0000FF">**********************************************************************</font>
+<font color ="#0000FF">*popup component</font>
+<font color ="#0000FF">**********************************************************************</font>
+DATA : go_container_pop TYPE REF TO cl_gui_custom_container,
+       go_grid_pop      TYPE REF TO cl_gui_alv_grid,
+       gs_fcat_pop      TYPE        lvc_s_fcat,
+       gt_fcat_pop      TYPE        lvc_t_fcat,
+       gs_layout_pop    TYPE        lvc_s_layo.
+
+data : gs_stable    TYPE lvc_s_stbl,
+       gs_toolbar   TYPE ui_func,
+       gt_toolbar   TYPE ui_functions,
+       gs_variant   TYPE disvariant.
+
+<font color ="#0000FF">**********************************************************************</font>
+<font color ="#0000FF">* ALV variable</font>
+<font color ="#0000FF">**********************************************************************</font>
+DATA : go_alv_grid  TYPE REF TO cl_gui_alv_grid,
+       go_container TYPE REF TO cl_gui_docking_container.
+
+DATA : gt_fcat   TYPE lvc_t_fcat,
+       gs_fcat   TYPE lvc_s_fcat,
+       gs_layout TYPE lvc_s_layo.
+
+<font color ="#0000FF">**********************************************************************</font>
+<font color ="#0000FF">* Common variable</font>
+<font color ="#0000FF">**********************************************************************</font>
+DATA : gv_okcode TYPE sy-ucomm.
+
+<font color ="#0000FF">*</font>
+DATA : gr_date      TYPE RANGE OF datum,
+       gv_date      TYPE datum,
+       gv_read_r3   TYPE char01,
+       gv_read_adbc TYPE char01.
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - E.G.Mellodew. 1998-2005 UK. Sap Release 750
+</font>
+</body>
+</html>

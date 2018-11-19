@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script>
+		var numbering = function (){
+    	i = 0;
+    		while(i < 10){
+        		document.write(i);
+        		i += 1;
+    		}   
+		}
+		numbering();
+
+		// 위와 아래의 내용은 같다
+
+		function numbering(){
+    		i = 0;
+    		while(i < 10){
+        		document.write(i);
+        		i += 1;
+    		}   
+		}
+		numbering();
+
+		// 바로 실행!!
+		(function (){
+    		i = 0;
+    		while(i < 10){
+        		document.write(i);
+        		i += 1;
+    		}   
+		})();
+
+	</script>
+</head>
+<body>
+
+</body>
+</html>

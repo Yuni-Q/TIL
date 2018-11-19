@@ -1,0 +1,55 @@
+[
+ {
+  "file": "/Users/nburk/Projects/ray_wenderlich/sqlite/original/starter/Tutorial.playground/Sources/Helper.swift",
+  "offset": 510,
+  "text": "_ ",
+ },
+ {
+  "file": "/Users/nburk/Projects/ray_wenderlich/sqlite/original/starter/Tutorial.playground/Sources/Helper.swift",
+  "offset": 545,
+  "remove": 3,
+  "text": " ",
+ },
+ {
+  "file": "/Users/nburk/Projects/ray_wenderlich/sqlite/original/starter/Tutorial.playground/Sources/Helper.swift",
+  "offset": 566,
+  "remove": 10,
+  "text": "t",
+ },
+ {
+  "file": "/Users/nburk/Projects/ray_wenderlich/sqlite/original/starter/Tutorial.playground/Sources/Helper.swift",
+  "offset": 587,
+  "remove": 1,
+  "text": "(a",
+ },
+ {
+  "file": "/Users/nburk/Projects/ray_wenderlich/sqlite/original/starter/Tutorial.playground/Sources/Helper.swift",
+  "offset": 593,
+  "remove": 1,
+  "text": ": ",
+ },
+ {
+  "file": "/Users/nburk/Projects/ray_wenderlich/sqlite/original/starter/Tutorial.playground/Sources/Helper.swift",
+  "offset": 620,
+  "remove": 3,
+  "text": " ",
+ },
+ {
+  "file": "/Users/nburk/Projects/ray_wenderlich/sqlite/original/starter/Tutorial.playground/Sources/Helper.swift",
+  "offset": 641,
+  "remove": 10,
+  "text": "t",
+ },
+ {
+  "file": "/Users/nburk/Projects/ray_wenderlich/sqlite/original/starter/Tutorial.playground/Sources/Helper.swift",
+  "offset": 662,
+  "remove": 1,
+  "text": "(a",
+ },
+ {
+  "file": "/Users/nburk/Projects/ray_wenderlich/sqlite/original/starter/Tutorial.playground/Sources/Helper.swift",
+  "offset": 668,
+  "remove": 1,
+  "text": ": ",
+ }
+]

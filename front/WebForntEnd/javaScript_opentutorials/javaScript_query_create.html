@@ -1,0 +1,19 @@
+<div class="target">
+    content1
+</div>
+ 
+<div class="target">
+    content2
+</div>
+ 
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script>
+    $('.target').before('<div>before</div>');
+    // 타겟 위에
+    $('.target').after('<div>after</div>');
+    // 타겟 밑에
+    $('.target').prepend('<div>prepend</div>');
+    // 타겟 안에 젤 위에
+    $('.target').append('<div>append</div>');
+    // 타겟 안에 젤 밑에
+</script>

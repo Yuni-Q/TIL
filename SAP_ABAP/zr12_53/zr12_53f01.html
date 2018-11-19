@@ -1,0 +1,500 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>ZR12_53F01</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: ZR12_53F01</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  Include ZR12_53F01</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&  Include           ZR12_53F01</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  INIT_VALUE</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM init_value .
+
+  p_bukrs = '1000'.
+  p_gjahr = sy-datum(4).
+
+  s_budat-sign = 'I'.
+  s_budat-option = 'BT'.
+  s_budat-low = '20171101'.
+  s_budat-high = sy-datum.
+
+  APPEND s_budat.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_DATA</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_data .
+
+   CLEAR gt_header.
+
+  SELECT gjahr
+         belnr
+         budat
+         blart
+         tcode
+         waers
+  INTO CORRESPONDING FIELDS OF TABLE gt_header
+  FROM bkpf
+  WHERE bukrs EQ p_bukrs
+    AND gjahr EQ p_gjahr
+    AND budat IN s_budat.
+
+  IF gt_header IS INITIAL.
+
+    MESSAGE s004(zit00) WITH 'Fail To Get_Data_1' DISPLAY LIKE 'E'.
+
+    STOP.
+
+  ENDIF.
+
+  CLEAR gt_list.
+
+  SELECT bukrs
+         belnr
+         gjahr
+         buzei
+         sgtxt
+         dmbtr
+         hkont
+  INTO CORRESPONDING FIELDS OF TABLE gt_list
+  FROM bseg
+    FOR ALL ENTRIES IN gt_header
+  WHERE bukrs EQ p_bukrs
+    AND belnr EQ gt_header-belnr
+    AND gjahr EQ gt_header-gjahr.
+
+  IF gt_list IS NOT INITIAL.
+
+    DATA lv_tabix TYPE sy-tabix.
+
+    LOOP AT gt_list INTO gs_list.
+
+      lv_tabix = sy-tabix.
+
+      CLEAR gs_header.
+
+      READ TABLE gt_header INTO gs_header WITH KEY gjahr = gs_list-gjahr
+                                                   belnr = gs_list-belnr.
+
+      gs_list-budat = gs_header-budat.
+      gs_list-blart = gs_header-blart.
+      gs_list-waers = gs_header-waers.
+
+      MODIFY gt_list FROM gs_list INDEX lv_tabix TRANSPORTING budat blart.
+
+    ENDLOOP.
+
+  ENDIF.
+
+  SELECT *
+  INTO CORRESPONDING FIELDS OF TABLE gt_skat
+  FROM skat
+  WHERE spras EQ sy-langu
+    AND ktopl EQ 'CAIN'.
+
+  IF gt_skat IS INITIAL.
+
+    MESSAGE s004(zit00) WITH 'Fail To Get_Data_2' DISPLAY LIKE 'E'.
+
+    STOP.
+
+  ENDIF.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  DISPLAY_SCREEN</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM display_screen .
+
+  CLEAR : gt_fcat_header,
+          gt_fcat_segment.
+
+  PERFORM set_field_catalog.
+
+  PERFORM set_layout.
+
+  IF go_docking_contianer IS INITIAL.
+
+    PERFORM create_object.
+
+    SET HANDLER lcl_event_handler=&gt;double_click FOR go_alv_grid_header.
+
+    CALL METHOD go_alv_grid_header-&gt;set_table_for_first_display
+      EXPORTING
+        i_save          = 'A'
+        i_default       = 'X'
+        is_layout       = gs_layo_header
+      CHANGING
+        it_outtab       = gt_header
+        it_fieldcatalog = gt_fcat_header.
+
+    CALL METHOD go_alv_grid_segment-&gt;set_table_for_first_display
+      EXPORTING
+        i_save          = 'A'
+        i_default       = 'X'
+        is_layout       = gs_layo_segment
+      CHANGING
+        it_outtab       = gt_segment
+        it_fieldcatalog = gt_fcat_segment.
+
+  ELSE.
+
+    CALL METHOD : go_alv_grid_header-&gt;refresh_table_display,
+                  go_alv_grid_segment-&gt;refresh_table_display.
+
+  ENDIF.
+
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_FIELD_CATALOG</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_0050   text</font>
+<font color ="#0000FF">*      --&gt;P_0051   text</font>
+<font color ="#0000FF">*      --&gt;P_0052   text</font>
+<font color ="#0000FF">*      --&gt;P_0053   text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_field_catalog  .
+
+    PERFORM set_field_catalog_header USING : 'X' 'GJAHR' 'Year'       ' ',
+                                           'X' 'BELNR' 'DocumentNo' ' ',
+                                           ' ' 'BUDAT' 'Pstng Date' ' ',
+                                           ' ' 'TCODE' 'TCode'      ' ',
+                                           ' ' 'WAERS' 'Crcy'       'X'.
+
+  PERFORM set_field_catalog_segment USING : 'X' 'BELNR' 'DocumentNo'      ' ',
+                                            'X' 'BUZEI' 'Itm'             ' ',
+                                            ' ' 'BSCHL' 'PK'              ' ',
+                                            ' ' 'SGTXT' 'Text'            'X',
+                                            ' ' 'DMBTR' 'Loc.curr.amount' ' ',
+                                            ' ' 'HKONT' 'G/L'             ' ',
+                                            ' ' 'TXT50' 'G/L Text'        'X'.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_LAYOUT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_layout .
+
+  CLEAR : gs_layo_header,
+          gs_layo_segment.
+
+  gs_layo_header-zebra      = 'X'.
+  gs_layo_header-cwidth_opt = 'X'.
+  gs_layo_header-sel_mode   = 'D'.
+
+  gs_layo_segment-zebra      = 'X'.
+  gs_layo_segment-cwidth_opt = 'X'.
+  gs_layo_segment-sel_mode   = 'D'.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  CREATE_OBJECT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM create_object .
+
+  CREATE OBJECT go_docking_contianer
+    EXPORTING
+      repid     = sy-repid
+      dynnr     = sy-dynnr
+      side      = go_docking_contianer-&gt;dock_at_left
+      extension = 3000.
+
+  CREATE OBJECT go_splitter_container
+    EXPORTING
+      align   = 15
+      parent  = go_docking_contianer
+      rows    = 2
+      columns = 1.
+
+  CALL METHOD go_splitter_container-&gt;get_container
+    EXPORTING
+      row       = 1
+      column    = 1
+    RECEIVING
+      container = go_container_header.
+
+  CREATE OBJECT go_alv_grid_header
+    EXPORTING
+      i_parent = go_container_header.
+
+  CALL METHOD go_splitter_container-&gt;get_container
+    EXPORTING
+      row       = 2
+      column    = 1
+    RECEIVING
+      container = go_container_segment.
+
+  CREATE OBJECT go_alv_grid_segment
+    EXPORTING
+      i_parent = go_container_segment.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  MAKE_BODY</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM make_body .
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  DOUBLE_CLICK</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_E_COLUMN  text</font>
+<font color ="#0000FF">*      --&gt;P_E_ROW  text</font>
+<font color ="#0000FF">*      --&gt;P_SENDER  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM double_click  USING pv_column pv_row.
+
+  CLEAR gs_header.
+
+  READ TABLE gt_header INTO gs_header INDEX pv_row.
+
+  CLEAR gt_segment.
+
+  SELECT belnr
+         buzei
+         bschl
+         sgtxt
+         dmbtr
+         hkont
+  INTO CORRESPONDING FIELDS OF TABLE gt_segment
+  FROM bseg
+  WHERE bukrs EQ p_bukrs
+    AND belnr EQ gs_header-belnr
+    AND gjahr EQ gs_header-gjahr.
+
+  IF gt_segment IS INITIAL.
+
+    MESSAGE s004(zit00) WITH 'Fail To Double_Click' DISPLAY LIKE 'E'.
+
+    EXIT.
+
+  ELSE.
+
+    DATA lv_tabix TYPE sy-tabix.
+
+    LOOP AT gt_segment INTO gs_segment.
+
+      lv_tabix = sy-tabix.
+
+      CLEAR gs_skat.
+
+      READ TABLE gt_skat INTO gs_skat WITH KEY saknr = gs_segment-hkont.
+
+      gs_segment-txt50 = gs_skat-txt50.
+
+      MODIFY gt_segment FROM gs_segment INDEX lv_tabix TRANSPORTING txt50.
+
+    ENDLOOP.
+
+    CALL METHOD go_alv_grid_segment-&gt;refresh_table_display.
+
+  ENDIF.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  GET_DATA_ITEM</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_PS_ROW_INDEX  text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM get_data_item  USING    pv_index.
+
+<font color ="#0000FF">*  DATA : ls_item  LIKE gs_body,</font>
+<font color ="#0000FF">*         lv_tabix TYPE sy-tabix.</font>
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">*  CLEAR gt_item.</font>
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">*  READ TABLE gt_bkpf INTO gs_bkpf INDEX pv_index.</font>
+<font color ="#0000FF">*  READ TABLE gt_body WITH  KEY belnr = gs_bkpf-belnr</font>
+<font color ="#0000FF">*                    TRANSPORTING NO FIELDS.</font>
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">*  CLEAR gt_item.</font>
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">*  LOOP AT gt_body INTO gs_body WHERE belnr = gs_bkpf-belnr.</font>
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">*    MOVE-CORRESPONDING gs_body TO ls_item.</font>
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">*    APPEND ls_item TO gt_item.</font>
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">*    COLLECT ls_item INTO gt_item.</font>
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">*    CLEAR ls_item.</font>
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">*  ENDLOOP.</font>
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">*  IF sy-subrc = 0.</font>
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">*    lv_tabix = sy-tabix.</font>
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">*  ENDIF.</font>
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  FIELD_CATALOG</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_0399   text</font>
+<font color ="#0000FF">*      --&gt;P_0400   text</font>
+<font color ="#0000FF">*      --&gt;P_0401   text</font>
+<font color ="#0000FF">*      --&gt;P_0402   text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM field_catalog  USING pv_key pv_field pv_text pv_emphasize.
+
+<font color ="#0000FF">*  gs_fcat-key       = pv_key.</font>
+<font color ="#0000FF">*  gs_fcat-fieldname = pv_field.</font>
+<font color ="#0000FF">*  gs_fcat-coltext   = pv_text.</font>
+<font color ="#0000FF">*  gs_fcat-emphasize = pv_emphasize.</font>
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">*  APPEND gs_fcat TO gt_fcat_item.</font>
+<font color ="#0000FF">*  CLEAR gs_fcat.</font>
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_FIELD_CATALOG_HEADER</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_0262   text</font>
+<font color ="#0000FF">*      --&gt;P_0263   text</font>
+<font color ="#0000FF">*      --&gt;P_0264   text</font>
+<font color ="#0000FF">*      --&gt;P_0265   text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_field_catalog_header  USING pv_key pv_fieldname pv_coltext pv_emphasize.
+
+  gs_fcat_header-key       = pv_key.
+  gs_fcat_header-fieldname = pv_fieldname.
+  gs_fcat_header-coltext   = pv_coltext.
+  gs_fcat_header-emphasize = pv_emphasize.
+
+  APPEND gs_fcat_header TO gt_fcat_header.
+
+  CLEAR gs_fcat_header.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SET_FIELD_CATALOG_SEGMENT</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*      --&gt;P_0297   text</font>
+<font color ="#0000FF">*      --&gt;P_0298   text</font>
+<font color ="#0000FF">*      --&gt;P_0299   text</font>
+<font color ="#0000FF">*      --&gt;P_0300   text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM set_field_catalog_segment  USING pv_key pv_fieldname pv_coltext pv_emphasize.
+
+  gs_fcat_segment-key       = pv_key.
+  gs_fcat_segment-fieldname = pv_fieldname.
+  gs_fcat_segment-coltext   = pv_coltext.
+  gs_fcat_segment-emphasize = pv_emphasize.
+
+  APPEND gs_fcat_segment TO gt_fcat_segment.
+
+  CLEAR gs_fcat_segment.
+
+ENDFORM.
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&      Form  SAVE_DATA</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*       text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+<font color ="#0000FF">*  --&gt;  p1        text</font>
+<font color ="#0000FF">*  &lt;--  p2        text</font>
+<font color ="#0000FF">*----------------------------------------------------------------------*</font>
+FORM save_data .
+
+    DATA: ls_save TYPE ztit12_53,
+        lt_save TYPE TABLE OF ztit12_53.
+
+  LOOP AT gt_list INTO gs_list.
+
+    MOVE-CORRESPONDING gs_list TO ls_save.
+
+    ls_save-erdat = sy-datum.
+    ls_save-erzet = sy-uzeit.
+    ls_save-ernam = sy-uname.
+
+    APPEND ls_save TO lt_save.
+
+    CLEAR ls_save.
+
+  ENDLOOP.
+
+  IF lt_save IS NOT INITIAL.
+
+    MODIFY ztit12_53 FROM TABLE lt_save.
+
+    IF sy-subrc EQ 0.
+
+      COMMIT WORK.
+
+      MESSAGE s001(zit00).
+
+    ELSE.
+
+      ROLLBACK WORK.
+
+      MESSAGE s002(zit00) DISPLAY LIKE 'E'.
+
+    ENDIF.
+
+  ELSE.
+
+    MESSAGE s002(zit00) DISPLAY LIKE 'E'.
+
+    EXIT.
+
+  ENDIF.
+
+ENDFORM.
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - E.G.Mellodew. 1998-2005 UK. Sap Release 750
+</font>
+</body>
+</html>
