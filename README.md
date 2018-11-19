@@ -17,3 +17,8 @@
 
 ### Node
 [myapp](https://github.com/Yuni-Q/myapp)  
+[nuber-server](https://github.com/Yuni-Q/nuber-server)
+
+## Study
+[Node2](https://github.com/Mash-UP-BACKEND-6th/Node2)
+[web-study-assignment](https://github.com/Yuni-Q/web-study-assignment)
