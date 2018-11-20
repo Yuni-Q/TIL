@@ -46,3 +46,5 @@
 2. decorators(https://github.com/tc39/proposal-decorators)
 3. dynamic imports(https://github.com/tc39/proposal-dynamic-import)
 4. optional chaining(https://github.com/tc39/proposal-optional-chaining)
+
+[클린코드](https://sungjk.github.io/2017/07/27/clean-code.html?fbclid=IwAR2I8k1h_kkaD-Xb3VvGq6FB5ntYn6Ab3Zd_BQ42SaRYsRW3rf7VL0QeTsU)
