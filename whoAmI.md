@@ -112,6 +112,7 @@ Job 생성 및 SQS 적용
 새로운 API 작성  
 Node 어드민 작업  
 이미지 업로더 및 영상 업로더 생성  
+Swagger 모듈화 해서 만들기
 
 ### ETC
 API Gayway 추가  
@@ -119,3 +120,6 @@ RDB workbanch로 작업
 EC2 인스턴스 생성  
 Redis-commander 원격 redis 접속  
 앱에서 클릭으로 동작하는 모든 API 추적  
+AutoScaling 생성
+ELB 적용
+
