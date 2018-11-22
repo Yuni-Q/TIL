@@ -138,11 +138,34 @@ this value가 결정되기 이전에 this는 전역 객체를 가리키고 있�
 함수 코드의 스코프 체인의 생성과 초기화는 우선 Activation Object에 대한 레퍼런스를 스코프 체인의 선두에 설정하는 것으로 시작됩니다.  
 Activation Object는 우선 arguments 프로퍼티의 초기화를 실행하고 그 후, Variable Instantiation가 실행됩니다.  
 Activation Object는 스펙 상의 개념으로 프로그램이 Activation Object에 직접 접근할 수 없습니다.(Activation Object의 프로퍼티로의 접근은 가능합니다)  
-그 후, Caller(전역 컨텍스트)의 Scope Chain이 참조하고 있는 객체가 스코프 체인에 push된다. 따라서, 이 경우 함수 foo를 실행한 직후 실행 컨텍스트의 스코프 체인은 Activation Object(함수 foo의 실행으로 만들어진 AO-1)과 전역 객체를 순차적으로 참조하게 된다.
+그 후, Caller(전역 컨텍스트)의 Scope Chain이 참조하고 있는 객체가 스코프 체인에 push 됩니다.  
+따라서, 이 경우 함수 foo를 실행한 직후 실행 컨텍스트의 스코프 체인은 Activation Object(함수 foo의 실행으로 만들어진 AO-1)과 전역 객체를 순차적으로 참조하게 됩니다.  
 
+#### 3.2.2.2 Variable Instantiation 실행
+Function Code의 경우, 스코프 체인의 생성과 초기화에서 생성된 Activation Object를 Variable Object로서 Variable Instantiation가 실행됩니다.  
+이것을 제외하면 전역 코드의 경우와 같은 처리가 실행됩니다.  
+즉, 함수 객체를 Variable Object(AO-1)에 바인딩합니다.(프로퍼티는 bar, 값은 새로 생성된 Function Object. bar function object의 [[Scope]] 프로퍼티 값은 AO-1과 Global Object를 참조하는 리스트）  
 
+#### 3.2.2.3 this value 결정
+변수 선언 처리가 끝나면 다음은 this value가 결정 됩니다.  
+this에 할당되는 값은 함수 호출 패턴에 의해 결정 됩니다.  
+내부 함수의 경우, this의 value는 전역 객체입니다.  
 
+## 3.3 foo 함수 코드의 실행
+이제 함수 foo의 코드 블록 내 구문이 실행 됩니다.  
 
+### 3.3.1 변수 값의 할당
+지역 변수 y에 문자열 ‘yyy’를 할당할 때, 현재 실행 컨텍스트의 스코프 체인이 참조하고 있는 Variable Object를 선두(0)부터 검색하여 변수명에 해당하는 프로퍼티가 발견되면 값 ‘yyy’를 할당 합니다.  
+
+### 3.3.2 함수 bar의 실행
+함수 bar가 실행되기 시작하면 새로운 실행 컨텍스트이 생성 됩니다.  
+이전 함수 foo의 실행 과정과 동일하게 1. 스코프 체인의 생성과 초기화, 2. Variable Instantiation 실행, 3. this value 결정이 순차적으로 실행 됩니다.  
+
+이 단계에서 console.log(x + y + z); 구문의 실행 결과는 xxxyyyzzz가 됩니다.  
+
+- x : AO-2에서 x 검색 실패 → AO-1에서 x 검색 실패 → GO에서 x 검색 성공 (값은 ‘xxx’)
+- y : AO-2에서 y 검색 실패 → AO-1에서 y 검색 성공 (값은 ‘yyy’)
+- z : AO-2에서 z 검색 성공 (값은 ‘zzz’)
 
 
 
