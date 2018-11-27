@@ -16,7 +16,7 @@
 
 ### Node
 [myapp](https://github.com/Yuni-Q/myapp)  
-[myapp-client](https://github.com/Yuni-Q/myapp-client) . 
+[myapp-client](https://github.com/Yuni-Q/myapp-client)   
 [nuber-server](https://github.com/Yuni-Q/nuber-server)
 
 ## Study
