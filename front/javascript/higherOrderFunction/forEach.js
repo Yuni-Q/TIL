@@ -24,3 +24,9 @@ console.log(testArray); // [ 1, 4, 9, 16 ]
 //   console.log(`[${index}] =  + ${item}`);
 //   if (item > 1) break; // SyntaxError: Illegal break statement
 // });
+
+total = 0;
+for (let i = 0; i < testArray.length; i += 1) {
+  console.log(`${i} = + ${testArray[i]}`);
+  total += testArray[i];
+}
