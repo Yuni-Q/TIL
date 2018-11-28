@@ -120,6 +120,8 @@ RDB workbanch로 작업
 EC2 인스턴스 생성  
 Redis-commander 원격 redis 접속  
 앱에서 클릭으로 동작하는 모든 API 추적  
-AutoScaling 생성
-ELB 적용
+AutoScaling 생성  
+ELB 적용  
+Route53 사용  
+Swagger(json, yaml) 사용  
 
