@@ -38,3 +38,111 @@ Spring
 
 백엔드 개발자는 뭐라고 생각하는가?
 요즘은 뭐라고 딱 정하기가 힘들다 많은 부분을 백엔드 개발자가 하고 있기 때문이다. 스프링, 노드, 장고 이런 프레임워크는 적어도 기본적으로 해야한다고 생각한다. 프레임워크 보다는 서버 아키텍쳐와 성능튜닝등 서버의 전체적인 걸 봤으면 좋겠다. 이력서를 봤는데 대부분 언어 프레임워크에 종속적이라서 발전 가능성이 안보여 뽑지 않았다.
+
+핵데이 사전 공부
+* gitflow
+http://woowabros.github.io/experience/2017/10/30/baemin-mobile-git-branch-strategy.html
+
+* 처음 쓰는 기술은 여기서 주로 공부합니다
+https://www.tutorialspoint.com/
+http://tutorials.jenkov.com/
+
+* RPC Framework
+https://stackoverflow.com/questions/20653240/what-is-rpc-framework-and-apache-thrift
+GRPC? Thrift?
+
+* Redis vs Memcached
+https://ojava.tistory.com/70
+https://d2.naver.com/helloworld/614607
+Serialize 방식에는 어떤게 있을까? 왜 해야할까?
+
+* SHARD
+http://tech.kakao.com/2016/07/01/adt-mysql-shard-rebalancing/
+
+* 여러 IT회사의 기술 블로그들이 있는데요 심심할때 보면 좋습니다.(저도 잘 안봐요..ㅋㅠ)
+http://woowabros.github.io/
+https://meetup.toast.com/
+https://tmondev.blog.me/
+
+* 조대협님 블로그 - 네이버있다 구글 가신분인데 유용한 글이 많습니다
+http://bcho.tistory.com/948
+http://bcho.tistory.com/1005
+
+* TCP/UDP
+http://www.inven.co.kr/webzine/news/?news=165870
+
+—————————————————————————————————
+MSA 이론
+
+Msa 구성(동아리)
+https://github.com/Mash-UP-BACKEND-6th/BackendStudy/blob/master/181020.md
+
+조대협님 대용량 아키텍쳐 설계 패턴
+https://www.slideshare.net/Byungwook/4-61487454
+
+조대협님 MSA
+http://bcho.tistory.com/948
+
+MSA 데이터베이스 분리
+https://medium.com/@nathankpeck/microservice-principles-decentralized-data-management-4adaceea173f
+
+———————————————————————————————————
+API GATEWAY
+
+API-Gateway 배민 spring zuul
+http://woowabros.github.io/r&d/2017/06/13/apigateway.html
+
+API-Gateway spring zuul
+http://blog.eomdev.com/java/2016/05/30/API-Gateway.html
+
+———————————————————————————————————
+
+트랜잭션 구현
+https://www.popit.kr/rest-%EA%B8%B0%EB%B0%98%EC%9D%98-%EA%B0%84%EB%8B%A8%ED%95%9C-%EB%B6%84%EC%82%B0-%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98-%EA%B5%AC%ED%98%84-1%ED%8E%B8/
+
+Msa 아키텍쳐 구성(메시지 큐/ 트랜잭션)
+https://kihoonkim.github.io/2018/03/25/Microservices%20Architecture/first-msa-retro/
+
+Event driven Microservice(메세징큐를 이용한 방식)
+https://goodyhlee.wordpress.com/2015/11/29/msa-%EC%97%90%EC%84%9C-%EB%B6%84%EC%82%B0%EB%90%9C-%EC%9B%90%EA%B2%A9-%EC%84%9C%EB%B9%84%EC%8A%A4%EA%B0%84-%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98-%EA%B4%80%EB%A6%AC-%EB%B0%A9%EB%B2%95/
+
+트랜잭션 처리
+https://brainbackdoor.tistory.com/78
+
+———————————————————————————————————
+
+캐싱
+
+스프링 캐시
+https://minwan1.github.io/2018/03/18/2018-03-18-Spring-Cache/
+
+자바 직렬화
+http://woowabros.github.io/experience/2017/10/17/java-serialize.html
+
+Spring-redis 사용법(직렬화)
+http://yookeun.github.io/java/2017/05/21/spring-redis/
+http://yakolla.tistory.com/46
+
+Redis vs memcached
+http://blog.leekyoungil.com/?p=200
+
+———————————————————————————————————
+RPC
+https://www.hardikp.com/2018/07/28/services/
+https://github.com/briandilley/jsonrpc4j/wiki/JSON-RPC-for-Java-Client-&-Spring-Boot-(Server-example)
+
+
+GRPC
+
+맛보기
+https://medium.com/@goinhacker/microservices-with-grpc-d504133d191d
+https://developer.ibm.com/kr/cloud/blockchain/2017/03/26/grpc_overview_01/
+
+유튜브 - 스프링캠프 2017 gㅏ벼운 RPC, gRPC(빠르고 가벼운 Polyglot. RPC framework)
+https://www.youtube.com/watch?v=sKWy7BJxIas
+
+GitHub - grpc-spring-boot-starter
+https://github.com/LogNet/grpc-spring-boot-starter
+
+GiHub - GPRC APIgateway
+https://github.com/grpc-ecosystem/grpc-gateway/blob/master/README.md
