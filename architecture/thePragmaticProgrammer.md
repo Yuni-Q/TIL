@@ -135,8 +135,6 @@ IDE가 강제하는 편리함의 울타리 바깥에서도 능숙하게 작업�
 1. 호환성
 1. 더 쉬운 테스트
 
-
-
 ---
 
 [내가 아닌 누군가의 리뷰](https://blog.ordinarysimple.com/posts/programming/2018-11-04-the-progmatic-programmer/)
