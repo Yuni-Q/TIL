@@ -7,3 +7,31 @@
 1. 여러개의 호스트를 두는 방안
 - swagger-ui는 방식이 예전 것인지 잘 활용하지 못하겠음 ( 인터넷에 가장 쉽게 올라온 예제는 15년도 것으로 많이 바뀌었을 것으로 생각 )
 - swagger-ui-expres는 여러 페이지 사용이 불가능 한 것으로 추정 ( 마지막 setup 된 것으로 모두 덮어 버린다. )
+
+```javascript
+const express = require('express');
+
+const app = express();
+
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./api/swagger/swagger.yaml');
+const steamsDocument = YAML.load('./api/swagger/streams.yaml');
+
+  swaggerExpress.register(app);
+  app.use('/health', healthRouter);
+  function streams(req, res, next) {
+    console.log('bbbb')
+    app.use('/streams', swaggerUi.serve);
+    app.get('/streams', swaggerUi.setup(steamsDocument));
+    next();
+  }
+  function swagger(req, res, next) {
+    console.log('aaaa')
+    app.use('/', swaggerUi.serve);
+    app.get('/', swaggerUi.setup(swaggerDocument));
+    next();
+  }
+  app.get('/streams', streams);
+  app.get('/', swagger);
+  ```
+  > 성공 !!
