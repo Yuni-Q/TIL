@@ -16,3 +16,16 @@ axios 짱 !! 하지만 라이브러리라서 설치가 필요하다
 이미지는 동일출처 원칙은 적용 되지 않는다
 
 자바스크립트 내의 자바스크립트 요청만 적용(?)
+
+# 리엑트
+
+리엑트 내의 돔에 접근하려면 ref가 필요
+
+wrapper = React.createRef()
+
+window.scrollY
+
+didmount로 추가(이벤트리스너로 사용)
+
+unmount로 제거
+
