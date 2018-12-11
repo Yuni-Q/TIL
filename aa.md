@@ -171,3 +171,5 @@ https://github.com/grpc-ecosystem/grpc-gateway/blob/master/README.md
 단점
 메시지를 조회할 때마다 대상 사용자의 관계 정보를 확인해야 한다.
 여러 채널과 관계를 맺은 사용자는 각 채널의 공용 메시지함을 한 번씩 조회하여야 한다.
+
+[면접 대비](https://github.com/WeareSoft/tech-interview)
