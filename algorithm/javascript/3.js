@@ -33,6 +33,7 @@ function solution(T) {
       } else {
         d = b;
       }
+      console.log(c,d)
       if (c > e) {
         e = c
       }
@@ -45,3 +46,36 @@ function solution(T) {
   return e
 
 }
+
+const Q = {
+  x: 4,
+  l: {
+    x: 3,
+    l: {
+      x: 4,
+      l: {
+        x: 5,
+        l: null,
+        r: null,
+      },
+      r: null,
+    },
+    r: null,
+  },
+  r: {
+    x: 2,
+    l: {
+      x: 3,
+      l: null,
+      r: null,
+    },
+    r: {
+      x: 2,
+      l: null,
+      r: null,
+    }
+  }
+}
+
+console.log(solution(Q));
+console.log(Q);
