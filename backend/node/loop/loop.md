@@ -110,3 +110,26 @@ forEach는 break, continue가 불가능 합니다.<br>
 > return true; 가 continue 이며,<br>
 > return false; 는 break 입니다.<br>
 > some과 다른이유는 some이 break와 continue를 위해 return true와 false를 하는 용도로 만들어진게 아니기 때문입니다.<br>
+
+## for of
+Symbol.iterator가 있는 값에만 사용 가능 ( ex) 배열, String )   
+> Symbol.iterator: 이터러블한 객체를 정의하기 위한 심볼  
+```javascript
+const = arr = [1,2,3]
+for (const val of arr) {
+  console.log(val);
+}
+```
+
+## for in
+객체를 순환 할 수 있다.  
+하지만 지양하기를 권고한다고 한다.  
+__proto__도 출력하기 떄문에 의도치 않은 출력을 할 수 있습니다.  
+```javascript
+const obj = { '1':1, '2':2, '3':3 };
+for (const val in obj) {
+  console.log(val);
+}
+```
+
+
