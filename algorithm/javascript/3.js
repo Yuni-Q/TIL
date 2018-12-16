@@ -13,7 +13,7 @@ function solution(T) {
   if (T.r) {
     d = temp(T.r, a, b);
   }
-
+ 
   function temp(T, a, b) {
     // write your code in JavaScript (Node.js 8.9.4)
     let c = 0;
