@@ -126,9 +126,10 @@ for (const val of arr) {
 하지만 지양하기를 권고한다고 한다.  
 __proto__도 출력하기 떄문에 의도치 않은 출력을 할 수 있습니다.  
 ```javascript
-const obj = { '1':1, '2':2, '3':3 };
-for (const val in obj) {
-  console.log(val);
+const obj = { '11':1, '22':2, '33':3 };
+for (const key in obj) {
+  console.log(key); // key 값이다.
+  console.log(obj.key); // key 값이다.
 }
 ```
 
