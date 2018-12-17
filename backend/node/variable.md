@@ -1,7 +1,7 @@
 
 # JavaScript 변수
 ES5에서 변수를 선언할 수 있는 유일한 방법은 var 키워드를 사용하는 것이었습니다.  
-이는 다른 C-family 언어와는 차별되는 특징(설계상 오류)으로 주의를 기울이지 않으면 심각한 문제를 일으킵니다.  
+이는 다른 [C-family](https://en.wikipedia.org/wiki/List_of_C-family_programming_languages) 언어와는 차별되는 특징(설계상 오류)으로 주의를 기울이지 않으면 심각한 문제를 일으킵니다.  
 
 var : functionScoped, 변수 재할당, 재선언 모두 가능합니다.
 1. 함수 레벨 스코프(Function-level scope)
@@ -24,7 +24,7 @@ var : functionScoped, 변수 재할당, 재선언 모두 가능합니다.
 따라서 변수의 유효 범위(scope)는 좁을수록 좋다.  
 
 ## let const
-es2015에서 let과 const 가 생성 되었습니다.<br>
+[es2015(ES6)](https://www.zerocho.com/category/ECMAScript/post/5756d488e9c105aaeb550ea5)에서 let과 const 가 생성 되었습니다.<br>
 let : blockScoped,  변수에 재할당만 가능 합니다 ( 재선언 불가능 )<br>
 const : blockScoped, 변수 재선언, 재할당 모두 불가능 합니다.<br>
 
@@ -66,8 +66,8 @@ console.log(a); // a is not defined
   console.log(a); // 2
   a = 3;
   console.log(a); // 3
-  let a = 4;
-  console.log(a); // Identifier 'a' has already been declared
+  let a = 4; // Identifier 'a' has already been declared
+  console.log(a); 
 }
 ```
 > let은 재선언 되지 않습니다.
@@ -167,8 +167,11 @@ for (var j = 0; j < 3; j++) {
 > for 루프의 let i는 for loop에서만 유효한 지역 변수이다. 또한, i는 자유 변수로서 for 루프의 생명주기가 종료되어도 변수 i를 참조하는 함수가 존재하는 한 계속 유지된다.  
 
 ## 전역 객체와 let
-전역 객체(Global Object)는 모든 객체의 유일한 최상위 객체를 의미하며 일반적으로 Browser-side에서는 window 객체, Server-side(Node.js)에서는 global 객체를 의미한다. var 키워드로 선언된 변수를 전역 변수로 사용하면 전역 객체의 프로퍼티가 된다.
-let 키워드로 선언된 변수를 전역 변수로 사용하는 경우, let 전역 변수는 전역 객체의 프로퍼티가 아니다. 즉, window.foo와 같이 접근할 수 없다. let 전역 변수는 보이지 않는 개념적인 블록 내에 존재하게 된다.
+전역 객체(Global Object)는 모든 객체의 유일한 최상위 객체를 의미하며 일반적으로 Browser-side에서는 window 객체, Server-side(Node.js)에서는 global 객체를 의미한다.   
+var 키워드로 선언된 변수를 전역 변수로 사용하면 전역 객체의 프로퍼티가 된다.   
+let 키워드로 선언된 변수를 전역 변수로 사용하는 경우, let 전역 변수는 전역 객체의 프로퍼티가 아니다.  
+즉, window.foo와 같이 접근할 수 없다.  
+let 전역 변수는 보이지 않는 개념적인 블록 내에 존재하게 된다.  
 
 ## const
 
@@ -177,8 +180,13 @@ let은 재할당이 자유로우나 const는 재할당이 금지된다.
 주의할 점은 const는 반드시 선언과 동시에 할당이 이루어져야 한다는 것이다. 그렇지 않으면 다음처럼 문법 에러(SyntaxError)가 발생한다.  
 
 ### const와 객체
-const는 재할당이 금지된다. 이는 const 변수의 타입이 객체인 경우, 객체에 대한 참조를 변경하지 못한다는 것을 의미한다. 하지만 이때 객체의 프로퍼티는 보호되지 않는다. 다시 말하자면 재할당은 불가능하지만 할당된 객체의 내용(프로퍼티의 추가, 삭제, 프로퍼티 값의 변경)은 변경할 수 있다.  
-객체의 내용이 변경되더라도 객체 타입 변수에 할당된 주소값은 변경되지 않는다. 따라서 객체 타입 변수 선언에는 const를 사용하는 것이 좋다. 만약에 명시적으로 객체 타입 변수의 주소값을 변경(재할당)하여야 한다면 let을 사용한다.  
+const는 재할당이 금지된다.   
+이는 const 변수의 타입이 객체인 경우, 객체에 대한 참조를 변경하지 못한다는 것을 의미한다.  
+하지만 이때 객체의 프로퍼티는 보호되지 않는다.  
+다시 말하자면 재할당은 불가능하지만 할당된 <b>객체의 내용(프로퍼티의 추가, 삭제, 프로퍼티 값의 변경)은 변경할 수 있다.</b>   
+객체의 내용이 변경되더라도 객체 타입 변수에 할당된 주소값은 변경되지 않는다.  
+따라서 <b>객체 타입 변수 선언에는 const를 사용하는 것이 좋다.</b>  
+만약에 명시적으로 객체 타입 변수의 주소값을 변경(재할당)하여야 한다면 let을 사용한다.  
 
 ## var vs. let vs. const
 - ES6를 사용한다면 var 키워드는 사용하지 않는다.
