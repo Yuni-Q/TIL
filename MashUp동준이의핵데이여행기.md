@@ -61,13 +61,13 @@ GRPC? Thrift?
 RPC 프레임 워크 일반적으로는 동일한 시스템에서 다른 시스템이나 또 다른 과정을 원격 과정에서 코드 조각을 호출 할 프로그래머를 수있는 도구의 집합입니다.  
 Apache Thrift 의 특별한 경우 , 효율적이고 OS 플랫폼과 프로그래밍 언어에서 사용할 수 있도록 설계된 프레임 워크에 대해 이야기합니다. 또한 전송 (소켓, 파이프 등) 및 프로토콜 (바이너리, JSON, 심지어 압축)과 SSL 또는 SASL 지원과 같은 몇 가지 옵션에 대한 유연성이 있습니다.  
 
-* Redis vs Memcached
-https://ojava.tistory.com/70
-https://d2.naver.com/helloworld/614607
-Serialize 방식에는 어떤게 있을까? 왜 해야할까?
+* Redis vs Memcached  
+https://ojava.tistory.com/70  
+https://d2.naver.com/helloworld/614607  
+Serialize 방식에는 어떤게 있을까? 왜 해야할까?  
 
-* SHARD
-http://tech.kakao.com/2016/07/01/adt-mysql-shard-rebalancing/
+* SHARD  
+http://tech.kakao.com/2016/07/01/adt-mysql-shard-rebalancing/  
 
 * 여러 IT회사의 기술 블로그들이 있는데요 심심할때 보면 좋습니다.(저도 잘 안봐요..ㅋㅠ)
 http://woowabros.github.io/
