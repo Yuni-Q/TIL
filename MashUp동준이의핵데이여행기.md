@@ -69,118 +69,118 @@ Serialize 방식에는 어떤게 있을까? 왜 해야할까?
 * SHARD  
 http://tech.kakao.com/2016/07/01/adt-mysql-shard-rebalancing/  
 
-* 여러 IT회사의 기술 블로그들이 있는데요 심심할때 보면 좋습니다.(저도 잘 안봐요..ㅋㅠ)
-http://woowabros.github.io/
-https://meetup.toast.com/
-https://tmondev.blog.me/
+* 여러 IT회사의 기술 블로그들이 있는데요 심심할때 보면 좋습니다.(저도 잘 안봐요..ㅋㅠ)  
+http://woowabros.github.io/  
+https://meetup.toast.com/  
+https://tmondev.blog.me/  
 
-* 조대협님 블로그 - 네이버있다 구글 가신분인데 유용한 글이 많습니다
-http://bcho.tistory.com/948
-http://bcho.tistory.com/1005
+* 조대협님 블로그 - 네이버있다 구글 가신분인데 유용한 글이 많습니다  
+http://bcho.tistory.com/948  
+http://bcho.tistory.com/1005  
 
 * TCP/UDP
-http://www.inven.co.kr/webzine/news/?news=165870
+http://www.inven.co.kr/webzine/news/?news=165870   
 
 —————————————————————————————————
-MSA 이론
+MSA 이론  
 
-Msa 구성(동아리)
-https://github.com/Mash-UP-BACKEND-6th/BackendStudy/blob/master/181020.md
+Msa 구성(동아리)  
+https://github.com/Mash-UP-BACKEND-6th/BackendStudy/blob/master/181020.md  
 
-조대협님 대용량 아키텍쳐 설계 패턴
-https://www.slideshare.net/Byungwook/4-61487454
+조대협님 대용량 아키텍쳐 설계 패턴  
+https://www.slideshare.net/Byungwook/4-61487454  
 
-조대협님 MSA
-http://bcho.tistory.com/948
+조대협님 MSA  
+http://bcho.tistory.com/948  
 
-MSA 데이터베이스 분리
-https://medium.com/@nathankpeck/microservice-principles-decentralized-data-management-4adaceea173f
-
-———————————————————————————————————
-API GATEWAY
-
-API-Gateway 배민 spring zuul
-http://woowabros.github.io/r&d/2017/06/13/apigateway.html
-
-API-Gateway spring zuul
-http://blog.eomdev.com/java/2016/05/30/API-Gateway.html
+MSA 데이터베이스 분리  
+https://medium.com/@nathankpeck/microservice-principles-decentralized-data-management-4adaceea173f  
 
 ———————————————————————————————————
+API GATEWAY  
 
-트랜잭션 구현
-https://www.popit.kr/rest-%EA%B8%B0%EB%B0%98%EC%9D%98-%EA%B0%84%EB%8B%A8%ED%95%9C-%EB%B6%84%EC%82%B0-%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98-%EA%B5%AC%ED%98%84-1%ED%8E%B8/
+API-Gateway 배민 spring zuul  
+http://woowabros.github.io/r&d/2017/06/13/apigateway.html  
 
-Msa 아키텍쳐 구성(메시지 큐/ 트랜잭션)
-https://kihoonkim.github.io/2018/03/25/Microservices%20Architecture/first-msa-retro/
-
-Event driven Microservice(메세징큐를 이용한 방식)
-https://goodyhlee.wordpress.com/2015/11/29/msa-%EC%97%90%EC%84%9C-%EB%B6%84%EC%82%B0%EB%90%9C-%EC%9B%90%EA%B2%A9-%EC%84%9C%EB%B9%84%EC%8A%A4%EA%B0%84-%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98-%EA%B4%80%EB%A6%AC-%EB%B0%A9%EB%B2%95/
-
-트랜잭션 처리
-https://brainbackdoor.tistory.com/78
+API-Gateway spring zuul  
+http://blog.eomdev.com/java/2016/05/30/API-Gateway.html  
 
 ———————————————————————————————————
 
-캐싱
+트랜잭션 구현  
+https://www.popit. kr/rest-%EA%B8%B0%EB%B0%98%EC%9D%98-%EA%B0%84%EB%8B%A8%ED%95%9C-%EB%B6%84%EC%82%B0-%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98-%EA%B5%AC%ED%98%84-1%ED%8E%B8/  
 
-스프링 캐시
-https://minwan1.github.io/2018/03/18/2018-03-18-Spring-Cache/
+Msa 아키텍쳐 구성(메시지 큐/ 트랜잭션)  
+https://kihoonkim.github.io/2018/03/25/Microservices%20Architecture/first-msa-retro/  
 
-자바 직렬화
-http://woowabros.github.io/experience/2017/10/17/java-serialize.html
+Event driven Microservice(메세징큐를 이용한 방식)  
+https://goodyhlee.wordpress.com/2015/11/29/msa-%EC%97%90%EC%84%9C-%EB%B6%84%EC%82%B0%EB%90%9C-%EC%9B%90%EA%B2%A9-%EC%84%9C%EB%B9%84%EC%8A%A4%EA%B0%84-%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98-%EA%B4%80%EB%A6%AC-%EB%B0%A9%EB%B2%95/  
 
-Spring-redis 사용법(직렬화)
-http://yookeun.github.io/java/2017/05/21/spring-redis/
-http://yakolla.tistory.com/46
-
-Redis vs memcached
-http://blog.leekyoungil.com/?p=200
+트랜잭션 처리  
+https://brainbackdoor.tistory.com/78  
 
 ———————————————————————————————————
-RPC
-https://www.hardikp.com/2018/07/28/services/
-https://github.com/briandilley/jsonrpc4j/wiki/JSON-RPC-for-Java-Client-&-Spring-Boot-(Server-example)
+
+캐싱  
+
+스프링 캐시  
+https://minwan1.github.io/2018/03/18/2018-03-18-Spring-Cache/  
+
+자바 직렬화  
+http://woowabros.github.io/experience/2017/10/17/java-serialize.html  
+
+Spring-redis 사용법(직렬화)  
+http://yookeun.github.io/java/2017/05/21/spring-redis/  
+http://yakolla.tistory.com/46  
+
+Redis vs memcached  
+http://blog.leekyoungil.com/?p=200  
+
+———————————————————————————————————
+RPC  
+https://www.hardikp.com/2018/07/28/services/  
+https://github.com/briandilley/jsonrpc4j/wiki/JSON-RPC-for-Java-Client-&-Spring-Boot-(Server-example)  
 
 
-GRPC
+GRPC  
 
-맛보기
-https://medium.com/@goinhacker/microservices-with-grpc-d504133d191d
-https://developer.ibm.com/kr/cloud/blockchain/2017/03/26/grpc_overview_01/
+맛보기  
+https://medium.com/@goinhacker/microservices-with-grpc-d504133d191d   
+https://developer.ibm.com/kr/cloud/blockchain/2017/03/26/grpc_overview_01/  
 
-유튜브 - 스프링캠프 2017 gㅏ벼운 RPC, gRPC(빠르고 가벼운 Polyglot. RPC framework)
-https://www.youtube.com/watch?v=sKWy7BJxIas
+유튜브 - 스프링캠프 2017 gㅏ벼운 RPC, gRPC(빠르고 가벼운 Polyglot. RPC framework)  
+https://www.youtube.com/watch?v=sKWy7BJxIas  
 
-GitHub - grpc-spring-boot-starter
-https://github.com/LogNet/grpc-spring-boot-starter
+GitHub - grpc-spring-boot-starter  
+https://github.com/LogNet/grpc-spring-boot-starter  
 
-GiHub - GPRC APIgateway
-https://github.com/grpc-ecosystem/grpc-gateway/blob/master/README.md
+GiHub - GPRC APIgateway  
+https://github.com/grpc-ecosystem/grpc-gateway/blob/master/README.md  
 
-피드시스템(인스타/페북을 생각해보세요)
-피드 구성 전략 2가지를 소개합니다.
-- Inbox
-메시지를 개별 사용자의 전용 메시지함에 전달하는 전략
-메시지를 전달할 때 대상 목록이 필요하다.
-‘이 메시지를 어떤 사용자의 메시지함에 전달해야 하지?’
-메시지를 전달한 후에도 전달 대상에 대한 정보를 저장하지만, 외부에 제공하지 않으며 메시지를 삭제할 때 함께 폐기한다.
-장점
-메시지를 조회할 때 전용 메시지함을 한번만 조회하기 때문에 부담이 적다.
-단점
-메시지를 전달할 때 부하가 크다.
-수신자가 여럿일수록 메시지 전달 횟수도 많아지기 때문이다.
-수신자가 10만명 이상인 메시지를 자주 발송하는 경우 전송시간이 길어지며, 시스템 전체 성능에 영향을 미친다.
-한번 메시지가 전달되면 발송 대상을 변경하기 어렵다.
-저장 공간을 많이 소모한다.
-- Outbox
-메시지를 공용 메시지함에 저장하고, 필요한 경우 조회한다.
-특정 유저가 자신의 메시지를 조회할 때 관계 정보가 필요하다.
-‘이 사용자는 어떤 공용 메시지함을 봐야 하지?’
-장점
-일일히 메시지 전달을 하지 않아 부담이 적다.
-단점
-메시지를 조회할 때마다 대상 사용자의 관계 정보를 확인해야 한다.
-여러 채널과 관계를 맺은 사용자는 각 채널의 공용 메시지함을 한 번씩 조회하여야 한다.
+피드시스템(인스타/페북을 생각해보세요)  
+피드 구성 전략 2가지를 소개합니다.  
+- Inbox  
+메시지를 개별 사용자의 전용 메시지함에 전달하는 전략  
+메시지를 전달할 때 대상 목록이 필요하다.  
+‘이 메시지를 어떤 사용자의 메시지함에 전달해야 하지?’  
+메시지를 전달한 후에도 전달 대상에 대한 정보를 저장하지만, 외부에 제공하지 않으며 메시지를 삭제할 때 함께 폐기한다.  
+장점  
+메시지를 조회할 때 전용 메시지함을 한번만 조회하기 때문에 부담이 적다.  
+단점  
+메시지를 전달할 때 부하가 크다.  
+수신자가 여럿일수록 메시지 전달 횟수도 많아지기 때문이다.  
+수신자가 10만명 이상인 메시지를 자주 발송하는 경우 전송시간이 길어지며, 시스템 전체 성능에 영향을 미친다.  
+한번 메시지가 전달되면 발송 대상을 변경하기 어렵다.  
+저장 공간을 많이 소모한다.  
+- Outbox  
+메시지를 공용 메시지함에 저장하고, 필요한 경우 조회한다.  
+특정 유저가 자신의 메시지를 조회할 때 관계 정보가 필요하다.  
+‘이 사용자는 어떤 공용 메시지함을 봐야 하지?’  
+장점  
+일일히 메시지 전달을 하지 않아 부담이 적다.  
+단점  
+메시지를 조회할 때마다 대상 사용자의 관계 정보를 확인해야 한다.  
+여러 채널과 관계를 맺은 사용자는 각 채널의 공용 메시지함을 한 번씩 조회하여야 한다.  
 
 [면접 대비](https://github.com/WeareSoft/tech-interview)
 
