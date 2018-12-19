@@ -108,7 +108,7 @@ http://blog.eomdev.com/java/2016/05/30/API-Gateway.html
 ———————————————————————————————————
 
 트랜잭션 구현  
-https://www.popit. kr/rest-%EA%B8%B0%EB%B0%98%EC%9D%98-%EA%B0%84%EB%8B%A8%ED%95%9C-%EB%B6%84%EC%82%B0-%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98-%EA%B5%AC%ED%98%84-1%ED%8E%B8/  
+https://www.popit.kr/rest-%EA%B8%B0%EB%B0%98%EC%9D%98-%EA%B0%84%EB%8B%A8%ED%95%9C-%EB%B6%84%EC%82%B0-%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98-%EA%B5%AC%ED%98%84-1%ED%8E%B8/  
 
 Msa 아키텍쳐 구성(메시지 큐/ 트랜잭션)  
 https://kihoonkim.github.io/2018/03/25/Microservices%20Architecture/first-msa-retro/  
