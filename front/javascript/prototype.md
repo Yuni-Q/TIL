@@ -123,19 +123,3 @@ student 객체는 hasOwnProperty 메소드를 가지고 있지 않으므로 에�
 ---
 참조 : [프로토타입](https://poiemaweb.com/js-prototype)  
 참조 : [JS 질문](https://github.com/yangshun/front-end-interview-handbook/blob/master/Translations/Korean/questions/javascript-questions.md)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
