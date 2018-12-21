@@ -241,5 +241,42 @@ console.log(foo == undefined); // true. 옳지않습니다. 확인하는 데 사
 아직 사용하지 않으려는 경우, 선언한 후에 명시적으로 null 을 할당할 것입니다.  
 
 ---
+
+# 호스트 객체와 내장 객체의 차이점은 무엇입니까?
+내장 객체는 ECMAScript 사양에 정의된 JavaScript 언어의 일부인 객체입니다. (예: String, Math, RegExp, Object, Function 등)  
+
+호스트 객체는 window, XMLHTTPRequest 등과 같이 런타임 환경 (브라우저 또는 노드)에 의해 제공됩니다.  
+
+---
+
+# Person(){}, var person = Person(), var person = new Person() 의 차이점은 무엇입니까?
+
+이 질문은 굉장해 애매합니다. 질문의 의도에 대한 저의 최선의 추측은 JavaScript의 생성자에 대해 묻는 것입니다.  
+엄밀히 말하면, function Person(){}은 정상적인 함수 선언일 뿐입니다.  
+이 컨벤션은 생성자로 사용하기 위해 함수에 PascalCase 를 사용합니다.  
+
+var person = Person()은 생성자가 아니며 Person을 함수로 호출합니다.  
+함수를 생성자로 사용하려는 경우에 이렇게 호출하는 것이 일반적인 실수입니다.  
+일반적으로 생성자는 아무것도 반환하지 않으므로 일반 함수처럼 생성자를 호출하면 undefined가 반환되고 지정된 변수에 할당됩니다.  
+
+var person = new Person()은 Person.prototype을 상속받은 new 연산자를 사용하여 Person 객체의 인스턴스를 생성합니다.  
+또 다른 방법은 Object.create를 사용하는 것입니다: Object.create(Person.prototype).  
+```javascript
+function Person(name) {
+  this.name = name;
+}
+
+var person = Person('John');
+console.log(person); // undefined
+console.log(person.name); // Uncaught TypeError: 정의되지 않은 'name' 프로퍼티를 읽을 수 없습니다
+
+var person = new Person('John');
+console.log(person); // Person { name: "John" }
+console.log(person.name); // "john"
+```
+
+
+
+---
 참조 : [let, const와 블록 레벨 스코프](https://poiemaweb.com/es6-block-scope)
 참조 : [JS 질문](https://github.com/yangshun/front-end-interview-handbook/blob/master/Translations/Korean/questions/javascript-questions.md)
