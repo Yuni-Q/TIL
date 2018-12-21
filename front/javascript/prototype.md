@@ -116,6 +116,15 @@ student 객체는 hasOwnProperty 메소드를 가지고 있지 않으므로 에�
 객체의 프로퍼티에 값을 할당하는 경우, 프로토타입 체인이 동작하지 않습니다.  
 이는 객체에 해당 프로퍼티가 있는 경우, 값을 재할당하고 해당 프로퍼티가 없는 경우는 해당 객체에 프로퍼티를 동적으로 추가하기 때문 입니다.  
 
+---
+
+이것은 매우 일반적인 JavaScript 인터뷰 질문입니다. 모든 JavaScript 객체는 다른 객체에 대한 참조인 prototype 프로퍼티를 가지고 있습니다. 객체의 프로퍼티에 접근할 때 해당 객체에 해당 프로퍼티가 없으면 JavaScript 엔진은 객체의 prototype과 prototype의 prototype등을 보고 프로퍼티가 정의될 때까지 찾고 만약 객체의 프로퍼티에 접근할 때 해당 객체에 해당 프로퍼티가 없으면 프로토타입 체인 중 하나에 있거나 프로토타입 체인의 끝에 도달할 때까지 찾습니다. 이 동작은 고전적인 상속을 흉내 내지만 실제로 상속보다 위임에 더 가깝습니다.
+
+---
+참조 : [프로토타입](https://poiemaweb.com/js-prototype)  
+참조 : [JS 질문](https://github.com/yangshun/front-end-interview-handbook/blob/master/Translations/Korean/questions/javascript-questions.md)
+
+
 
 
 
