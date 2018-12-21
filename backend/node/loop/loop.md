@@ -133,4 +133,11 @@ for (const key in obj) {
 }
 ```
 
+---
 
+.forEach 와 .map() 의 주된 차이점은 .map() 이 새로운 배열을 반환한다는 것입니다.  
+결과가 필요하지만 원본 배열을 변경하고 싶지 않으면 .map() 이 확실한 선택입니다.  
+단순히 배열을 반복할 필요가 있다면, forEach 가 좋은 선택입니다.  
+
+---
+참조 : [JS 질문](https://github.com/yangshun/front-end-interview-handbook/blob/master/Translations/Korean/questions/javascript-questions.md)

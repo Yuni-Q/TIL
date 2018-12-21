@@ -194,4 +194,52 @@ const는 재할당이 금지된다.
 - 변경이 발생하지 않는(재할당이 필요 없는) 원시 타입과 객체 타입에는 const를 사용한다.
 
 ---
+
+# null, undefined, 선언되지 않은 변수 의 차이점은 무엇입니까? 당신은 어떻게 이 상태들에 대한 점검을 할 것입니까?
+
+## 선언되지 않은 변수
+선언되지 않은 변수 변수는 이전에 var, let, const 를 사용하여 생성되지 않은 식별자에 값을 할당할 때 생성됩니다.  
+선언되지 않은 변수 는 현재 범위 외부에서 전역으로 정의됩니다.  
+strict 모드에서는 선언되지 않은 변수 에 할당하려고 할 때 ReferenceError 가 throw 됩니다.  
+선언되지 않은 변수 는 전역 변수처럼 좋지 않은 것입니다.  
+그것들은 모두 피하세요!  
+이들을 검사하기 위해 사용할 때 try / catch 블록에 감싸십시오.  
+
+## undefined
+undefined 변수는 선언되었지만 값이 할당되지 않은 변수입니다.  
+이것은 undefined 타입입니다.  
+함수가 실행 결과에 따라 값을 반환하지 않으면 변수에 할당되며, 변수가 undefined 값을 갖습니다.  
+이것을 검사하기 위해, 엄격한 (===) 연산자 또는 typeof 에 undefined 문자열을 사용하여 비교하십시오.  
+확인을 위해 추상 평등 연산자(==)를 사용해서는 안되며, 이는 값이 null 이면 true 를 반환합니다.  
+
+```javascript
+var foo;
+console.log(foo); // undefined
+console.log(foo === undefined); // true
+console.log(typeof foo === 'undefined'); // true
+
+console.log(foo == null); // true. 옳지않습니다. 확인하는 데 사용하지 마세요.
+
+function bar() {}
+var baz = bar();
+console.log(baz); // undefined
+```
+
+## null 
+null 인 변수는 null 값에 명시적으로 할당될 것입니다.  
+그것은 값을 나타내지 않으며 명시적으로 할당된다는 점에서 undefined와 다릅니다.   
+null을 체크하기 위해서 단순히 완전 항등 연산자(===)를 사용하여 비교하면 됩니다.  
+위와 같이, 추상 평등 연산자 (==)를 사용해서는 안되며, 값이 undefined이면 true를 반환합니다.  
+
+```javascript
+var foo = null;
+console.log(foo === null); // true
+
+console.log(foo == undefined); // true. 옳지않습니다. 확인하는 데 사용하지 마세요.
+```
+개인적 습관으로, 저는 변수를 선언하지 않거나 할당하지 않은 상태로 두지 않습니다.   
+아직 사용하지 않으려는 경우, 선언한 후에 명시적으로 null 을 할당할 것입니다.  
+
+---
 참조 : [let, const와 블록 레벨 스코프](https://poiemaweb.com/es6-block-scope)
+참조 : [JS 질문](https://github.com/yangshun/front-end-interview-handbook/blob/master/Translations/Korean/questions/javascript-questions.md)
