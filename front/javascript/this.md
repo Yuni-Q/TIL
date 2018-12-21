@@ -148,13 +148,23 @@ this에 바인딩될 객체는 함수 호출 패턴에 의해 결정 됩니다.
 이것을 가능하게 하는 것이 Function.prototype.apply, Function.prototype.call 메소드 입니다.  
 > 이 메소드들은 모든 함수 객체의 프로토타입 객체인 Function.prototype 객체의 메소드입니다.  
 
+---
 
+this가 JavaScript 에서 어떻게 작동하는지 설명하세요.
+this는 간단하게 설명하기 어렵습니다.   
+JavaScript 에서 가장 혼란스러운 개념 중 하나입니다.  
+대략 설명하면 this의 값은 함수가 호출되는 방식에 따라 달라집니다.  
+온라인에 많은 설명이 있는데 [Arnav Aggrawal](https://medium.com/@arnav_aggarwal)의 설명이 가장 명확했습니다.  
 
+함수를 호출할 때 new 키워드를 사용하는 경우 함수 내부에 있는 this는 완전히 새로운 객체입니다.  
+apply, call, bind가 함수의 호출 / 작성에 사용되는 경우 함수 내의 this는 인수로 전달된 객체입니다.  
+obj.method()와 같이 함수를 메서드로 호출하는 경우 this는 함수가 프로퍼티인 객체입니다.  
+함수가 자유함수로 호출되는 경우 즉 위의 조건 없이 호출되는 경우 this는 전역 객체입니다.  
+브라우저에서는 window 객체입니다.  
+엄격 모드('use strict') 일 경우 this는 전역 객체 대신 undefined가 됩니다.  
+위의 규칙 중 다수가 적용되면 더 높은 규칙이 승리하고 this값을 설정합니다.  
+함수가 ES2015 화살표 함수인 경우 위의 모든 규칙을 무시하고 생성된 시점에서 주변 스코프의 this값을 받습니다.  
 
-
-
-
-
-
-
-
+---
+참조 : [함수 호출 방식에 의해 결정되는 this](https://poiemaweb.com/js-this)  
+참조 : [JS 질문](https://github.com/yangshun/front-end-interview-handbook/blob/master/Translations/Korean/questions/javascript-questions.md)
