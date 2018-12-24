@@ -1,6 +1,18 @@
 
 # 비동기식 처리 모델과 Ajax
 
+## 장점
+- 상호작용성이 좋아집니다. 서버의 새로운 컨텐츠를 전체 페이지를 다시로드 할 필요 없이 동적으로 변경할 수 있습니다.
+- 스크립트 및 스타일 시트는 한 번만 요청하면 되므로 서버에 대한 연결을 줄여줍니다.
+- 상태를 페이지에서 관리 할 수 ​​있습니다. 메인 컨테이너 페이지가 다시 로드되지 않기 때문에 JavaScript의 변수와 DOM의 상태가 유지됩니다.
+- 기본적으로 SPA의 장점 대부분입니다.
+
+## 단점
+- 동적 웹 페이지는 북마크 하기 어렵습니다.
+- 브라우저에서 JavaScript가 비활성화된 경우 작동하지 않습니다.
+- 일부 웹 크롤러는 JavaScript를 실행하지 않으며 JavaScript에 의해 로드된 콘텐츠를 볼 수 없습니다.
+- SPA의 대부분의 단점이 대부분입니다.
+
 ## 1. Ajax (Asynchronous JavaScript and XML)
 Ajax(Asynchronous JavaScript and XML)는 자바스크립트를 이용해서 비동기적(Asynchronous)으로 서버와 브라우저가 데이터를 교환할 수 있는 통신 방식을 의미합니다.  
 
@@ -115,6 +127,7 @@ xhr.onreadystatechange = function (e) {
 2. JSONP
 script 태그의 원본 주소에 대한 제약은 존재하지 않는데 이것을 이용하여 다른 도메인의 서버에서 데이터를 수집하는 방법입니다.  
 자신의 서버에 함수를 정의하고 다른 도메인의 서버에 얻고자 하는 데이터를 인수로 하는 함수 호출문을 로드하는 것입니다.  
+> 요즘에는 CORS가 권장되는 접근 방식이며 JSONP는 해킹으로 간주됩니다.  
 
 3. Cross-Origin Resource Sharing
 HTTP 헤더에 추가적으로 정보를 추가하여 브라우저와 서버가 서로 통신해야 한다는 사실을 알게하는 방법입니다.  
@@ -146,3 +159,4 @@ W3C 명세에 포함되어 있지만 최신 브라우저에서만 동작하며 �
 
 ---
 참조 : [비동기식 처리 모델과 Ajax](https://poiemaweb.com/js-ajax)
+참조 : [JS 질문](https://github.com/yangshun/front-end-interview-handbook/blob/master/Translations/Korean/questions/javascript-questions.md)
