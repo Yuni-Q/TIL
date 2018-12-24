@@ -114,6 +114,25 @@ let foo = 1; // 전역 변수
 > 따라서 지역 변수 foo도 해당 스코프에서 호이스팅되고 코드 블록의 선두부터 초기화가 이루어지는 지점까지 일시적 사각지대(TDZ)에 빠집니다.  
 > 따라서 전역 변수 foo의 값이 출력되지 않고 참조 에러(ReferenceError)가 발생합니다.  
 
+```javascript
+// 함수 선언
+console.log(foo); // [Function: foo]
+foo(); // 'FOOOOO'
+function foo() {
+  console.log('FOOOOO');
+}
+console.log(foo); // [Function: foo]
+
+// 함수 표현식
+console.log(bar); // undefined
+bar(); // Uncaught TypeError: bar는 함수가 아닙니다
+var bar = function() {
+  console.log('BARRRR');
+};
+console.log(bar); // [Function: bar]
+```
+> 함수 선언은 바디를 호이스팅되는 반면 변수 선언 형태로 작성된 함수 표현식은 변수 선언만 호이스팅됩니다.  
+
 ## 클로저
 블록 레벨 스코프를 지원하는 let은 var보다 직관적입니다 !!  
 
