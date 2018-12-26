@@ -40,22 +40,35 @@ var threeSum = function (nums) {
   //
   // nums = nums.sort(function(a,b){return a-b});
   nums = QuickSort(nums)
-  for (i = 0; i < nums.length; i += 1) {
+  const len = nums.length
+  console.log(nums)
+  for (i = 0; i < len; i += 1) {
     if (0 < nums[i]) {
       break;
     }
-    for (j = i + 1; j < nums.length; j += 1) {
+    for (j = i + 1; j < len; j += 1) {
       if (0 < nums[i] + nums[j]) {
         break;
       }
-      for (k = j + 1; k < nums.length; k += 1) {
+      if (nums[len - 1] < (nums[i] + nums[j] * -1)) {
+        break;
+      }
+      // for (k = j + 1; k < len; k += 1) {
+      for (k = len - 1; k > j; k -= 1) {
+        // if(nums[k]<0){
+        // break;
+        // }
+        // if (0 < nums[i] + nums[j] + nums[k]) {
+        // break;
+        // }
         if (0 === nums[i] + nums[j] + nums[k]) {
           const temp = [nums[i], nums[j], nums[k]];
           const aa = JSON.stringify(result);
           const bb = JSON.stringify(temp);
-          if (aa.indexOf(bb) < 0) result.push(temp);
-        } else {
-          if (0 < nums[i] + nums[j] + nums[k]) {
+          if (aa.indexOf(bb) < 0) {
+            result.push(temp);
+            break;
+          } else {
             break;
           }
         }
@@ -97,3 +110,99 @@ var threeSum = function (nums) {
 
   // return rslt.sort();
 };
+
+
+
+
+
+
+
+
+
+
+
+// /**
+//  * @param {number[]} nums
+//  * @return {number[][]}
+//  */
+
+
+// var threeSum = function (nums) {
+//   const result = [];
+//   //
+//   function QuickSort(arr) {
+//     if (arr.length == 0) { return []; }
+//     const middle = arr[0];
+//     const len = arr.length;
+//     const left = [], right = [];
+//     for (let i = 1; i < len; ++i) {
+//       if (arr[i] < middle) {
+//         left.push(arr[i]);
+//       } else {
+//         right.push(arr[i]);
+//       }
+//     }
+//     return QuickSort(left).concat(middle, QuickSort(right));
+//   }
+//   //
+
+
+//     nums = QuickSort(nums)
+//     const len = nums.length
+//     for (i = 0; i < len; i += 1) {
+//         if (0 < nums[i]) {
+//             break;
+//         }
+//     for (j = i + 1; j < len; j += 1) {
+//         if (0 < nums[i] + nums[j]) {
+//             break;
+//         }
+//         if(nums[len-1] < (nums[i] + nums[j] * -1)){
+//             break;
+//         }
+//         // for (k = j + 1; k < len; k += 1) {
+//         for (k = len - 1; k > j; k -= 1) {
+//             if (0 === nums[i] + nums[j] + nums[k]) {
+//                 const temp = [nums[i], nums[j], nums[k]];
+//                 const aa = JSON.stringify(result);
+//                 const bb = JSON.stringify(temp);
+//                 if (aa.indexOf(bb) < 0) {
+//                     result.push(temp);
+//                 }
+//                 break;
+//             }
+//         }
+//     }
+//   }
+//   return result
+// };
+
+
+// var threeSum = function(nums) {
+//   let num = nums.sort()
+// if(num==null) return null;
+//   console.log(num)
+//       const res = [];
+//       for (let i = 0; i < num.length-2; i++) {
+//           if(i==0 || (i>0 && num[i]!=num[i-1])){ // remove duplicate
+//               let left = i+1, right = num.length-1;
+//               while(left<right){
+//                   let sum = num[i] + num[left] + num[right];
+//                   if(sum<0){
+//                       while(left<right && num[left]==num[left+1]) left++; // remove duplicate
+//                       left++;
+//                   } else if(sum>0){
+//                       while(left<right && num[right]==num[right-1]) right--; // remove duplicate
+//                       right--;
+//                   } else {
+//                       res.push([num[i], num[left], num[right]]);
+//                       while(left<right && num[left]==num[left+1]) left++; // remove duplicate
+//                       while(left<right && num[right]==num[right-1]) right--; // remove duplicate
+//                       left++;
+//                       right--;
+//                   }
+//               }
+//           }
+//       }
+//       return res;
+// };
