@@ -18,72 +18,112 @@
  * @param {number[]} nums
  * @return {number[][]}
  */
-
-
 var threeSum = function (nums) {
-  const result = [];
-  //
-  function QuickSort(arr) {
-    if (arr.length == 0) { return []; }
-    const middle = arr[0];
-    const len = arr.length;
-    const left = [], right = [];
-    for (let i = 1; i < len; ++i) {
-      if (arr[i] < middle) {
-        left.push(arr[i]);
-      } else {
-        right.push(arr[i]);
-      }
-    }
-    return QuickSort(left).concat(middle, QuickSort(right));
+  var rtn = [];
+  if (nums.length < 3) {
+    return rtn;
   }
-  //
-  // nums = nums.sort(function(a,b){return a-b});
-  nums = QuickSort(nums)
-  const len = nums.length
-  console.log(nums)
-  for (i = 0; i < len; i += 1) {
-    if (0 < nums[i]) {
-      break;
+  nums = nums.sort(function (a, b) {
+    return a - b;
+  });
+  for (var i = 0; i < nums.length - 2; i++) {
+    if (nums[i] > 0) {
+      return rtn;
     }
-    for (j = i + 1; j < len; j += 1) {
-      if (0 < nums[i] + nums[j]) {
-        break;
-      }
-      if (nums[len - 1] < (nums[i] + nums[j] * -1)) {
-        break;
-      }
-      // for (k = j + 1; k < len; k += 1) {
-      for (k = len - 1; k > j; k -= 1) {
-        // if(nums[k]<0){
-        // break;
-        // }
-        // if (0 < nums[i] + nums[j] + nums[k]) {
-        // break;
-        // }
-        if (0 === nums[i] + nums[j] + nums[k]) {
-          const temp = [nums[i], nums[j], nums[k]];
-          const aa = JSON.stringify(result);
-          const bb = JSON.stringify(temp);
-          if (aa.indexOf(bb) < 0) {
-            result.push(temp);
-            break;
-          } else {
-            break;
-          }
+    if (i > 0 && nums[i] == nums[i - 1]) {
+      continue;
+    }
+    for (var j = i + 1, k = nums.length - 1; j < k;) {
+      if (nums[i] + nums[j] + nums[k] === 0) {
+        rtn.push([nums[i], nums[j], nums[k]]);
+        j++;
+        k--;
+        while (j < k && nums[j] == nums[j - 1]) {
+          j++;
         }
+        while (j < k && nums[k] == nums[k + 1]) {
+          k--;
+        }
+      } else if (nums[i] + nums[j] + nums[k] > 0) {
+        k--;
+      } else {
+        j++;
       }
     }
   }
-  //     let single = result.reduce(( a, b ) => {
-  //         aa = JSON.stringify(a)
-  //         bb = JSON.stringify(b)
-  // 	if( aa.indexOf(bb) < 0 ) a.push(b) ;
-  //         // console.log(a.indexOf(b) < 0)
-  //         // console.log(a,b)
-  // 	return a ;
-  // }, []) ; // <-- 초기값 빈 배열 세팅!
-  return result//.sort()
+  return rtn;
+};
+
+// /**
+//  * @param {number[]} nums
+//  * @return {number[][]}
+//  */
+
+
+// var threeSum = function (nums) {
+//   const result = [];
+//   //
+//   function QuickSort(arr) {
+//     if (arr.length == 0) { return []; }
+//     const middle = arr[0];
+//     const len = arr.length;
+//     const left = [], right = [];
+//     for (let i = 1; i < len; ++i) {
+//       if (arr[i] < middle) {
+//         left.push(arr[i]);
+//       } else {
+//         right.push(arr[i]);
+//       }
+//     }
+//     return QuickSort(left).concat(middle, QuickSort(right));
+//   }
+//   //
+//   // nums = nums.sort(function(a,b){return a-b});
+//   nums = QuickSort(nums)
+//   const len = nums.length
+//   console.log(nums)
+//   for (i = 0; i < len; i += 1) {
+//     if (0 < nums[i]) {
+//       break;
+//     }
+//     for (j = i + 1; j < len; j += 1) {
+//       if (0 < nums[i] + nums[j]) {
+//         break;
+//       }
+//       if (nums[len - 1] < (nums[i] + nums[j] * -1)) {
+//         break;
+//       }
+//       // for (k = j + 1; k < len; k += 1) {
+//       for (k = len - 1; k > j; k -= 1) {
+//         // if(nums[k]<0){
+//         // break;
+//         // }
+//         // if (0 < nums[i] + nums[j] + nums[k]) {
+//         // break;
+//         // }
+//         if (0 === nums[i] + nums[j] + nums[k]) {
+//           const temp = [nums[i], nums[j], nums[k]];
+//           const aa = JSON.stringify(result);
+//           const bb = JSON.stringify(temp);
+//           if (aa.indexOf(bb) < 0) {
+//             result.push(temp);
+//             break;
+//           } else {
+//             break;
+//           }
+//         }
+//       }
+//     }
+//   }
+//     let single = result.reduce(( a, b ) => {
+//         aa = JSON.stringify(a)
+//         bb = JSON.stringify(b)
+// 	if( aa.indexOf(bb) < 0 ) a.push(b) ;
+//         // console.log(a.indexOf(b) < 0)
+//         // console.log(a,b)
+// 	return a ;
+// }, []) ; // <-- 초기값 빈 배열 세팅!
+return result//.sort()
   // const rslt = [];
   // nums = nums.sort()
   // for(let i = 0 ; i < nums.length ; i++){ if(i == 0 || (i > 0 && nums[i-1] != nums[i])){
@@ -109,17 +149,7 @@ var threeSum = function (nums) {
   //     }
 
   // return rslt.sort();
-};
-
-
-
-
-
-
-
-
-
-
+// };
 
 // /**
 //  * @param {number[]} nums
