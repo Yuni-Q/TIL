@@ -64,4 +64,48 @@ Promise 객체를 반환한 비동기 함수는 프로미스 후속 처리 메�
 - ES2015를 지원하지 않는 이전 브라우저에서 이를 사용하기 위해서는 polyfill을 로드해야 합니다.
 
 ---
+
+# Promise
+
+## 프로미스의 비동기적 실행
+```javascript
+var promise = new Promise(function (resolve){
+    console.log("inner promise");
+    resolve(42);
+});
+
+promise.then(function(value){
+    console.log(value);
+});
+
+console.log("outer promise");
+
+// inner promise
+// outer promise
+// 42
+```
+## 비동기 콜백을 절대 동기적으로 호출하지마라
+- 데이터를 즉시 사용할 수 있더라도, 절대로 비동기 콜백을 동기적으로 호출하지 마라.
+- 비동기 콜백을 동기적으로 호출하면 기대한 연산의 순서를 방해하고, 예상치 않은 코드의 간섭을 초래할 수 있다.
+- 비동기 콜백을 동기적으로 호출하면 스택 오버플로우나 처리되지 않은 예외를 초래할 수 있다.
+- 비동기 콜백을 다른 턴에 실행되도록 스케쥴링하기 위해 setTimeout같은 비동기 API를 사용하라.
+> 이처럼 동기와 비동기를 혼재했을 때 발생하는 문제를 예방하기 위해 항상 비동기로 처리하도록 ES6 Promises 사양이 정해진 것이다.  
+> 항상 비동기로 처리되기 때문에 명시적으로 비동기 처리를 위한 코드를 추가로 작성할 필요가 없다.  
+
+## 콜백-헬과 무관한 Promise
+Promise는 미래 어느 시점이 되면 값을 채워주기로 약속한 빈 그릇이며 비동기 처리를 추상화한 추상 컨테이너이다.  
+즉, 통일된 인터페이스로 데이터를 전달할 수 있는 컨테이너로써 장점을 발휘하는 것이다.  
+중첩을 해결하고자 promise체인을 길게 연결하는 것은 외형의 느낌만 다를 뿐 콜백-헬과 큰 차이가 없다.  
+
+이벤트 리스너나 Stream처럼 정지적, 지속적으로 비동기 처리가 필요한 경우 Promise를 사용하면 오히려 이상적인 결과를 얻을 수 없다.  
+또한, 강력한 에러 처리 메커니즘이 오히려 독이 되는 경우도 더러 있다.  
+
+Promise의 진정한 장점을 느끼기 위해서는 분석 및 설계를 통한 모듈화가 선행돼야 한다.  
+깊은 콜백 중첩으로 구조가 이미 망가져 있는 곳에 Promise로 해결하려고 노력하지 말기 바란다.  
+해결할 수도 없을 뿐더러 문제를 더 복잡하게 만들 수 있다.  
+
+## Promise 고급
+Polyfill 라이브러리 : Promise API를 ES6 Promises의 사양과 같은 인터페이스로 제공하는 라이브러리다. 이 라이브러리를 사용하면 IE10과 같이 Promise를 지원하지 않는 브라우저에서도 Promise를 사용할 수 있다.  
+
+---
 참조 : [JS 질문](https://github.com/yangshun/front-end-interview-handbook/blob/master/Translations/Korean/questions/javascript-questions.md)
