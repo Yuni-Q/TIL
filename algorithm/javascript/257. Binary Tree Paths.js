@@ -37,11 +37,9 @@ var binaryTreePaths = function (root) {
         return paths
     }
     let stack = [root, root.val]
-    // console.log(stack.length)
     while (stack.length > 0) {
         let path = stack.pop();
         let node = stack.pop();
-        // console.log(path,node)
         if (!node.left && !node.right) {
             paths.push(path)
             console.log(path)
