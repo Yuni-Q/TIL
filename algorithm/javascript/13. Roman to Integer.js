@@ -19,22 +19,21 @@ const mapping = [
 ];
 var romanToInt = function (s) {
   let str = s.split('');
-  console.log(s[0] + s[1])
   let result = 0;
-  console.log(str)
   for (let i = 0; i < mapping.length; i += 1) {
     const [val, char] = mapping[i];
-    if (s[0] === char) {
-      while (s[0] === char) {
-        result += val;
-        s.
-          }
+    if (str[0] === char) {
+        while (str[0] === char) {
+            result += val;
+            str.shift();
+        }
     }
-    if (s[0] + s[1] === char) {
-      while (s[0] + s[1] === char) {
-
-        result += val;
-      }
+    if (str[0] + str[1] === char) {
+        while (str[0] + str[1] === char) {
+            result += val;
+            str.shift();
+            str.shift();
+        }
     }
   }
 
