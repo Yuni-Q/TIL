@@ -32,5 +32,7 @@
 
 ## Study
 - MashUp 6기 BackEnd Study ([Node2](https://github.com/Mash-UP-BACKEND-6th/Node2))  
+
 - 디자이너와 함께하는 웹 프론트 스터디 ([web-study-assignment](https://github.com/Yuni-Q/web-study-assignment))  
- 
+
+- MashUp 6기 CS-Study ([CS-Study](https://github.com/Mash-UP-BACKEND-6th/CS-Study))
