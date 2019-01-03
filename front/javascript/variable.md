@@ -28,44 +28,60 @@ var : functionScoped, 변수 재할당, 재선언 모두 가능합니다.
 let : blockScoped,  변수에 재할당만 가능 합니다 ( 재선언 불가능 )<br>
 const : blockScoped, 변수 재선언, 재할당 모두 불가능 합니다.<br>
 
-let을 변수 const를 상수로 var는 사용하지 않는게 좋을듯 하다...
+let을 변수 const를 상수로 var는 사용하지 않는게 좋습니다.
 
 ```javascript
 {
+  // 호이스팅
+  console.log(a) // undefined
+  // var 키워드 생략
   a = 3;
   console.log(a); // 3
+  // 선언
   var a = 2;
   console.log(a); // 2
+  // 재할당
+  a = 3;
+  console.log(a); // 3
+  // 재선언
   var a = 4;
   console.log(a); // 4
 }
+// functionScoped
 console.log(a); // 4
 ```
-> var는 모든 사항에 문제 없습니다 ( 호이스팅, 재선언, 함수 스코프 )
+> var는 모든 사항에 문제 없습니다 ( 호이스팅, 재선언, 재할당, 함수 스코프 )
 
 ```javascript
 {
+  // 할당
   a = 3; // a is not defined
+  // 선언
   let a = 2;
 }
 ```
-> let은 호이스팅이 되지 않습니다.
+> let은 선언하기 전에 사용 할 수 없습니다.
 
 ```javascript
 {
+  // 선언
   let a = 2;
   console.log(a); // 2
 }
+// blockScoped
 console.log(a); // a is not defined
 ```
 > let은 블록 스코프 입니다.
 
 ```javascript
 {
+  // 선언
   let a = 2;
   console.log(a); // 2
+  // 재할당
   a = 3;
   console.log(a); // 3
+  // 재선언
   let a = 4; // Identifier 'a' has already been declared
   console.log(a); 
 }
@@ -74,8 +90,10 @@ console.log(a); // a is not defined
 
 ```javascript
 {
+  // 선언
   const a = 2;
   console.log(a); // 2
+  // 재할당
   a = 3;
   console.log(a); // Assignment to constant variable.
 }
@@ -84,6 +102,7 @@ console.log(a); // a is not defined
 
 ## 호이스팅
 자바스크립트는 ES6에서 도입된 let, const를 포함하여 모든 선언(var, let, const, function, function*, class)을 호이스팅합니다.  
+
 호이스팅(Hoisting)이란, var 선언문이나 function 선언문 등을 해당 스코프의 선두로 옮긴 것처럼 동작하는 특성을 말합니다.  
 
 하지만 var 키워드로 선언된 변수와는 달리 let 키워드로 선언된 변수를 선언문 이전에 참조하면 참조 에러(ReferenceError)가 발생합니다.  
@@ -101,7 +120,8 @@ undefined로 초기화된 변수에 실제 값을 할당한다.
 var 키워드로 선언된 변수는 선언 단계와 초기화 단계가 한번에 이루어집니다.  
 let 키워드로 선언된 변수는 선언 단계와 초기화 단계가 분리되어 진행됩니다.  
 
-결국 ES6에서는 호이스팅이 발생하지 않는 것과 차이가 없어 보입니다. 하지만 그렇지 않습니다.  
+결국 ES6에서는 호이스팅이 발생하지 않는 것과 차이가 없어 보입니다. 하지만 그렇지 않습니다. 
+
 ```javascript
 let foo = 1; // 전역 변수
 
@@ -110,6 +130,7 @@ let foo = 1; // 전역 변수
   let foo = 2; // 지역 변수
 }
 ```
+> 만약 호이스팅이 되지 않는다면 console.log(foo)는 블록 밖에 있는 1을 참조 해야 한다.  
 > ES6의 let으로 선언된 변수는 블록 레벨 스코프를 가지므로 코드 블록 내에서 선언된 변수 foo는 지역 변수입니다.  
 > 따라서 지역 변수 foo도 해당 스코프에서 호이스팅되고 코드 블록의 선두부터 초기화가 이루어지는 지점까지 일시적 사각지대(TDZ)에 빠집니다.  
 > 따라서 전역 변수 foo의 값이 출력되지 않고 참조 에러(ReferenceError)가 발생합니다.  
@@ -214,7 +235,7 @@ const는 재할당이 금지된다.
 
 ---
 
-# null, undefined, 선언되지 않은 변수 의 차이점은 무엇입니까? 당신은 어떻게 이 상태들에 대한 점검을 할 것입니까?
+# null, undefined, 선언되지 않은 변수의 차이점
 
 ## 선언되지 않은 변수
 선언되지 않은 변수 변수는 이전에 var, let, const 를 사용하여 생성되지 않은 식별자에 값을 할당할 때 생성됩니다.  
@@ -245,7 +266,7 @@ console.log(baz); // undefined
 ```
 
 ## null 
-null 인 변수는 null 값에 명시적으로 할당될 것입니다.  
+null인 변수는 null 값에 명시적으로 할당될 것입니다.  
 그것은 값을 나타내지 않으며 명시적으로 할당된다는 점에서 undefined와 다릅니다.   
 null을 체크하기 위해서 단순히 완전 항등 연산자(===)를 사용하여 비교하면 됩니다.  
 위와 같이, 추상 평등 연산자 (==)를 사용해서는 안되며, 값이 undefined이면 true를 반환합니다.  
@@ -256,21 +277,18 @@ console.log(foo === null); // true
 
 console.log(foo == undefined); // true. 옳지않습니다. 확인하는 데 사용하지 마세요.
 ```
-개인적 습관으로, 저는 변수를 선언하지 않거나 할당하지 않은 상태로 두지 않습니다.   
-아직 사용하지 않으려는 경우, 선언한 후에 명시적으로 null 을 할당할 것입니다.  
-
 ---
 
-# 호스트 객체와 내장 객체의 차이점은 무엇입니까?
+# 호스트 객체와 내장 객체의 차이점
 내장 객체는 ECMAScript 사양에 정의된 JavaScript 언어의 일부인 객체입니다. (예: String, Math, RegExp, Object, Function 등)  
 
 호스트 객체는 window, XMLHTTPRequest 등과 같이 런타임 환경 (브라우저 또는 노드)에 의해 제공됩니다.  
 
 ---
 
-# Person(){}, var person = Person(), var person = new Person() 의 차이점은 무엇입니까?
+# Person(){}, var person = Person(), var person = new Person() 의 차이점
 
-이 질문은 굉장해 애매합니다. 질문의 의도에 대한 저의 최선의 추측은 JavaScript의 생성자에 대해 묻는 것입니다.  
+JavaScript의 생성자에 대해 묻는 것입니다.  
 엄밀히 말하면, function Person(){}은 정상적인 함수 선언일 뿐입니다.  
 이 컨벤션은 생성자로 사용하기 위해 함수에 PascalCase 를 사용합니다.  
 
@@ -297,5 +315,5 @@ console.log(person.name); // "john"
 
 
 ---
-참조 : [let, const와 블록 레벨 스코프](https://poiemaweb.com/es6-block-scope)
+참조 : [let, const와 블록 레벨 스코프](https://poiemaweb.com/es6-block-scope)  
 참조 : [JS 질문](https://github.com/yangshun/front-end-interview-handbook/blob/master/Translations/Korean/questions/javascript-questions.md)
