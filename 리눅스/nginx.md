@@ -69,9 +69,5 @@ server {
 }
 ```
 
-
-
-
-
 ---
 참조 : [nginx 웹서버 라우팅 설정하기 – 도메인 IP 연결, www 리다이렉팅](https://swiftcoding.org/nginx-routing)
