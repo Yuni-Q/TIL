@@ -42,12 +42,5 @@ http://www.ubuntu.com 에 접속하여 Ubuntu Server 이미지를 다운받아�
 1. ssh userName@ip
 > Tip. SSH접속의 기본포트는 22번이다. 혹 포드번호를 바꿨을때에는 명령어 뒤에 -p [포트번호] 를 붙혀주면 된다.  
 
-
-
-
-
-
-
-
 ---
 출처: [Run and Fly](http://mirwebma.tistory.com/115?category=394591 )
