@@ -117,12 +117,24 @@ server {
 }
 ```
 
-## 잊지말자 restart
-sudo service restart nginx  
+## /etc/nginx/conf.d 설정
+원래 nginx의 설정파일은 /etc/nginx/nginx.conf 입니다. 하지만, yum 업데이트시 설정파일이 덮어쓰질 우려가 있기때문에 설정파일을 새로 생성한 다음 사용하는 방법으로 해보겠습니다.  
+메인 설정파일( /etc/nginx/nginx.conf )에 보면 include /etc/nginx/conf.d/*.conf; 이란 부분이 있습니다. 이것은 /etc/nginx/conf.d 디렉토리에 있는 모든설정 파일들을 불러오는 구문입니다. 즉, conf.d 디렉토리에서 새로운 설정파일을 생성하면 그마저도 불러온다는 뜻입니다.   
+디렉토리에는 기본적으로 default.conf 와 example_ssl.conf 이란 파일이 설치시에 추가되어있을 겁니다.  
+default.conf : 가장 메인이 되는 파일입니다. 서버 ip를 쳐봤을 때 나오는 페이지의 그 설정파일입니다.  
+example_ssl.conf : SSL 적용시 어떻게 설정하는 지 보여주는 단순한 예제파일입니다. 또 모두 주석(#)처리가 되어있어서 효력이 발생하지않는 파일입니다.   
+이 파일들을 참조하여 설정파일을 새로 생성하면 됩니다.  
+> 설정파일에서 지정한 웹루트 디렉토리에 표시할 index.html 파일을 넣으면 됩니다. 예를 들어, 설정파일에서 /home/www 디렉토리를 웹루트로 지정하였다면 /home/www/index.html 파일이 인덱스파일이 됩니다.  
 
-## 설정 추가
-/etc/nginx/conf.d 폴더에 *.conf 파일을 만들어 사용하자  
-server 부분을 만들면 될 듯 !!  
+## 서비스 시작
+설정을 마쳤으면 서비스를 시작합니다.  
+systemctl start nginx  
+이제 서버 ip나 연결된 도메인으로 웹 접속이 가능해졌습니다.  
+
+## 설정 반영
+추후에 nginx 설정 변경할 경우 서비스 재시작이나 재로드를 해야 설정이 반영됩니다.  
+하지만 재시작은 서비스가 끊겨야 되므로 재로드를 권장합니다.  
+> systemctl이 되지 않는다면 sudo service restart nginx  
 
 ---
 참조 : [nginx 웹서버 라우팅 설정하기 – 도메인 IP 연결, www 리다이렉팅](https://swiftcoding.org/nginx-routing)
