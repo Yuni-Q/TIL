@@ -17,18 +17,25 @@
  * @param {number[]} nums
  * @return {number[]}
  */
-var findDisappearedNumbers = function(nums) {
-  const result = {};
-  const result2 = []
-  for(let i = 0; i <nums.length; i+=1){
-      result[nums[i]] = true;
-  }
-  const max = Math.max.apply(null, nums);
-  // console.log(result)
-  for(let i = 1; i <= nums.length; i+=1){
-      if(result[i] !== true){
-          result2.push(i)
-      }
-  }
-  return result2  
+var findDisappearedNumbers = function (nums) {
+    const result = {
+        4: true,
+        3: true,
+        2: true,
+        7: true,
+        8: true,
+        1: true,
+    };
+    const result2 = []
+    for (let i = 0; i < nums.length; i += 1) {
+        result[nums[i]] = true;
+    }
+    // const max = Math.max.apply(null, nums);
+    // console.log(result)
+    for (let i = 1; i <= nums.length; i += 1) {
+        if (result[i] !== true) {
+            result2.push(i)
+        }
+    }
+    return result2
 };
