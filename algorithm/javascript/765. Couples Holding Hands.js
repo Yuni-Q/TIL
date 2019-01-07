@@ -19,3 +19,23 @@
 // len(row) is even and in the range of[4, 60].
 // row is guaranteed to be a permutation of 0...len(row) - 1.
 
+/**
+ * @param {number[]} row
+ * @return {number}
+ */
+var minSwapsCouples = function (row) {
+  const pos = {};
+  for (let i = 0; i < row.length; i++) {
+    pos[row[i]] = i;
+  }
+
+  let count = 0;
+  for (let i = 1; i < row.length; i += 2) {
+    while ((row[i] ^ 1) !== row[i - 1]) {
+      let idx = pos[row[i] ^ 1] ^ 1;
+      [row[i], row[idx]] = [row[idx], row[i]];
+      count++;
+    }
+  }
+  return count;
+};
