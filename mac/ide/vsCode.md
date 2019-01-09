@@ -40,3 +40,7 @@ eslint init
 
 ### Rainbow Brackets
 > 괄호를 색깔로 구분 할 수 있습니다.<br>
+
+### vscode-icons
+> vs-code의 아이콘을 바꿔준다.  
+> 나느 나름 마음에 든다.  
