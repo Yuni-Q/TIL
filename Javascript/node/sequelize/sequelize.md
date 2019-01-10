@@ -46,3 +46,18 @@ db.User.findOne({
   }
 });
 ```
+
+## count
+```javascript
+models.rooms.update(
+        {
+            archive_view_app_count: Sequelize.literal(' archive_view_app_count + ' + 1),
+            total_view_count: Sequelize.literal(' total_view_count + ' + 1)
+        },
+        {
+            where: {
+                id: Number(req.params.roomid)
+            }
+        }
+    );
+```
