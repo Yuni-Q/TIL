@@ -28,6 +28,12 @@ C#의 창시자인 덴마크 출신 소프트웨어 엔지니어 Anders Hejlsber
 TypeScript는 ES5의 Superset이므로 기존의 자바스크립트(ES5) 문법을 그대로 사용할 수 있다.  
 또한, ES6의 새로운 기능들을 사용하기 위해 Babel과 같은 별도 트랜스파일러(Transpiler)를 사용하지 않아도 ES6의 새로운 기능을 기존의 자바스크립트 엔진(현재의 브라우저 또는 Node.js)에서 실행할 수 있다.  
 
+- 프로그래밍 언어
+- Compiled Languge
+  -  전통적인 Compiled Languge와는 다른 점이 많습니다.
+  - 그랫 Transpile이라는 용어를 사용하기도 합니다.
+- 자바스크립트는 Interpreted Language 입니다.
+
 ## 2. TypeScript의 장점
 
 ### 2.1 정적 타입
