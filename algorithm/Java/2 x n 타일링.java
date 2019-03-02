@@ -29,3 +29,21 @@ class TryHelloWorld {
 		System.out.print(tryHelloWorld.tiling(3));
 	}
 }
+
+// 문제가 좀 바뀜
+
+class Solution {
+  public int solution(int n) {
+      int answer = 0;
+    int a = 1;
+    int b = 1;
+    int c = 0;
+    for (int i = 1; i<n ; i++ ) {
+        c =	a+b;
+      a	= b % 1000000007;
+      b = c % 1000000007;  
+    }   
+		answer = c%1000000007;
+		return answer;
+  }
+}
