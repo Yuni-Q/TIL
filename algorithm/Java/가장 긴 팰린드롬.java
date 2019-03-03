@@ -56,3 +56,30 @@ class Solution
         return result;
     }
 }
+
+// C
+#include <string>
+using namespace std;
+
+int solution(string s)
+{
+    int answer = 0;
+    int dp[2510][2510] = {0, };
+
+    for(int i = 0 ; i < s.size(); i++){
+        for(int j = 0; i + j < s.size(); j++){
+            if(s[j] == s[j + i]){
+                if(i == 1 || i == 0){
+                    answer = i + 1;
+                    dp[j][j + i] = answer;
+                }
+                else if(dp[j + 1][j + i - 1] != 0){
+                    answer = i + 1;
+                    dp[j][j + i] = answer;
+                }
+            }
+        }
+    }
+    
+    return answer;
+}
