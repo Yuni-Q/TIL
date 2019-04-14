@@ -1,3 +1,5 @@
+// https://www.acmicpc.net/problem/10844
+
 var fs = require('fs');
 var input = fs.readFileSync('/dev/stdin', 'utf8').split('\n');
 var idx = 0;
