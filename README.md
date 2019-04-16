@@ -27,8 +27,18 @@
 
 - 배타적 SNS 서비스 ([gaze](https://github.com/gaze3/Backend))  
 
+- 하루에 사진 한장 ([ONEPIC-Backend](https://github.com/mash-up-kr/ONEPIC-Backend.git))  
+
+- 영어 녹음 앱 백엔드 ([TOAST](https://github.com/Yuni-Q/TOAST.git))  
+
+- 리액트 ToDo를 위한 백엔드 ([ReactTodoBackend](https://github.com/Yuni-Q/ReactTodoBackend.git))  
+
 ### React
 - 개인 프로젝트 Front – TODO / 버스도착정보 ([myapp-client](https://github.com/Yuni-Q/myapp-client))   
+
+- 리액트 ToDoList ([ReactTodo](https://github.com/Yuni-Q/ReactTodo.git))  
+
+- React-Next boilerplate ([react-next](https://github.com/Yuni-Q/react-next.git))  
 
 ## Study
 - MashUp 6기 BackEnd Study ([Node2](https://github.com/Mash-UP-BACKEND-6th/Node2))  
@@ -36,3 +46,5 @@
 - 디자이너와 함께하는 웹 프론트 스터디 ([web-study-assignment](https://github.com/Yuni-Q/web-study-assignment))  
 
 - MashUp 6기 CS-Study ([CS-Study](https://github.com/Mash-UP-BACKEND-6th/CS-Study))
+
+- MashUp 7기 React-Study ([summaries](https://github.com/mash-up-kr-web/summaries))  

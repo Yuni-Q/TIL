@@ -70,7 +70,7 @@ sudo chmod 664 /etc/nginx/sites-available/default
 server {
     listen 80;
     listen [::]:80;
-    server_name www.swiftcoding.org;
+    server_name :q.swiftcoding.org;
     location / {
         return 301 http://swiftcoding.org$request_uri;       ### http://swiftcoding.org 로 리다이렉팅
     }
@@ -98,7 +98,7 @@ sudo service nginx restart
 ## [NGINX] 정적 파일 연결
 ```vim
 server {
-  # 파일 경로 설정
+  # 파일 경로 설정:q
   # /public 경로로 접속하면 /www/public에 있는 파일을 자동으로 연결
   location /public/ {
     root /www;
