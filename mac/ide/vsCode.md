@@ -22,6 +22,7 @@ npm install -g eslint
 eslint init
 ```
 > .eslintrc.js 파일이 생성 됩니다.<br>
+> .eslintgnore 파일에 ESLint가 무시행야하는 파일이나 디렉터리를 추가할 수 있다.  
 
 ### htmltagwrap
 > option + w 를 이용하여 선택한 내용을 HTML(p) 태그로 래핑 합니다.<br>
