@@ -67,3 +67,10 @@ const AddColorform = ({onNewColor=>f}) => {
   )
 }
 ```
+
+## hooks에서 ref
+```javascript
+const inputRef = React.useRef(null);
+
+<input ref={inputRef} />
+```
