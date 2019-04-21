@@ -45,6 +45,6 @@
 
 - 디자이너와 함께하는 웹 프론트 스터디 ([web-study-assignment](https://github.com/Yuni-Q/web-study-assignment))  
 
-- MashUp 6기 CS-Study ([CS-Study](https://github.com/Mash-UP-BACKEND-6th/CS-Study))
+- MashUp 6기 CS-Study ([CS-Study](https://github.com/Yuni-Q/CS-Study))
 
-- MashUp 7기 React-Study ([summaries](https://github.com/mash-up-kr-web/summaries))  
+- MashUp 7기 React-Study ([summaries](https://github.com/mash-up-kr-web/summaries), [assignments](https://github.com/mash-up-kr-web/assignments))  
