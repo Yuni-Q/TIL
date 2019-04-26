@@ -45,26 +45,39 @@ class addColorForm extends Componenet {
   constructor(props) {
     super(props)
     this.submit = this.submit.bind(this)
+    this.onInputTitleRef = this.onInputTitleRef.bind(this)
+    this.onInputColorRef = this.onInputColorRef.bind(this)
   }
 
   submit(e) {
     const { _title, _color} = this.refs
     e.preventDefailt();
     alert(`새로운 색 ${_title.value} ${_color.value}`)
-    _title = '';
-    _color = '';
-    _title.focus();
+    inputTitleRef.current.value = '';
+    inputColorRef.current.value = '';
+    inputTitleRef.current.focus();
   }
-  
+
+  inputTitleRef;
+  inputColorRef;
+
+  onInputTitleRef(c) {
+    inputTitleRef = c;
+  }
+
+  onInputColorRef(c) {
+    inputColorRef = c;
+  }
+
   render() {
     return (
       <form onSubmit={this.submit}>
-        <input ref="_title"
+        <input ref={this.onInputTitleRef}
           type="text"
           placeholder="색 이름..."
           required
         />
-        <input ref="_color"
+        <input ref={this.onInputColorRef}
           type="color"
           required
         />
@@ -74,6 +87,7 @@ class addColorForm extends Componenet {
   }
 }
 ```
+
 ```javascript
 class addColorForm extends Componenet {
   constructor(props) {
@@ -85,20 +99,23 @@ class addColorForm extends Componenet {
     const { _title, _color} = this.refs
     e.preventDefailt();
     alert(`새로운 색 ${_title.value} ${_color.value}`)
-    _title = '';
-    _color = '';
-    _title.focus();
+    inputTitleRef.current.value = '';
+    inputColorRef.current.value = '';
+    inputTitleRef.current.focus();
   }
+
+  inputTitleRef = createRef();
+  inputColorRef = createRef();
   
   render() {
     return (
       <form onSubmit={this.submit}>
-        <input ref="_title"
+        <input ref={this.inputTitleRef}
           type="text"
           placeholder="색 이름..."
           required
         />
-        <input ref="_color"
+        <input ref={this.inputColorRef}
           type="color"
           required
         />
@@ -108,7 +125,7 @@ class addColorForm extends Componenet {
   }
 }
 ```
-
+> current를 사용해야 한다.  
 
 ## FC에서 ref
 ```javascript
@@ -142,4 +159,32 @@ const AddColorform = ({onNewColor=>f}) => {
 const inputRef = React.useRef(null);
 
 <input ref={inputRef} />
+
+const AddColorform = ({onNewColor=>f}) => {
+  let _title, _color
+  const submit = e => {
+    e.preventDefault()
+    inputTitleRef.current.value = '';
+    inputColorRef.current.value = '';
+    inputTitleRef.current.focus();
+  }
+
+  inputTitleRef = React.useRef(null)
+  inputColorRef = React.useRef(null)
+  
+  return (
+    <form onSubmit={submit}>
+        <input ref={this.inputTitleRef}
+          type="text"
+          placeholder="색 이름..."
+          required
+        />
+        <input ref={this.inputColorRef}
+          type="color"
+          required
+        />
+        <button>추가</button>
+      </form>
+  )
+}
 ```
