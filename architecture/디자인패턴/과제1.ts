@@ -4,7 +4,7 @@ interface Charater {
 }
 
 class Character implements Charater {
-  weapon = null;
+  private weapon: WeaponBehavior = null;
 
   constructor(w: WeaponBehavior) {
     this.weapon = w;
@@ -12,6 +12,10 @@ class Character implements Charater {
   
   setWeapon = (w: WeaponBehavior) => {
     this.weapon = w;
+  }
+
+  getWeapon() {
+    return this.weapon;
   }
 
   fight = () => {}
