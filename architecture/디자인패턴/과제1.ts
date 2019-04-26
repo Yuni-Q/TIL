@@ -1,5 +1,5 @@
 interface Charater {
-  fight();
+  fight: () => void;
   setWeapon: (w: WeaponBehavior) => void;
 }
 
