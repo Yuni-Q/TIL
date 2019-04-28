@@ -188,3 +188,14 @@ const AddColorform = ({onNewColor=>f}) => {
   )
 }
 ```
+
+## ref의 또다른 사용(FC에서)
+- class에서 this로 사용했던 부분을 useRef()를 통해서 대신 할 수 있다
+```jsx
+const timeout.current = useRef(null);
+const startTime.current = useRef();
+const endTime.current = useRef();
+```
+- useRef 값을 바꿀 때는 return이 재실행 되지 않는다.
+- 사용할때는 current 안에 넣어야 한다.
+- 재랜더 시키고 싶은 않은 부분에 ref 사용
