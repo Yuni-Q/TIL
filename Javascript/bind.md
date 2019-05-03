@@ -8,5 +8,5 @@ function sum(prefix) {
   return prefix + (this.first + this.second)
 }
 
-var kimSum = sum
+var kimSum = sum.bind(kim, '-> ');
 ```
