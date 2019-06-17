@@ -70,7 +70,7 @@ void ex2()
   printf("%d\n", num1 * num1);
 }
 
-void main(void)
+int main(void)
 {
   //    fn1();
   //    fn2();
