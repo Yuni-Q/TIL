@@ -45,4 +45,3 @@ arr.forEach((v, i, array) => array[i] = () => i);
 
 arr.forEach(f => console.log(f()));
 ```
-문
