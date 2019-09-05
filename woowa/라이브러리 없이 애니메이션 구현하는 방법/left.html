@@ -31,10 +31,12 @@
     const element = document.querySelector('.box');
     const button = document.querySelector('.button');
     const scrollHeight = element.scrollHeight;
+    let progress = scrollHeight * 10;
     let visible = false;
     button.addEventListener('click', () => {
-      !!visible? unStep : window.requestAnimationFrame(step);
+      !!visible? window.requestAnimationFrame(unStep) : window.requestAnimationFrame(step);
       visible = !visible;
+      timestamp=0
     })
 
     const step = (timestamp) => {
@@ -47,11 +49,11 @@
     }
 
     const unStep = (timestamp) => {
-      if (!start) start = scrollHeight;
-      const progress = timestamp - start;
-      element.style.height = Math.max(scrollHeight / 10, 0) + 'px';
-      if (progress < 2000) {
-        window.requestAnimationFrame(step);
+      if (progress === 0) progress = scrollHeight * 10;
+      if (progress > 0) progress -= 10;
+      element.style.height = Math.max(progress / 10, 0) + 'px';
+      if (progress > 0) {
+        window.requestAnimationFrame(unStep);
       }
     }
   </script>
