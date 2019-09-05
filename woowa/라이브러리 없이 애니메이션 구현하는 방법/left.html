@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+  <style>
+    .box {
+      height: 0;
+      overflow: hidden;
+    }
+  </style>
+<body>
+  <button class="button" type="button">클릭</button>
+  <div class="box">
+    내용을 만들어 봅시다.<br>
+    내용을 만들어 봅시다.<br>
+    내용을 만들어 봅시다.<br>
+    내용을 만들어 봅시다.<br>
+    내용을 만들어 봅시다.<br>
+    내용을 만들어 봅시다.<br>
+    내용을 만들어 봅시다.<br>
+    내용을 만들어 봅시다.<br>
+    내용을 만들어 봅시다.<br>
+    내용을 만들어 봅시다.<br>
+  </div>
+  <script>
+    const start = null;
+    const element = document.getElementById('SomeElementYouWantToAnimate');
+    const sectionHeight = element.scrollHeight;
+    button.addEventListener('click', () => {
+      !!visible? expandSection(box) : collapseSection(box);
+      visible = !visible;
+    })
+
+    function step(timestamp) {
+      console.log(timestamp)
+      if (!start) start = timestamp;
+      const progress = timestamp - start;
+      element.style.height = Math.min(progress / 10, sectionHeight) + 'px';
+      if (progress < 2000) {
+        window.requestAnimationFrame(step);
+      }
+    }
+
+    window.requestAnimationFrame(step);
+  </script>
+</body>
+</html>
