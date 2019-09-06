@@ -27,32 +27,32 @@
     내용을 만들어 봅시다.<br>
   </div>
   <script>
-    let start = null;
+    let start = false;
     const element = document.querySelector('.box');
     const button = document.querySelector('.button');
     const scrollHeight = element.scrollHeight;
     let progress = scrollHeight * 10;
     let visible = false;
-    button.addEventListener('click', () => {
-      !!visible? window.requestAnimationFrame(unStep) : window.requestAnimationFrame(step);
-      visible = !visible;
-      timestamp=0
+
+    button.addEventListener('click', (event) => {
+        !!visible? window.requestAnimationFrame(unStep) : window.requestAnimationFrame(step);
+        visible = !visible
     })
 
-    const step = (timestamp) => {
-      if (!start) start = timestamp;
-      const progress = timestamp - start;
+    const step = () => {
+      if(progress >= scrollHeight * 10) progress = 0;
+      if (progress <= scrollHeight * 10) progress += 16;
       element.style.height = Math.min(progress / 10, scrollHeight) + 'px';
-      if (progress < scrollHeight * 10) {
+      if (progress < scrollHeight * 10 && !!visible) {
         window.requestAnimationFrame(step);
       }
     }
 
-    const unStep = (timestamp) => {
-      if (progress === 0) progress = scrollHeight * 10;
-      if (progress > 0) progress -= 10;
+    const unStep = () => {
+      if (progress <= 0) progress = scrollHeight * 10;
+      if (progress > 0) progress -= 16;
       element.style.height = Math.max(progress / 10, 0) + 'px';
-      if (progress > 0) {
+      if (progress > 0  && !visible) {
         window.requestAnimationFrame(unStep);
       }
     }
