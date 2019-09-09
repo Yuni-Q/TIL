@@ -58,3 +58,23 @@
 - TypeScript 3.5에서 형식 검사기는 제공된 모든 속성이 일부 공용체 멤버에 속 하고 적절한 형식인지 확인합니다. 즉, 위의 샘플에서 오류가 올바르게 발생합니다.
 - 처럼 판별 속성 유형에 할당 할 때 타이프 라이터 3.5에서 T언어는 실제로 것이다 더 나아가 같은 유형을 분해 S가능한 모든 주민 유형의 조합으로. 이 경우, 사람 boolean의 합집합 true과 false,이 S(A)의 조합으로 간주된다 { done: false, value: number }하고 { done: true, value: number }.
 - TypeScript 3.5는 생성자 함수에서도 작동하도록이 동작을 일반화합니다.
+
+## 3.6
+
+- 익숙하지 않은 사람들을 위해 TypeScript는 선택적 정적 유형을 추가하여 JavaScript를 기반으로하는 언어입니다. 이러한 유형은 TypeScript 컴파일러에서 검사하여 맞춤법 오류 및 함수 호출과 같은 프로그램의 일반적인 오류를 포착 할 수 있습니다. 그런 다음 TypeScript 컴파일러 및 Babel과 같은 도구를 사용하여 모든 최신 표준 기능을 사용하는 TypeScript 코드를 모든 브라우저 또는 런타임 (ES3 또는 ES5를 지원하는 훨씬 오래된 버전)에서 작동하는 표준 호환 ECMAScript 코드로 변환 할 수 있습니다.
+- TypeScript는 유형 검사 및 새로운 ECMAScript 기능을 뛰어 넘습니다. 편집기 툴링은 일류 시민으로 간주되며 TypeScript 프로젝트의 핵심 부분으로, 코드 완성, 리팩토링 및 일련의 다른 편집기에서 빠른 수정과 같은 기능을 제공합니다 . 실제로 Visual Studio 또는 Visual Studio Code에서 JavaScript 파일을 이미 편집 한 경우 실제로 해당 경험은 TypeScript에서 제공되므로 모르는 사이에 이미 TypeScript를 사용했을 수 있습니다!
+- 더 엄격한 발전기
+- 보다 정확한 어레이 확산
+- 약속 된 UX 개선
+- 식별자에 대한 더 나은 유니 코드 지원
+- import.meta SystemJS 지원
+- get접근 set자는 주변 상황에서 허용됩니다
+- 주변 클래스 및 함수가 병합 될 수 있음
+- API를 지원하는 방법 --build및--incremental
+- 새로운 TypeScript 놀이터
+- 세미콜론 인식 코드 편집
+- 똑똑한 자동 가져 오기
+- 클래스 멤버 "constructor"는 이제 생성자입니다
+- DOM 업데이트
+- 더 이상 병합되지 않는 JSDoc 설명
+- 키워드가 이스케이프 시퀀스를 포함 할 수 없음
