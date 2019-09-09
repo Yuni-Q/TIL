@@ -1,0 +1,1 @@
+# TypeScript Omit, Readonly, Partial, Required, Pick 등 헬터 타입들 정리
