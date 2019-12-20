@@ -35,43 +35,27 @@
  * @return {number[]}
  */
 var findAnagrams = function(s, p) {
-  const result = [];
-  if (!s || !s.length) {
-    return result;
+  if (!s.length) return [];
+  let uniqCharCount = 0;
+  let arr = new Array(26).fill(0);
+  for (let i = 0; i < p.length; i++) {
+    let c = p.charCodeAt(i) - 97;
+    if (arr[c] === 0) uniqCharCount++;
+    arr[c]++;
   }
-  if (p.length > s.length) {
-    return result;
-  }
-  const map = {};
-  for (let i = 0; i < p.length(); i++) {
-    let c = p.charAt(i);
-    if (map.containsKey(c)) {
-      map.put(c, map.get(c) + 1);
-    } else {
-      map.put(c, 1);
-    }
-  }
-  let match = 0;
-  for (let i = 0; i < s.length(); i++) {
-    let c = s[i];
-    if (!!map[c]) {
-      map[c] -= 1;
-      if (map[c] == 0) {
-        match++;
-      }
-    }
+  let out = [];
+  for (let i = 0; i < s.length; i++) {
+    let c = s.charCodeAt(i) - 97;
+    arr[c]--;
+    if (arr[c] === 0) uniqCharCount--;
     if (i >= p.length) {
-      c = s[i - p.length];
-      if (map.containsKey(c)) {
-        map.put(c, map.get(c) + 1);
-        if (map.get(c) == 1) {
-          match--;
-        }
-      }
+      let c = s.charCodeAt(i - p.length) - 97;
+      arr[c]++;
+      if (arr[c] > 0) uniqCharCount++;
     }
-    if (match == map.size()) {
-      result.add(i - p.length() + 1);
+    if (uniqCharCount === 0) {
+      out.push(i - p.length + 1);
     }
   }
-  return result;
+  return out;
 };
