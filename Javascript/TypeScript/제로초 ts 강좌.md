@@ -20,5 +20,11 @@ btn.addEventListener("click", function(this: HTMLButtonElement, e: Event) {});
 ```
 
 - 작은 집합은 큰 집합에 들어 갈 수 있지만 작은 집합은 큰 집합에 들어 갈 수 없다. 하지만 일치하는게 좋다.
-- 타입을 확정하려면 !(느낌표)를 사용하면 된다. 그 외에는 변수로 뺀 다음 if로 null | undefiend가 아님을 명시한다.
+- 타입을 확정하려면 !(느낌표)를 사용하면 된다. 그 외에는 변수로 뺀 다음 if로 null | undefiend가 아님을 명시한다. 위에서 throw를 하는 방법도 있지만 둘 다 에러의 발생 여부가 있기 때문에 고심해 보아야 할 부분이다.
 - 타입스크립트가 같은 것인지 판단 못할 경우에는 변수로 빼서 사용하면 인식할 수 있다.
+
+- strictNullChecks가 false면 null과 undefined를 구분하지 않는다.
+
+  - strictNullChecks가 false가 아니면 ?(물음표)의 경우 undefined만 허용하기 때문에 `| null`을 추가해 주어야 합니다.
+
+- 자바 최신 문법에서 클래스 변수의 #(private)이 추가 되었지만 너무 최신 문법이라 호환이 힘들다. typescript에서는 public, protected, private 모두 지원한다.
