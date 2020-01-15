@@ -28,3 +28,29 @@ btn.addEventListener("click", function(this: HTMLButtonElement, e: Event) {});
   - strictNullChecks가 false가 아니면 ?(물음표)의 경우 undefined만 허용하기 때문에 `| null`을 추가해 주어야 합니다.
 
 - 자바 최신 문법에서 클래스 변수의 #(private)이 추가 되었지만 너무 최신 문법이라 호환이 힘들다. typescript에서는 public, protected, private 모두 지원한다.
+
+## interface
+
+```typescript
+interface obj<T> {
+  add: (a: T, b: T) => T;
+}
+
+// 아래와 같이 하면 밑에 모든 예제 ERROR 없음
+// interface obj {
+//   add: (a: string | number, b: string | number) => string | number;
+// }
+
+const a: obj<string> = {
+  add: (a, b) => a + b
+};
+const b: obj<number> = {
+  add: (a, b) => a + b
+};
+
+a.add("a", "b"); // 정상 동작
+a.add(1, 2); // ERROR
+a.add("a", 2); // ERROR
+b.add("a", "b"); // ERROR
+b.add(1, 2); // 정상동작
+```
