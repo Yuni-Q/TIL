@@ -29,6 +29,8 @@ btn.addEventListener("click", function(this: HTMLButtonElement, e: Event) {});
 
 - 자바 최신 문법에서 클래스 변수의 #(private)이 추가 되었지만 너무 최신 문법이라 호환이 힘들다. typescript에서는 public, protected, private 모두 지원한다.
 
+- interface에서 extends는 포함한 하위 속성으로 타입을 제한하는 용도로 사용한다.
+
 ## interface
 
 ```typescript
@@ -53,4 +55,17 @@ a.add(1, 2); // ERROR
 a.add("a", 2); // ERROR
 b.add("a", "b"); // ERROR
 b.add(1, 2); // 정상동작
+```
+
+## never
+
+```typescript
+interface Example {
+  // 타입이 never가 되어서 어떠한 것도 넣을 수 없다.
+  a: [];
+  // string 배열
+  b: string[];
+  // b: string[]; === c: Array<string>;
+  c: Array<string>;
+}
 ```
