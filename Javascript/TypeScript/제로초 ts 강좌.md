@@ -69,3 +69,19 @@ interface Example {
   c: Array<string>;
 }
 ```
+
+## 타입 가드
+
+- 기존에 Card인 타입을 Sub로 바꿀 수 있다.
+
+```typescript
+function isSub(data: Card): data is Sub {
+  if (data.cost) {
+    return true;
+  }
+  return false;
+}
+
+if (isSub(data) && data.cost) {
+}
+```
