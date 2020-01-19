@@ -85,3 +85,104 @@ function isSub(data: Card): data is Sub {
 if (isSub(data) && data.cost) {
 }
 ```
+
+## 모듈 시스템
+
+- commonjs 방법
+
+```javascript
+const hello = "hello";
+
+module.exports = hello;
+```
+
+```javascript
+const hello = require("./hello");
+
+exports.a = "a";
+exports.b = false;
+
+// module.exports와 exports는 같은 객체이기 때문에 위에 부분이 적용되지 않는다.
+// ES2015에서 이를 해결하기 위해 default를 만들었다.
+module.exports = {
+  a: "a",
+  b: false
+};
+```
+
+- ES2015
+
+```javascript
+const b = false;
+
+export const a = "a";
+export { b };
+
+// module.exports와 다르다.
+export default function() {}
+```
+
+```javascript
+import hello, { a, b } from "./hello";
+// module.exports에 경우 아래와 같이 사용해야 한다. ts에서 특정 옵션(esmoduleinterop)을 켜서 무시할 수도 있다.
+// import * as hello from "./hello";
+```
+
+- ts
+
+```javascript
+// common.js
+module.exports = function() {
+  console.log("hi");
+};
+```
+
+```typescript
+// common.d.ts
+// 타입을 만들기 위해 declare를 사용
+declare function a() {
+};
+export = a;
+```
+
+```javascript
+import A = require('./common')
+import * as A from './common'
+```
+
+- referrance
+
+```typescript
+// type(패키지 이름)과 path(경로)가 있다.
+// 참조할 때 사용. 직접 코등할때는 거의 쓰일 일이 없다.
+/// <reference type="symbol-observavle>
+```
+
+- import 한것 바로 export 하기
+
+```javascript
+export * from "d3-array";
+```
+
+- 유형
+
+1. typescript로 만들어진 패키지
+2. index.d.ts 지원
+3. DefinitelyTyped 지원
+4. types 폴더를 만들고 d.ts 파일을 직접 만든다. tsconfig에 typeRoots를 만들어 준다.
+5. 잘못된 타입의 경우. 타입을 지우고 직접 정의 한다.
+
+## 글로벌 타입 넣을 때 문제해결 꼼수
+
+```typescript
+// export가 없으면 안 된다.
+exprot {}
+declare globla {
+  interface Window {
+    hello: string;
+  }
+  interface Error {
+    code?: any;
+  }
+}
+```
