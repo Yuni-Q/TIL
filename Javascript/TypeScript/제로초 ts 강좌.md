@@ -186,3 +186,69 @@ declare globla {
   }
 }
 ```
+
+## 유틸리티
+
+- Partial, Readonly, Record, Pick, Omit, Exclue, Extract, ReturnType, Required, OmitThisParameter, ThisType가 많이 쓰인다.
+- 타이핑 할때 편하게 사용할 수 있다.
+- 중복을 줄일 때 도움을 준다.
+
+## 데코레이터
+
+- 클래스에서 중복을 제거하기 위해 사용한다.(공통 로직 분리)
+- tsconfig.json에서 "experimetalDecorators"가 true여야 한다.
+  - 아직 stage2에 있어서 아직 불안정하다. 아직 실험적인 기능이다.(stage4가 안정)
+- 클래스, 프로퍼티, 메소드, 파라미터, 엑세스에 붙일 수 있다.
+- 위에 쓰면 아래에, 왼쪽에 쓰면 오른쪽에 적용 된다.
+- 데코레이터를 잘 쓰려면 reflect-metadata에 대한 공부가 필요하다.
+- 꾸며주는 역할(기능을 추가, 수정, 덮어쓰기)
+- 고차함수처럼 사용
+
+```typescript
+function makeGender(target: typeof Person) {
+  console.log("hello");
+  return class extends target {
+    gender = "male";
+    sayGender() {
+      return this.gender;
+    }
+  };
+}
+
+function readonly(target: any, key: any, descriptor: PropertyDescriptor) {
+  console.log(target, key, descriptor);
+  descriptor.writable = false;
+}
+
+function readonlyProperty(target: any, key: any, index: number) {
+  console.log(target, key, index);
+}
+
+@makeGender
+class Person {
+  title: string;
+  age = 27;
+  constructor(title: string) {
+    this.title = title;
+  }
+  @readonly
+  setTitle(@readonlyProperty title: string) {
+    this.title = title;
+  }
+  @readonly
+  sayTitle(): any {
+    return this.title;
+  }
+}
+
+@makeGender
+class Person2 {
+  title: string;
+  age = 27;
+  constructor() {}
+  setTitle(title: string) {}
+  sayTitle(): any {
+    return this.title;
+  }
+}
+```
