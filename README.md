@@ -16,7 +16,7 @@
 
 [study-watson](https://github.com/Yuni-Q/study-watson)
 
-[https://github.com/Yuni-Q/Ahobsu-Node-Backend](https://github.com/Yuni-Q/Ahobsu-Node-Backend)
+[Ahobsu-Node-Backend](https://github.com/Yuni-Q/Ahobsu-Node-Backend)
 
 [TOAST](https://github.com/Yuni-Q/TOAST)
 
