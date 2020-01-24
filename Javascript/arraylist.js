@@ -56,7 +56,7 @@ class ArrayList {
         const done = cursor >= this.size;
         const value = !done ? this.elementData[cursor++] : undefined;
         return {
-          done: done,
+          done: this.size === cursor,
           value: value
         };
       }
@@ -85,6 +85,8 @@ for (let i = 0; i < numbers.getSize(); i++) {
 console.log("loop end");
 console.log("iterator start");
 const it = numbers.iterator();
+const it2 = numbers.iterator();
+
 while (it.hasNext()) {
   let value = it.next();
   console.log(value);
