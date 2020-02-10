@@ -252,3 +252,14 @@ class Person2 {
   }
 }
 ```
+
+```typescript
+const rspCoords = {
+  바위: "0",
+  가위: "-142px",
+  보: "-284px"
+} as const;
+
+// '0' | '-142px' | '-284px'
+type imgCoords = typeof repCoords[keyof typeof rspCoords];
+```
