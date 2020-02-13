@@ -263,3 +263,8 @@ const rspCoords = {
 // '0' | '-142px' | '-284px'
 type imgCoords = typeof repCoords[keyof typeof rspCoords];
 ```
+
+- react-router 타입핑
+  - RouteComponentProps, RouteChildernProps 중 사용
+  - RouteChildernProps<{name: string}>처럼 params를 넣어서 사용
+- function component에서는 useRouteMatch, useLocation, useHistory 사용
