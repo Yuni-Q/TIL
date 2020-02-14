@@ -247,7 +247,122 @@ Link: <https://api.test.com/users?page=3&per_page=100>; rel="next",
 
 ## Use HTTP status
 
+- status는 200으로 성공인데 body 내용엔 실패에 관한 내용을 리턴하고 있다.
+  - 모든 응답을 200으로 처리하고 body 내용으로 성공 | 실패를 판단하는 구조에서 사용된다. 잘못된 설계다.
+
 ### 의미에 맞는 HTTP status를 리턴한다
+
+### HTTP status만으로 상태 에러를 나타낸다
+
+- 세부 에러 사항은 응답 객체에 표시하거나, 해당 에러를 확인할 수 있는 link를 표시한다.
+- http 상태 코드를 응답 객체에 중복으로 표시할 필요 없다.
+
+## Use the correct HTTP status code.
+
+### 성공 응답은 2XX로 응답한다.
+
+- 200 : [OK]
+- 201 : [Created]
+  - 200과 달리 요청에 성공하고 새로운 리소스를 만든 경우에 응답한다.
+  - POST, PUT에 사용한다.
+- 202 : [Accepted]
+  - 클라이언트 요청을 받은 후, 요청은 유효하나 서버가 아직 처리하지 않은 경우에 응답한다. 비동기 작업
+  - 요청에 대한 응답이 일정 시간 후 완료되는 작업의 경우
+  - 작업 완료 후 클라이언트에 알릴 수 있는 server push 작업을 하거나, 클라이언트가 해당 작업의 진행 상황을 조회할 수 있는 URL을 응답해야 한다.
+    }
+- 204 : [No Content]
+  - 응답 body가 필요 없는 자원 삭제 요청(DELETE) 같은 경우 응답한다.
+  - 200 응답 후 body에 null, {}, [], false로 응답하는 것과 다르다.
+  - 204의 경우 HTTP body가 아예 없는 경우
+
+### 실패 응답은 4XX로 응답한다.
+
+- 400 : [Bad Request]
+  - 클라이언트 요청이 미리 정의된 파라미터 요구사항을 위반한 경우
+  - 파라미터의 위치(path, query, body), 사용자 입력 값, 에러 이유 등을 반드시 알린다
+- 401 : [Unauthorized]
+- 403 : [Forbidden]
+  - 해당 요청은 유효하나 서버 작업 중 접근이 허용되지 않은 자원을 조회하려는 경우
+  - 접근 권한이 전체가 아닌 일부만 허용되어 요청자의 접근이 불가한 자원에 접근 시도한 경우 응답한다.
+- 404 : [Not Found]
+- 405 : [Method Not Allowed]
+  - 405 code는 404 code와 혼동될 수 있기 때문에 룰을 잘 정하고 시작한다.
+  - POST /users/1의 경우 404로 응답한다고 생각할 수 있지만, 경우에 따라 405로 응답할 수 있다.
+  - /users/:id URL은 GET, PATCH, DELETE method는 허용되고 POST는 불가한 URL이다.
+  - 만약 id가 1인 사용자가 없는 경우엔 404로 응답하지만(GET, PATCH, DELETE의 경우), POST /users/1는 /users/:id URL이 POST method를 제공하지 않기 때문에 405로 응답하는 게 옳다.
+  - Allow: GET, PATCH, DELETE HTTP header에 허용 가능한 method를 표시한다.
+- 409 : [Conflict]
+  - 해당 요청의 처리가 비지니스 로직상 불가능하거나 모순이 생긴 경우
+  - e.g.) DELETE /users/hak의 경우, 비지니스 로직상 사용자의 모든 자원이 비어있을 때만 사용자를 삭제할 수 있는 규칙이 있을 때 409로 응답한다.
+- 429 : [Too Many Requests]
+  - Retry-After: 3600(HTTP Headers)
+  - DoS, Brute-force attack 같은 비정상적인 접근을 막기 위해 요청의 수를 제한한다.
+
+## 5XX 에러는 절대 사용자에게 나타내지 마라!
+
+- API Server level에선 500 에러가 나선 안된다.
+- 이건 서비스 장애!
+- 즉, API Server는 모든 발생 가능한 에러를 핸들링해야 한다.
+- 만약 API Server를 서빙하는 웹서버(apache, nginx)가 오류일 때는 500 가능
+
+## Use HATEOAS
+
+- 응답 객체에 해당 리소스의 상태가 전이될 수 있는 link들을 함께 제공한다. link들을 통해 리소스의 다음 상태 전이 정보를 동적으로 제공한다.
+
+### 구성 요소
+
+- 변경될 리소스의 상태 관계 rel
+  - self: 현재 URL 자신, 예약어처럼 쓰임
+- 요청 URL href
+- 요청 Method method
+- …(그 외 추가사항)
+
+### 응답 예제
+
+- rel의 값은 self를 제외하고 내부 규칙을 정해서 따른다. 의미만 정확히 드러나면 된다.
+- more_info, body와 같이 내부 정의된 key를 사용해도 된다.
+  - more_info: 해당 link의 세부 정보를 알고 싶은 경우 탐색할 웹 페이지 주소
+  - body: 해당 link가 POST, PUT인 경우 파라미터를 body에 넣어 보내기 때문에 보낼 수 있는 body 파라미터 샘플. 파라미터가 너무 많거나 제약사항이 엄격한 경우 more_info로 해당 link의 상세 정보를 확인할 수 있게 한다.
+
+## Paging, Ordering, Filtering, Field-Selecting
+
+### Paging
+
+- Collection(리스트)에 대한 GET 요청의 경우(GET /users) 한 번에 모든 결과를 응답하지 않고 적당한 크기로 데이터 셋을 나눠서 응답한다.
+
+#### Paging Key
+
+- Github
+  - page
+  - per_page
+- Atlassian
+  - start
+  - limit
+- Digitalocean
+  - page
+  - per_page
+- 개발자 관점
+  - offset
+  - limit
+- 어떤 key로 paging을 처리할지 변경될 수 있으니 개발자는 코드의 설정 값으로 언제든 key 이름을 변경할 수 있게 구현한다.
+
+### 응답 예제
+
+- HTTP Header의 Link 속성을 이용한다.
+- HATEOAS로 응답한다.
+- Link, HATEOAS 모두 사용한다.
+
+## Ordering
+
+- Collection(리스트)에 대한 GET 요청의 경우(GET /users) 리스트를 클라이언트의 요청에 맞게 정렬해 응답한다.
+- order라는 key를 사용한다.
+  - 오름차순: key
+  - 내림차순: -key
+
+### 요청 샘플
+
+- ?order=-name: name 내림차순 name desc
+- ?order=-name,level: name 내림차순, level 오름차순 name desc, level asc
 
 ## 참고
 
