@@ -268,3 +268,17 @@ type imgCoords = typeof repCoords[keyof typeof rspCoords];
   - RouteComponentProps, RouteChildernProps 중 사용
   - RouteChildernProps<{name: string}>처럼 params를 넣어서 사용
 - function component에서는 useRouteMatch, useLocation, useHistory 사용
+
+- 리덕스에서 리턴 타입 가지고 가기
+
+```typescript
+import { combineReducers } from "redux";
+import { userReducer } from "./user";
+import { postReducer } from "./post";
+
+const reducer = combineReducers({
+  user: userReducer,
+  post: userReducer
+});
+type RootState = ReturnType<typeof reducer>;
+```
