@@ -282,3 +282,17 @@ const reducer = combineReducers({
 });
 type RootState = ReturnType<typeof reducer>;
 ```
+
+- thunk typing
+
+```typescript
+
+
+interface ThunkDispatch {
+  (thunkAction: ThunkAction): void;
+  <A>(action: A): A;
+  <TAction>(action: TAction | ThunkAction): TAction;
+}
+
+type ThunkAction = (dispatch: ThunkDispatch) => void;
+```
