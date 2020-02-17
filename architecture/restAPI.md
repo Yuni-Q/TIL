@@ -346,23 +346,77 @@ Link: <https://api.test.com/users?page=3&per_page=100>; rel="next",
   - limit
 - 어떤 key로 paging을 처리할지 변경될 수 있으니 개발자는 코드의 설정 값으로 언제든 key 이름을 변경할 수 있게 구현한다.
 
-### 응답 예제
+#### 응답 예제
 
 - HTTP Header의 Link 속성을 이용한다.
 - HATEOAS로 응답한다.
 - Link, HATEOAS 모두 사용한다.
 
-## Ordering
+### Ordering
 
 - Collection(리스트)에 대한 GET 요청의 경우(GET /users) 리스트를 클라이언트의 요청에 맞게 정렬해 응답한다.
 - order라는 key를 사용한다.
   - 오름차순: key
   - 내림차순: -key
 
-### 요청 샘플
+#### 요청 샘플
 
 - ?order=-name: name 내림차순 name desc
 - ?order=-name,level: name 내림차순, level 오름차순 name desc, level asc
+
+### Filtering
+
+- Collection(리스트)에 대한 GET 요청의 경우(GET /users) 리스트 검색 조건을 요청할 수 있다.
+  - AND, OR
+  - =, !=
+  - \> , >=
+  - <, >=
+  - IN(OR), NOT IN
+  - LIKE(include)
+
+### Field-Selecting
+
+- Collection(리스트)에 대한 GET 요청의 경우(GET /users) 리스트 결과의 일부분만 선택해서 응답받을 수 있다.
+  - include: ?fields=id,name
+    - id, name 만 반환
+  - exclude: ?-fields=level
+    - level 제외 모두 반환
+  - 존재하지 않는 key
+    - fields에 존재하는 key가 하나도 없는 경우, fields 모두 무시
+    - (?fields=aaaaaa 혹은 ?fields=aaaaaa,bbbb)
+    - fields에 key가 일부분만 존재하는 경우, 존재하는 key로만 selecting
+
+(?fields=aaaaaa,name)
+
+## Versioning
+
+- URI Versioning
+  - http://api.test.com/v1
+  - http://apiv1.test.com
+- Accept header
+  - Accept: application/vnd.example.v1+json
+  - Accept: application/vnd.example+json;version=1.0
+
+### 예외적으로 서비스의 기본 도메인이 3차인 경우 path level에 모두 명시한다.
+
+- Domain
+  - http://www.test.com
+  - http://service1.test.com
+  - http://service2.test.com
+- Your Service API URI
+  - http://service3.test.com
+- Allow
+  - http://.service3test.com/api/v1
+- Don’t http://api.service3.test.com/v1
+
+## URI Versioning 개발 가이드
+
+- 개발 코드에서 버저닝 정보를 관리하지 않는다.
+- 개발 프로젝트 폴더의 버저닝은 VCS(e.g. git)를 이용한다.
+- 웹 서버의 reverse-proxy 기능을 활용한다
+  - 웹 APP 서버의 라우팅은 버저닝을 제외하고 개발한다. /users, /posts
+  - http://api.test.com/v1 -> (reverse-proxy) -> 웹 APP /
+  - API 버저닝 여부에 관계없이 프로젝트 구조가 변경되지 않는다.
 
 ## 참고
 
