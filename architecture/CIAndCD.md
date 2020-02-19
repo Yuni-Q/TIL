@@ -1,20 +1,23 @@
-
 ### CI / CD
 
 #### 정의
+
 CI (Continuous Integration)<br>
+
 > CI란 팀 구성원들이 작업한 내용을 정기적을 통합하는 것을 의미합니다.
-CD (Continuous Delivery or Continuos Deploy)<br>
+> CD (Continuous Delivery or Continuos Deploy)<br>
 > 짧은 주기로 소프트웨어를 개발하는 소프트웨어 공학적 접근의 하나로, 소프트웨어가 언제든지 신뢰 가능한 수준으로 출시될 수 있도록 보증하기 위한 것입니다.<br>
 > 소프트웨어를 더 빠르게, 더 주기적으로 빌드하고 테스트하고 출시하는 것을 목표로 합니다.<br>
-빌드, 테스트, 배포 등을 자동으로 해주는 서비스<br>
+> 빌드, 테스트, 배포 등을 자동으로 해주는 서비스<br>
 
 #### 종류
 
 Jenkins<br>
+
 > GUI 제공 / 소스 코드 체크아웃 / 분산 빌드 / 지속적인 빌드 및 테스트 자동화와 배포 자동화 / 테스트 보고서 작성 / Griivy scipt를 이용한 Job Scheduling 기능 / CLI 제공 / 실행 결과를 통보하고 결과물을 저장 프로젝트의 빌드가 정상적으로 되고 있는지 체크할 때 사용하며, 자동으로 유닛 테스트와 통합 테스트들의 정기적인 실행을 하고 문제 발생 시 리포트를 작성해 줍니다.<br>
 
 Travis<br>
+
 > Jenkins와 비슷한 CI Tool입니다. 하지만 서버가 필요하지 않습니다.<br>
 
 - 장점
@@ -25,8 +28,38 @@ Travis<br>
 - Remote access API 제공
 
 Docker<br>
+
 > Go 언어로 작성된 리눅스 컨테이너 런타임 패키징 오픈 플랫폼으로 리눅스 컨테이너 기술을 자동화하여 쉽게 사용할 수 있게 해준다.
 
 Ansible<br>
+
 > 테스트 환경을 구축하는데 사용되는 Tool 입니다.<br>
 > YAML이라는 언어를 통해 정의할 수 있고 json으로 통신하며 github에서 정말 활발한 활동성을 보입니다.
+
+CI & CD 란 무엇일까?
+인터넷에 올라와 있는 문서들을 정리 후, 정리하면 다음과 같습니다.
+
+## 지속적 통합(CI: Continuous Integration)은, 작은 단위의 코드를 짧고 빈번하게 통합 하는 방식
+
+- 코드 퀄리티를 유지
+- 여러명이 동시 개발시, 코드 충돌 문제를 줄임
+- 작은단위를 빈번하게 통합하므로, 큰 방향으로는 배포시간을 줄이는 것에 목적을 둠
+- 코드 단위 테스트 자동화
+
+## 지속적 전달(CD: Continuous Delivery)는, 테스팅을 위해, 결과물을 짧고 빈번하게 전달 하는 방식
+
+- 운영팀과 개발팀의 Bridge
+- 짧고 빈번한 테스팅 환경 구축
+- 짧은 시간 내에 결과물 피드백을 받음
+- Staging-Area (Production-Area 이전)
+
+## 지속적 배포(CD: Continuous Deployment)는, 프로덕션 환경까지 빠르게(배포주기), 자동으로 배포 하는 방식
+
+- 애자일, DevOps와 연관됨
+- 배포를 하는 과정에서 들어가는 비용을 자동화로 줄임
+- 지속적 통합, 지속적 전달과 더불어 고객에게 퀄리티 높은 결과물을 빠르게 제공한다는 관점
+- Production-Area (실제 운영 환경)
+
+## 출처
+
+- [이병록의 개발 블로그](https://roka88.dev/97?fbclid=IwAR1T9xEusczGzY7zJCGSn52aLgTYtpJLVqk90bTdF1MmM6mYDJt-27altIQ)
