@@ -1,0 +1,9 @@
+.image-wrapper {
+  background: white;
+}
+.image-wrapper img {
+  mix-blend-mode: luminosity;
+}
+.image-wrapper img:hover {
+  mix-blend-mode: normal;
+}
