@@ -69,6 +69,34 @@ const parser = input => {
 
 - 대체 가능성을 지원하는가?
   - javascript는 프로토타입 체인으로 대체 가능성을 지원한다.
+
+```javascript
+const Parent = class {};
+const Child = class extends Parent {};
+const a = new Child();
+console.log(a instanceof Parent); // ture
+```
+
 - 내적 동질성
   - 원형이 누구냐에 따라서 만들어진 구상 객체의 것을 사용한다.
+
+```javascript
+const Parent = class {
+  wrap() {
+    this.action();
+  }
+  action() {
+    console.log("Parent");
+  }
+};
+const Child = class extends Parent {
+  action() {
+    console.log("Child");
+  }
+};
+const a = new Child();
+console.log(a instanceof Parent); // ture
+a.wrap(); // Child
+```
+
 - 은닉과 캡슐
