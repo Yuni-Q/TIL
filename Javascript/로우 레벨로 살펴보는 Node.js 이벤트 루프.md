@@ -35,7 +35,29 @@
 - setImmediate은 실질적으로 다음 페이즈 혹은 다음 이벤트 루프의 순회에서 실행되고, nextTick이 오히려 실질적으로 더 빠르게 실행된다.
 - nextTickQueue에 담긴 작업이 재귀 호출을 수행하는 경우 Node.js의 작업 프로세스를 블록킹할 수 있다. 주의하도록 하자.
 
+## 이벤트 루프의 전체 알고리즘
+
+1. 매크로태스크 대기열에서 가장 오래된 작업을 꺼내어 실행합니다. (예: 스크립트 실행)
+2. 모든 마이크로태스크를 실행합니다. (마이크로태스크 대기열이 비어있지 않다면 가장 오래된 마이크로태스크를 대기열에서 꺼내어 실행합니다.)
+3. DOM 변경사항이 있는 경우 렌더링합니다.
+4. 매크로태스크 대기열이 비었다면, 다른 매크로태스크가 생길 때까지 기다립니다.
+5. 처리할 매크로태스크가 생기면 1번으로 돌아갑니다.
+
+### 매크로태스크의 특징
+
+- 딜레이가 0인 setTimeout(func) 을 사용합니다.
+- setTimeout은 큰 계산이 요구되는 무거운 작업을 작게 쪼개어 주고 브라우저가 사용자 이벤트에 반응하고 나눠진 작업들 사이에서 진행 상태를 표시할 수 있게 해줍니다.
+- 또한, 이벤트가 완전히 처리된 후에 특정 액션에서 이벤트 핸들러가 실행되도록 예약하는 데도 사용될 수 있습니다.
+
+### 마이크로태스크의 특징
+
+- promise 객체의 핸들러들이 마이크로 태스크에 들어갑니다.
+- 마이크로태스크 사이에서는 어떠한 UI 혹은 네트워크 변화가 없습니다. 마이크로태스크는 즉시 다음 마이크로 태스크를 실행하기 때문입니다.
+- 따라서 사용자는 함수를 비동기식으로 실행하기 위해 queueMicrotask() 를 사용할 수 있지만, 올바른 환경에서 사용해야합니다.
+
 ---
 
-참조 : [로우 레벨로 살펴보는 Node.js 이벤트 루프
-](https://evan-moon.github.io/2019/08/01/nodejs-event-loop-workflow/?fbclid=IwAR1QP82JVrNfICEK1UNYGIDnrIlmzzD70AYYcEPiAnW9QzMH26GDker1-B8)
+## 참조
+
+- [로우 레벨로 살펴보는 Node.js 이벤트 루프](https://evan-moon.github.io/2019/08/01/nodejs-event-loop-workflow/?fbclid=IwAR1QP82JVrNfICEK1UNYGIDnrIlmzzD70AYYcEPiAnW9QzMH26GDker1-B8)
+- [자바스크립트 이벤트 루프: 마이크로태스크(Microtasks)와 매크로태스크(Macrotasks)](https://medium.com/official-podo/%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EB%A3%A8%ED%94%84-%EB%A7%88%EC%9D%B4%ED%81%AC%EB%A1%9C%ED%83%9C%EC%8A%A4%ED%81%AC-microtasks-%EC%99%80-%EB%A7%A4%ED%81%AC%EB%A1%9C%ED%83%9C%EC%8A%A4%ED%81%AC-macrotasks-4563cdc324b0)
