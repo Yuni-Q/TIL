@@ -1,4 +1,4 @@
-# object-chapter-01-객체,-설계
+# object chapter01 객체, 설계
 
 ## intro
 
