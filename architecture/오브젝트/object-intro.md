@@ -1,4 +1,4 @@
-# object-intro
+# object intro
 
 # 지은이의 글
 
