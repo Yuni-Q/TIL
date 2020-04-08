@@ -1,5 +1,27 @@
 # vsCode Setting
 
+## 단축키
+
+| 단축키                   | 설명                        |
+| ------------------------ | --------------------------- |
+| ctrl + shift + 좌/우     | 선택 영역 확장/축소         |
+| option + 위/아래         | 블록간 이동                 |
+| cmd + shift + \          | 마지막 블록으로 이동        |
+| F2                       | rename                      |
+| F12                      | 정의부로 이동               |
+| option + shift + F12     | 사용하는 코드 탐색          |
+| cmd + 0                  | 파일 탐색기 포커싱          |
+| cmd + 1                  | 에디터 포커싱               |
+| ctrl + ` | 터미널 포커싱 |
+| cmd + shift + .          | 브레드크럼 포커싱           |
+| shift + 좌/우            | 브레드크럼에서 이동         |
+| cmd + p                  | 파일로 이동                 |
+| cmd + shift + p          | 모든 명령어 표시            |
+| cmd + t                  | 심볼을 이용해서 파일로 이동 |
+| cmd + shift + o          | 파일 내의 심볼 바로가기     |
+| cmd + k + s              | 단축키 목록 보기            |
+| command + option + ]/[   | 블록 펴기, 접기             |
+
 ## terminer에서 노드 실행하기 ( atom은 그냥 된다고 하는데 ... )
 
 - command + shift + p
@@ -88,3 +110,7 @@ Prettier를 사용하여 JavaScript / TypeScript / CSS를 포맷하는 VS 코드
 ### [vscode-faker](https://marketplace.visualstudio.com/items?itemName=deerawan.vscode-faker)
 
 ### [WordCounter](https://marketplace.visualstudio.com/items?itemName=kirozen.wordcounter)
+
+### [Material Icon Theme](https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme)
+
+### [Bookmarks](https://marketplace.visualstudio.com/items?itemName=alefragnani.Bookmarks)
