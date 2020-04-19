@@ -17,8 +17,8 @@ Java에서의 this는 인스턴스 자신(self)을 가리키는 참조변수 입
 1. apply/call/bind 호출
 
 ```javascript
-var foo = function() {
-  console.dir(this);
+var foo = function () {
+	console.dir(this);
 };
 
 // 1. 함수 호출
@@ -53,16 +53,16 @@ foo.bind(bar)(); // bar
 var value = 1;
 
 var obj = {
-  value: 100,
-  foo: function() {
-    console.log("foo's this: ", this); // obj
-    console.log("foo's this.value: ", this.value); // 100
-    function bar() {
-      console.log("bar's this: ", this); // window
-      console.log("bar's this.value: ", this.value); // 1
-    }
-    bar();
-  }
+	value: 100,
+	foo: function () {
+		console.log("foo's this: ", this); // obj
+		console.log("foo's this.value: ", this.value); // 100
+		function bar() {
+			console.log("bar's this: ", this); // window
+			console.log("bar's this.value: ", this.value); // 1
+		}
+		bar();
+	},
 };
 
 obj.foo();
@@ -77,21 +77,21 @@ obj.foo();
 var value = 1;
 
 var obj = {
-  value: 100,
-  foo: function() {
-    var that = this; // Workaround : this === obj
+	value: 100,
+	foo: function () {
+		var that = this; // Workaround : this === obj
 
-    console.log("foo's this: ", this); // obj
-    console.log("foo's this.value: ", this.value); // 100
-    function bar() {
-      console.log("bar's this: ", this); // window
-      console.log("bar's this.value: ", this.value); // 1
+		console.log("foo's this: ", this); // obj
+		console.log("foo's this.value: ", this.value); // 100
+		function bar() {
+			console.log("bar's this: ", this); // window
+			console.log("bar's this.value: ", this.value); // 1
 
-      console.log("bar's that: ", that); // obj
-      console.log("bar's that.value: ", that.value); // 100
-    }
-    bar();
-  }
+			console.log("bar's that: ", that); // obj
+			console.log("bar's that.value: ", that.value); // 100
+		}
+		bar();
+	},
 };
 
 obj.foo();
@@ -117,7 +117,7 @@ obj.foo();
 ```javascript
 // 생성자 함수
 function Person(name) {
-  this.name = name;
+	this.name = name;
 }
 
 var me = new Person("Lee");
@@ -182,6 +182,29 @@ obj.method()와 같이 함수를 메서드로 호출하는 경우 this는 함수
 엄격 모드('use strict') 일 경우 this는 전역 객체 대신 undefined가 됩니다.  
 위의 규칙 중 다수가 적용되면 더 높은 규칙이 승리하고 this값을 설정합니다.  
 함수가 ES2015 화살표 함수인 경우 위의 모든 규칙을 무시하고 생성된 시점에서 주변 스코프의 this값을 받습니다.
+
+## THIS 추가 내용
+
+```javascript
+const someone = {
+	name: "yuni-q",
+	whoAmI: function () {
+		console.log(this);
+	},
+};
+someone.whoAmI(); // { name: "yuni-q", whoAmI: f }
+
+const myWhoAmI = someone.whoAmI;
+myWhoAmI(); // Window
+
+const btn = document.getElementById("btn");
+btn.addEventListener("click", someone.whoAmI); // <button />
+btn.addEventListener("click", myWhoAmI); // <button />
+
+const bindedWhoAmI = myWhoAmI.bind(someone);
+bindedWhoAmI(); // { name: "yuni-q", whoAmI: f }
+btn.addEventListener("click", bindedWhoAmI); // { name: "yuni-q", whoAmI: f }
+```
 
 ---
 
