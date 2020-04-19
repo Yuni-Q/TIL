@@ -2,25 +2,32 @@
 
 ## 단축키
 
-| 단축키                   | 설명                        |
-| ------------------------ | --------------------------- |
-| ctrl + shift + 좌/우     | 선택 영역 확장/축소         |
-| option + 위/아래         | 블록간 이동                 |
-| cmd + shift + \          | 마지막 블록으로 이동        |
-| F2                       | rename                      |
-| F12                      | 정의부로 이동               |
-| option + shift + F12     | 사용하는 코드 탐색          |
-| cmd + 0                  | 파일 탐색기 포커싱          |
-| cmd + 1                  | 에디터 포커싱               |
+| 단축키                   | 설명                             |
+| ------------------------ | -------------------------------- |
+| ctrl + shift + 좌/우     | 선택 영역 확장/축소              |
+| option + 위/아래         | 블록간 이동                      |
+| command + shift + \      | 마지막 블록으로 이동             |
+| F2                       | rename                           |
+| F12                      | 정의부로 이동                    |
+| option + shift + F12     | 사용하는 코드 탐색               |
+| command + 0              | 파일 탐색기 포커싱               |
+| command + 1              | 에디터 포커싱                    |
 | ctrl + ` | 터미널 포커싱 |
-| cmd + shift + .          | 브레드크럼 포커싱           |
-| shift + 좌/우            | 브레드크럼에서 이동         |
-| cmd + p                  | 파일로 이동                 |
-| cmd + shift + p          | 모든 명령어 표시            |
-| cmd + t                  | 심볼을 이용해서 파일로 이동 |
-| cmd + shift + o          | 파일 내의 심볼 바로가기     |
-| cmd + k + s              | 단축키 목록 보기            |
-| command + option + ]/[   | 블록 펴기, 접기             |
+| command + shift + .      | 브레드크럼 포커싱                |
+| shift + 좌/우            | 브레드크럼에서 이동              |
+| command + p              | 파일로 이동                      |
+| command + shift + p      | 모든 명령어 표시                 |
+| command + t              | 심볼을 이용해서 파일로 이동      |
+| command + shift + o      | 파일 내의 심볼 바로가기          |
+| command + k + s          | 단축키 목록 보기                 |
+| command + option + ]/[   | 블록 펴기, 접기                  |
+| command + d              | 같은 단어 선택                   |
+| option + click           | 중복 커서                        |
+| command + /              | 주석                             |
+| option + shift + i       | 선택 영역 중독 커서              |
+| option + shift + drag    | 선택 영역 중독 커서(마우스 기준) |
+| command + 위/아래        | 최상위 / 최하위 로 이동          |
+| command + b              | 사이드바 숨기기                  |
 
 ## terminer에서 노드 실행하기 ( atom은 그냥 된다고 하는데 ... )
 
