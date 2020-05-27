@@ -121,3 +121,5 @@ Prettier를 사용하여 JavaScript / TypeScript / CSS를 포맷하는 VS 코드
 ### [Material Icon Theme](https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme)
 
 ### [Bookmarks](https://marketplace.visualstudio.com/items?itemName=alefragnani.Bookmarks)
+
+## [Version Lens](https://marketplace.visualstudio.com/items?itemName=pflannery.vscode-versionlens)
