@@ -43,7 +43,7 @@
 
 - 닫기 태그를 자동으로 추가합니다.
 
-### Auto Rename Tag
+### [Auto Rename Tag](https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-rename-tag)
 
 - 페어링 태그의 이름을 자동으로 바꿉니다.
 
@@ -80,7 +80,7 @@ eslint init
 
 Prettier를 사용하여 JavaScript / TypeScript / CSS를 포맷하는 VS 코드 패키지 입니다.
 
-### Rainbow Brackets
+### [Rainbow Brackets](https://marketplace.visualstudio.com/items?itemName=2gua.rainbow-brackets)
 
 -= 괄호를 색깔로 구분 할 수 있습니다.
 
@@ -123,3 +123,11 @@ Prettier를 사용하여 JavaScript / TypeScript / CSS를 포맷하는 VS 코드
 ### [Bookmarks](https://marketplace.visualstudio.com/items?itemName=alefragnani.Bookmarks)
 
 ## [Version Lens](https://marketplace.visualstudio.com/items?itemName=pflannery.vscode-versionlens)
+
+## [Bracket Pair Colorizer](https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer)
+
+## [CSS Peek](https://marketplace.visualstudio.com/items?itemName=pranaygp.vscode-css-peek)
+
+## [indent-rainbow](https://marketplace.visualstudio.com/items?itemName=oderwat.indent-rainbow)
+
+## [HTML CSS Support](https://marketplace.visualstudio.com/items?itemName=ecmel.vscode-html-css)
