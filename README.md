@@ -4,12 +4,6 @@
 
 [Blog](https://yuni-q.github.io/)
 
-[Tistory](https://yuni-q.tistory.com/)
-
-[Medium](https://medium.com/@lyh6425)
-
-[study-watson](https://study-watson.herokuapp.com/)
-
 ## Repo
 
 [TIL](https://github.com/Yuni-Q/TIL)
