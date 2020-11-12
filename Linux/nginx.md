@@ -144,5 +144,75 @@ sudo nginx -s stop
 sudo nginx -s reload
 ```
 
+## 로드 밸런싱
+
+### 라운드 로빈(Round Robin)
+```
+http {
+  upstream app {
+    server 10.0.0.1:3000;
+    server 10.0.0.2:3000;
+  }
+  server {
+    listen 80;
+    location / {
+      proxy_pass http://app;
+    }
+  }
+}
+```
+
+### 최소 접속(Least connected)
+```
+upstream app {
+  least_conn;
+  server 10.0.0.1:3000;
+  server 10.0.0.2:3000;
+}
+```
+### IP 해싱(IP hashing)
+```
+upstream app {
+  ip_hash;
+  server 10.0.0.1:3000;
+  server 10.0.0.2:3000;
+}
+```
+
+### 가중치
+```
+upstream app {
+  server 10.0.0.1:3000 weight=5;
+  server 10.0.0.2:3000;
+}
+```
+
+## NGINX 상태 점검
+
+### 패시브 상태 점검
+- 오류가 반환되는 경우, NGINX는 노드에 결함이 있다고 표시하고, 로드 밸런싱을 도입하기 전 일정 시간 동안 로드 밸런싱 대상에서 해당 노드를 제거합니다. 이 전력을 이용해 NGINX는 계속해서 노드를 제거하기 때문에 실패 횟수가 대폭 감소됩니다.
+- 이 때 max_fails나 fail_timeout 처럼, 필요한 실패 횟수나 요청의 타임아웃을 설정함으로써 노드가 유효하지 않음을 표시하는 파라미터도 몇 가지 구성할 수 있습니다.
+
+### 액티브 상태 점검
+
+```
+http {
+  upstream app {
+    zone app test;
+    server 10.0.0.1:3000;
+    server 10.0.0.2:3000;
+  }
+  server {
+    listen 80;
+    location / {
+      proxy_pass http://app;
+      health)_check;
+    }
+  }
+}
+```
+- health_check : 액티브 상태 점검을 활성화합니다. 기본 구성은 5초마다 호스트와 upstream 구문에 지정된 포트에 대해 접속을 실행합니다.
+- zone app test : 상태 점검을 활성화할 때 NGINX 구성이 필요합니다.
+
 ---
 참조 : [nginx 웹서버 라우팅 설정하기 – 도메인 IP 연결, www 리다이렉팅](https://swiftcoding.org/nginx-routing)
